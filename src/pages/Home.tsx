@@ -78,9 +78,9 @@ export const Home: React.FC = () => {
 
       {/* 1. HERO SECTION (Split Screen) */}
       <section className="border-b border-[#252525] relative overflow-hidden scroll-mt-20" id="home">
-        <div className="site-container min-h-[710px] grid grid-cols-1 lg:grid-cols-[47%_53%] items-stretch">
+        <div className="site-container min-h-[420px] lg:min-h-[576px] grid grid-cols-1 lg:grid-cols-[47%_53%] items-stretch">
           {/* Left Narrative Column */}
-          <div className="relative z-10 flex flex-col justify-start pt-12 lg:pt-[84px] pb-12 pr-0 lg:pr-12">
+          <div className="relative z-10 flex flex-col justify-start pt-10 lg:pt-[76px] pb-6 lg:pb-8 pr-0 lg:pr-12">
             {/* Red Eyebrow Text with Accent Line */}
             <p className="flex items-center gap-3 text-[#ce354b] text-[10px] font-bold tracking-[0.26em] uppercase mb-5">
               <span className="w-[34px] h-[1px] bg-[#b51f35] inline-block shrink-0" aria-hidden="true" />
@@ -120,7 +120,7 @@ export const Home: React.FC = () => {
           </div>
 
           {/* Right Visual Column (Monochrome Sculpture + Crimson Light) */}
-          <div className="relative min-w-0 min-h-[520px] lg:min-h-[710px] bg-[#080808] overflow-hidden">
+          <div className="relative min-w-0 min-h-[420px] lg:min-h-[576px] bg-[#080808] overflow-hidden">
             {/* Shading scrims */}
             <div
               className="absolute inset-0 z-10 pointer-events-none"
