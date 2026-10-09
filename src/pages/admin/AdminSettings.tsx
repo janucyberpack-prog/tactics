@@ -9,11 +9,17 @@ import {
   CheckCircle2,
   AlertCircle,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  Globe,
+  FileCode2,
+  Download,
+  Copy,
+  Check
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { changeAdminPassword, resetPassword, BOOTSTRAP_ADMIN_EMAIL } from '../../services/auth';
-import { seedInitialPostsIfEmpty } from '../../services/posts';
+import { seedInitialPostsIfEmpty, getPublishedPosts } from '../../services/posts';
+import { buildDynamicSitemapXml, downloadSitemap, SITE_DOMAIN } from '../../utils/sitemap';
 import { AdminLayout } from '../../components/admin/AdminLayout';
 import { useToast } from '../../components/Toast';
 import { SEO } from '../../components/SEO';
@@ -27,6 +33,34 @@ export const AdminSettings: React.FC = () => {
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
   const [seedLoading, setSeedLoading] = useState(false);
+  const [sitemapLoading, setSitemapLoading] = useState(false);
+  const [copiedXml, setCopiedXml] = useState(false);
+
+  const handleDownloadLiveSitemap = async () => {
+    setSitemapLoading(true);
+    try {
+      const posts = await getPublishedPosts();
+      downloadSitemap(posts);
+      showToast('Live sitemap.xml generated and downloaded.', 'success');
+    } catch (err: any) {
+      showToast('Failed to generate live sitemap.', 'error');
+    } finally {
+      setSitemapLoading(false);
+    }
+  };
+
+  const handleCopySitemapXml = async () => {
+    try {
+      const posts = await getPublishedPosts();
+      const xml = buildDynamicSitemapXml(posts);
+      await navigator.clipboard.writeText(xml);
+      setCopiedXml(true);
+      showToast('Dynamic sitemap XML copied to clipboard.', 'success');
+      setTimeout(() => setCopiedXml(false), 2500);
+    } catch {
+      showToast('Could not copy XML.', 'error');
+    }
+  };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -239,6 +273,110 @@ export const AdminSettings: React.FC = () => {
                 <Sparkles className="w-3.5 h-3.5 text-white" />
                 <span>{seedLoading ? 'Verifying...' : 'Verify Articles'}</span>
               </button>
+            </div>
+          </div>
+
+          {/* Google Search Indexing, Sitemaps & Robots.txt */}
+          <div className="bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-zinc-800 shadow-sm space-y-6">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Globe className="w-5 h-5 text-red-400" />
+                <h3 className="font-serif text-xl text-zinc-100">Google Search Indexing & Sitemaps</h3>
+              </div>
+              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+                Automatic XML sitemaps, news feeds, and crawling directives calibrated for daily post indexing by Googlebot.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Sitemaps Status */}
+              <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold flex items-center gap-1.5">
+                    <FileCode2 className="w-3.5 h-3.5 text-red-400" /> XML Sitemap
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-900">
+                    Active & Crawlable
+                  </span>
+                </div>
+                <p className="text-xs font-mono text-zinc-300 break-all select-all">
+                  /sitemap.xml
+                </p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <a
+                    href="/sitemap.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" /> View sitemap.xml
+                  </a>
+                  <a
+                    href="/sitemap-news.xml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" /> View sitemap-news.xml
+                  </a>
+                </div>
+              </div>
+
+              {/* Robots.txt Status */}
+              <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5 text-red-400" /> Robots.txt
+                  </span>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-950 text-emerald-400 border border-emerald-900">
+                    Googlebot Allowed
+                  </span>
+                </div>
+                <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+                  Allows indexing of articles, images, and public routes while shielding admin & user data.
+                </p>
+                <div className="pt-1">
+                  <a
+                    href="/robots.txt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" /> View robots.txt
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions Bar */}
+            <div className="p-4 rounded-xl bg-zinc-900/60 border border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="font-semibold text-xs text-zinc-200">Daily Sitemap Synchronizer</div>
+                <div className="text-xs text-zinc-400 mt-0.5">
+                  Fetch all current Firestore posts, generate a fresh XML sitemap, and download or submit to Google.
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleCopySitemapXml}
+                  className="px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 transition-colors flex items-center gap-1.5"
+                >
+                  {copiedXml ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedXml ? 'Copied XML!' : 'Copy Live XML'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadLiveSitemap}
+                  disabled={sitemapLoading}
+                  className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  <Download className="w-3.5 h-3.5 text-white" />
+                  <span>{sitemapLoading ? 'Building...' : 'Download Live Sitemap'}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

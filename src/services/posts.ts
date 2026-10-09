@@ -181,6 +181,75 @@ Stillness is not an indulgence. It is the fundamental baseline upon which mental
     status: "published",
     featured: false,
     readingTime: 5
+  },
+  {
+    title: "The biology of decision fatigue",
+    slug: "the-biology-of-decision-fatigue",
+    excerpt: "Why micro-choices deplete executive energy before noon, and how cognitive minimalism preserves high-leverage mental clarity.",
+    content: `Every time you decide between two routes to work, deliberate over breakfast options, or debate which email to open first, your prefrontal cortex burns glucose and neurotransmitters. This finite cognitive budget is known as ego depletion or decision fatigue.
+
+By mid-afternoon, when critical strategic decisions or complex emotional interactions arise, the depleted brain takes cognitive shortcuts: impulsive choices or total paralysis.
+
+### The Antidote: Cognitive Minimalism
+
+* **Pre-Decide Routine Contexts**: Wear a simplified wardrobe, eat consistent breakfasts, and automate repetitive operational workflows.
+* **Tackle Hard Problems Early**: Protect the 9:00 AM to 11:30 AM window for your highest-order conceptual or creative challenge.
+* **The Rule of Two Priorities**: Identify only two needle-moving outcomes for each day. Everything else is secondary noise.`,
+    coverImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1200&q=80",
+    category: "Neuroscience",
+    tags: ["Willpower", "Focus", "Decision Making", "Clarity"],
+    authorId: "editorial-team",
+    authorName: "Marcus Thorne",
+    authorPhoto: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+    status: "published",
+    featured: false,
+    readingTime: 5
+  },
+  {
+    title: "Reframing internal dialogue without toxic positivity",
+    slug: "reframing-internal-dialogue-without-toxic-positivity",
+    excerpt: "How cognitive defusion and radical acceptance allow us to shift self-talk without invalidating real emotional weight.",
+    content: `Compulsive cheerfulness often inflicts more psychological harm than honest grief. When you force positive affirmations over genuine distress, your subconscious flags the dissonance as self-deception.
+
+Cognitive defusion—a core pillar of Acceptance and Commitment Therapy (ACT)—does not demand that you falsify your sorrow. Instead, it invites you to step back from treating thoughts as absolute mandates.
+
+### Shifting from Fusion to Observation
+
+* **Notice the Story**: Instead of saying *"I am a failure"*, practice saying *"I notice my mind is generating a story that I failed"*.
+* **Honor the Somatic Reality**: Validate the sensation in the chest before attempting to reframe the narrative.
+* **Focus on Workability**: Ask not whether a thought is pleasant, but whether acting on it brings you closer to what you genuinely value.`,
+    coverImage: "https://images.unsplash.com/photo-1508672019048-805b876b67e2?auto=format&fit=crop&w=1200&q=80",
+    category: "Emotional Agility",
+    tags: ["Self-Talk", "Acceptance", "CBT", "Mindset"],
+    authorId: "editorial-team",
+    authorName: "Dr. Alistair Finch",
+    authorPhoto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    status: "published",
+    featured: false,
+    readingTime: 6
+  },
+  {
+    title: "The art of non-striving: lessons from Wu Wei",
+    slug: "the-art-of-non-striving-lessons-from-wu-wei",
+    excerpt: "Why releasing neurotic over-control often unlocks the creative momentum and psychological flow you've been forcing.",
+    content: `In Taoist philosophy, Wu Wei is translated as "effortless action" or "non-striving." It is not apathy or passivity; rather, it is the state of dynamic alignment with reality as it unfolds.
+
+Modern neurobiology mirrors this ancient insight: creative breakthroughs occur during transient hypofrontality, when hyper-controlling executive circuits soften, permitting novel lateral associations across distant neural networks.
+
+### Integrating Wu Wei into Modern Work
+
+* **Lower the Internal Stakes**: Approach creative tasks as playful experiments rather than monumental declarations of self-worth.
+* **Ride Natural Energetic Cadences**: Align analytical demands with physiological peaks, and restful integration with natural energy troughs.
+* **Surrender the Fixation on Outcomes**: Immerse yourself completely in the craft, detaching from the vanity of immediate appraisal.`,
+    coverImage: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=80",
+    category: "Mindfulness",
+    tags: ["Wu Wei", "Flow", "Pacing", "Effortless Action"],
+    authorId: "editorial-team",
+    authorName: "Elena Vance",
+    authorPhoto: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    status: "published",
+    featured: false,
+    readingTime: 4
   }
 ];
 

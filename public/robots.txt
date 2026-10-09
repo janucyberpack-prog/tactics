@@ -1,7 +1,57 @@
+# Robots.txt for Mental Tactic (https://mental-tactic-65c43.web.app)
+# Optimized for Googlebot, search engine indexing, and daily editorial publishing
+
 User-agent: *
 Allow: /
+Allow: /journal
+Allow: /journal/*
+Allow: /about
+Allow: /contact
+
+# Static and media asset crawling
+Allow: /assets/
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.webp$
+Allow: /*.svg$
+Allow: /*.ico$
+Allow: /*.json$
+
+# Block private user profiles, login state, and CMS administration
 Disallow: /admin
 Disallow: /admin/*
 Disallow: /account
+Disallow: /account/*
+Disallow: /saved-articles
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
 
+# Google Search crawler configuration
+User-agent: Googlebot
+Allow: /
+Allow: /journal
+Allow: /journal/*
+Disallow: /admin/
+Disallow: /account/
+Disallow: /saved-articles
+
+# Googlebot Image crawler
+User-agent: Googlebot-Image
+Allow: /
+Allow: /assets/
+
+# Bing crawler
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /account/
+
+# Sitemaps (updated daily for fresh post indexing)
 Sitemap: https://mental-tactic-65c43.web.app/sitemap.xml
+Sitemap: https://mental-tactic-65c43.web.app/sitemap-news.xml
+
+Host: https://mental-tactic-65c43.web.app

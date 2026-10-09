@@ -1,53 +1,167 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Core Landing Page -->
   <url>
     <loc>https://mental-tactic-65c43.web.app/</loc>
+    <lastmod>2026-10-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Editorial Journal Index -->
   <url>
     <loc>https://mental-tactic-65c43.web.app/journal</loc>
+    <lastmod>2026-10-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- Topical Editorial Categories -->
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal?category=Mindfulness</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal?category=Rest%20%26%20Renewal</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal?category=Emotional%20Agility</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal?category=Neuroscience</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal?category=Daily%20Rituals</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Articles / Insights (Updated Daily) -->
   <url>
     <loc>https://mental-tactic-65c43.web.app/journal/the-quiet-power-of-doing-one-thing</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>The quiet power of doing one thing</image:title>
+    </image:image>
   </url>
+
   <url>
     <loc>https://mental-tactic-65c43.web.app/journal/rest-isnt-the-opposite-of-progress</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Rest isn&apos;t the opposite of progress</image:title>
+    </image:image>
   </url>
+
   <url>
     <loc>https://mental-tactic-65c43.web.app/journal/how-to-make-room-for-a-difficult-feeling</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>How to make room for a difficult feeling</image:title>
+    </image:image>
   </url>
+
   <url>
     <loc>https://mental-tactic-65c43.web.app/journal/the-architecture-of-a-slow-morning</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>The architecture of a slow morning</image:title>
+    </image:image>
   </url>
+
   <url>
     <loc>https://mental-tactic-65c43.web.app/journal/unraveling-cognitive-spirals-before-sleep</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1511295742362-92c96b124e52?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Unraveling cognitive spirals before sleep</image:title>
+    </image:image>
   </url>
+
   <url>
     <loc>https://mental-tactic-65c43.web.app/journal/why-your-nervous-system-craves-stillness</loc>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Why your nervous system craves stillness</image:title>
+    </image:image>
   </url>
+
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal/the-biology-of-decision-fatigue</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>The biology of decision fatigue</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal/reframing-internal-dialogue-without-toxic-positivity</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1508672019048-805b876b67e2?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Reframing internal dialogue without toxic positivity</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://mental-tactic-65c43.web.app/journal/the-art-of-non-striving-lessons-from-wu-wei</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>The art of non-striving: lessons from Wu Wei</image:title>
+    </image:image>
+  </url>
+
+  <!-- Static Informational Pages -->
   <url>
     <loc>https://mental-tactic-65c43.web.app/about</loc>
+    <lastmod>2026-10-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://mental-tactic-65c43.web.app/contact</loc>
+    <lastmod>2026-10-09</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.5</priority>
   </url>
 </urlset>

@@ -162,6 +162,14 @@ export const ArticleDetail: React.FC = () => {
         description={post.excerpt}
         image={post.coverImage}
         type="article"
+        url={window.location.href}
+        article={{
+          publishedTime: post.publishedAt?.toDate ? post.publishedAt.toDate().toISOString() : undefined,
+          modifiedTime: post.updatedAt?.toDate ? post.updatedAt.toDate().toISOString() : undefined,
+          author: post.authorName,
+          tags: post.tags,
+          category: post.category
+        }}
       />
 
       <div className="site-container max-w-4xl mx-auto">

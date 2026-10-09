@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArticleCard } from '../components/ArticleCard';
 import { CardSkeleton } from '../components/Skeletons';
 import { SEO } from '../components/SEO';
-import { subscribeToPublishedPosts } from '../services/posts';
+import { subscribeToPublishedPosts, INITIAL_SEED_POSTS } from '../services/posts';
 import { subscribeNewsletter } from '../services/interactions';
 import { useToast } from '../components/Toast';
 import { Post } from '../types';
@@ -64,9 +64,25 @@ export const Home: React.FC = () => {
     }
   };
 
-  // Get top 3 articles directly from live Firestore collection (no mock data)
+  // Display 3 post cards in one row across 3 rows = 9 post cards total
   const featuredArticles = useMemo(() => {
-    return posts.slice(0, 3);
+    const list = [...posts];
+    if (list.length < 9) {
+      const existingSlugs = new Set(list.map((p) => p.slug));
+      for (const seed of INITIAL_SEED_POSTS) {
+        if (!existingSlugs.has(seed.slug)) {
+          list.push({
+            id: seed.slug,
+            ...seed,
+            createdAt: null as any,
+            updatedAt: null as any,
+            publishedAt: null as any
+          });
+          if (list.length >= 9) break;
+        }
+      }
+    }
+    return list.slice(0, 9);
   }, [posts]);
 
   return (
@@ -78,9 +94,9 @@ export const Home: React.FC = () => {
 
       {/* 1. HERO SECTION (Split Screen) */}
       <section className="border-b border-[#252525] relative overflow-hidden scroll-mt-20" id="home">
-        <div className="site-container min-h-[420px] lg:min-h-[576px] grid grid-cols-1 lg:grid-cols-[47%_53%] items-stretch">
+        <div className="site-container min-h-[336px] lg:min-h-[460px] grid grid-cols-1 lg:grid-cols-[47%_53%] items-stretch">
           {/* Left Narrative Column */}
-          <div className="relative z-10 flex flex-col justify-start pt-10 lg:pt-[76px] pb-6 lg:pb-8 pr-0 lg:pr-12">
+          <div className="relative z-10 flex flex-col justify-start pt-10 lg:pt-[76px] pb-3 lg:pb-4 pr-0 lg:pr-12">
             {/* Red Eyebrow Text with Accent Line */}
             <p className="flex items-center gap-3 text-[#ce354b] text-[10px] font-bold tracking-[0.26em] uppercase mb-5">
               <span className="w-[34px] h-[1px] bg-[#b51f35] inline-block shrink-0" aria-hidden="true" />
@@ -120,7 +136,7 @@ export const Home: React.FC = () => {
           </div>
 
           {/* Right Visual Column (Monochrome Sculpture + Crimson Light) */}
-          <div className="relative min-w-0 min-h-[420px] lg:min-h-[576px] bg-[#080808] overflow-hidden">
+          <div className="relative min-w-0 min-h-[336px] lg:min-h-[460px] bg-[#080808] overflow-hidden">
             {/* Shading scrims */}
             <div
               className="absolute inset-0 z-10 pointer-events-none"
@@ -163,7 +179,7 @@ export const Home: React.FC = () => {
             </div>
 
             {/* Figure label */}
-            <span className="absolute z-30 right-[7%] bottom-[31px] text-white/40 font-serif italic text-[11px] tracking-[0.15em] select-none">
+            <span className="absolute z-30 right-[7%] bottom-[24px] text-white/40 font-serif italic text-[11px] tracking-[0.15em] select-none">
               Fig. 01 / The Self
             </span>
           </div>
@@ -194,16 +210,17 @@ export const Home: React.FC = () => {
                 </Link>
               </div>
 
-              {/* Articles Grid / Live Data */}
+              {/* Articles Grid / Live Data: 3 posts cards in one row, 3 rows total */}
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  <CardSkeleton />
-                  <CardSkeleton />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5 lg:gap-5">
+                  {Array.from({ length: 9 }).map((_, i) => (
+                    <CardSkeleton key={i} />
+                  ))}
                 </div>
               ) : featuredArticles.length > 0 ? (
-                <div className={`grid grid-cols-1 ${featuredArticles.length === 1 ? 'sm:grid-cols-1 max-w-md' : featuredArticles.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'} gap-5`}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4.5 lg:gap-5">
                   {featuredArticles.map((article, idx) => (
-                    <ArticleCard key={article.id} post={article} index={idx + 1} />
+                    <ArticleCard key={article.id} post={article} index={idx + 1} compact />
                   ))}
                 </div>
               ) : (
