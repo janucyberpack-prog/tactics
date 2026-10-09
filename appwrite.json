@@ -1,0 +1,14 @@
+{
+  "projectId": "",
+  "projectName": "Mental Tactic",
+  "sites": [
+    {
+      "$id": "mental-tactic",
+      "name": "Mental Tactic",
+      "framework": "vite",
+      "buildCommand": "npm run build",
+      "installCommand": "npm install",
+      "outputDirectory": "dist"
+    }
+  ]
+}

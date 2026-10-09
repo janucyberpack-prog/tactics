@@ -85,24 +85,24 @@ export const AdminOverview: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
           {/* Welcome Banner */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#EBE6DC]">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-zinc-800">
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-[#6F8A77]">
+              <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-red-500">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Sanctuary Command Center</span>
+                <span>Command Center</span>
               </div>
-              <h1 className="font-serif text-3xl sm:text-4xl text-[#122B22] font-normal tracking-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl text-zinc-100 font-normal tracking-tight">
                 Editorial Studio
               </h1>
-              <p className="text-xs text-[#122B22]/70 font-sans max-w-xl leading-relaxed">
-                Curate stillness, publish contemplative essays, foster community, and oversee reader correspondence.
+              <p className="text-xs text-zinc-400 font-sans max-w-xl leading-relaxed">
+                Publish articles, manage reader subscriptions, review correspondence, and oversee site content.
               </p>
             </div>
 
             <div className="flex items-center gap-3">
               <Link
                 to="/admin/articles/new"
-                className="px-5 py-2.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center gap-2 shadow-sm"
+                className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2 shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 <span>Write Article</span>
@@ -110,10 +110,10 @@ export const AdminOverview: React.FC = () => {
               <Link
                 to="/"
                 target="_blank"
-                className="px-4 py-2.5 rounded-full bg-white border border-[#EBE6DC] text-[#122B22] text-xs font-semibold uppercase tracking-wider hover:bg-[#FAF7F2] transition-colors flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-200 text-xs font-semibold uppercase tracking-wider hover:bg-zinc-800 transition-colors flex items-center gap-1.5"
               >
                 <span>Live Site</span>
-                <ExternalLink className="w-3.5 h-3.5 text-[#6F8A77]" />
+                <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
               </Link>
             </div>
           </div>
@@ -122,21 +122,21 @@ export const AdminOverview: React.FC = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <Link
               to="/admin/articles"
-              className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm hover:shadow-md hover:border-[#8EA595] transition-all group space-y-3"
+              className="bg-[#0a0a0a] rounded-2xl p-6 border border-zinc-800 hover:border-zinc-700 transition-all group space-y-3"
             >
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-[#FAF7F2] flex items-center justify-center text-[#122B22] border border-[#EBE6DC]">
-                  <FileText className="w-5 h-5 text-[#6F8A77]" />
+                <div className="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 border border-zinc-800">
+                  <FileText className="w-5 h-5 text-red-500" />
                 </div>
-                <span className="text-[11px] text-[#6F8A77] font-semibold group-hover:translate-x-0.5 transition-transform">
+                <span className="text-[11px] text-zinc-500 font-semibold group-hover:translate-x-0.5 transition-transform">
                   View →
                 </span>
               </div>
               <div>
-                <div className="text-3xl font-serif text-[#122B22]">{posts.length}</div>
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#8EA595]">Total Articles</div>
+                <div className="text-3xl font-serif text-zinc-100">{posts.length}</div>
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Total Articles</div>
               </div>
-              <div className="text-[11px] text-[#122B22]/60 pt-1 border-t border-[#F2ECE4] flex items-center justify-between">
+              <div className="text-[11px] text-zinc-400 pt-1 border-t border-zinc-800/80 flex items-center justify-between">
                 <span>{publishedCount} Published</span>
                 <span>{draftCount} Drafts</span>
               </div>
@@ -144,67 +144,67 @@ export const AdminOverview: React.FC = () => {
 
             <Link
               to="/admin/users"
-              className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm hover:shadow-md hover:border-[#8EA595] transition-all group space-y-3"
+              className="bg-[#0a0a0a] rounded-2xl p-6 border border-zinc-800 hover:border-zinc-700 transition-all group space-y-3"
             >
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-[#FAF7F2] flex items-center justify-center text-[#122B22] border border-[#EBE6DC]">
-                  <Users className="w-5 h-5 text-[#C9BEF6]" />
+                <div className="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 border border-zinc-800">
+                  <Users className="w-5 h-5 text-zinc-300" />
                 </div>
-                <span className="text-[11px] text-[#6F8A77] font-semibold group-hover:translate-x-0.5 transition-transform">
+                <span className="text-[11px] text-zinc-500 font-semibold group-hover:translate-x-0.5 transition-transform">
                   View →
                 </span>
               </div>
               <div>
-                <div className="text-3xl font-serif text-[#122B22]">{users.length}</div>
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#8EA595]">Seekers & Users</div>
+                <div className="text-3xl font-serif text-zinc-100">{users.length}</div>
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Users & Members</div>
               </div>
-              <div className="text-[11px] text-[#122B22]/60 pt-1 border-t border-[#F2ECE4]">
-                Registered profiles in Firestore
+              <div className="text-[11px] text-zinc-400 pt-1 border-t border-zinc-800/80">
+                Registered profiles
               </div>
             </Link>
 
             <Link
               to="/admin/subscribers"
-              className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm hover:shadow-md hover:border-[#8EA595] transition-all group space-y-3"
+              className="bg-[#0a0a0a] rounded-2xl p-6 border border-zinc-800 hover:border-zinc-700 transition-all group space-y-3"
             >
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-[#FAF7F2] flex items-center justify-center text-[#122B22] border border-[#EBE6DC]">
-                  <Mail className="w-5 h-5 text-[#F1B995]" />
+                <div className="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 border border-zinc-800">
+                  <Mail className="w-5 h-5 text-red-400" />
                 </div>
-                <span className="text-[11px] text-[#6F8A77] font-semibold group-hover:translate-x-0.5 transition-transform">
+                <span className="text-[11px] text-zinc-500 font-semibold group-hover:translate-x-0.5 transition-transform">
                   View →
                 </span>
               </div>
               <div>
-                <div className="text-3xl font-serif text-[#122B22]">{subscribers.length}</div>
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#8EA595]">Subscribers</div>
+                <div className="text-3xl font-serif text-zinc-100">{subscribers.length}</div>
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Subscribers</div>
               </div>
-              <div className="text-[11px] text-[#122B22]/60 pt-1 border-t border-[#F2ECE4]">
+              <div className="text-[11px] text-zinc-400 pt-1 border-t border-zinc-800/80">
                 Newsletter readership
               </div>
             </Link>
 
             <Link
               to="/admin/messages"
-              className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm hover:shadow-md hover:border-[#8EA595] transition-all group space-y-3"
+              className="bg-[#0a0a0a] rounded-2xl p-6 border border-zinc-800 hover:border-zinc-700 transition-all group space-y-3"
             >
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-2xl bg-[#FAF7F2] flex items-center justify-center text-[#122B22] border border-[#EBE6DC]">
-                  <MessageSquare className="w-5 h-5 text-[#6F8A77]" />
+                <div className="w-10 h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 border border-zinc-800">
+                  <MessageSquare className="w-5 h-5 text-zinc-300" />
                 </div>
                 {unreadMessagesCount > 0 ? (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E27D60] text-white">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-950 text-red-300 border border-red-800">
                     {unreadMessagesCount} New
                   </span>
                 ) : (
-                  <span className="text-[11px] text-[#6F8A77] font-semibold">View →</span>
+                  <span className="text-[11px] text-zinc-500 font-semibold">View →</span>
                 )}
               </div>
               <div>
-                <div className="text-3xl font-serif text-[#122B22]">{messages.length}</div>
-                <div className="text-[11px] font-semibold uppercase tracking-wider text-[#8EA595]">Inquiries</div>
+                <div className="text-3xl font-serif text-zinc-100">{messages.length}</div>
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">Inquiries</div>
               </div>
-              <div className="text-[11px] text-[#122B22]/60 pt-1 border-t border-[#F2ECE4]">
+              <div className="text-[11px] text-zinc-400 pt-1 border-t border-zinc-800/80">
                 {unreadMessagesCount} awaiting response
               </div>
             </Link>
@@ -212,15 +212,15 @@ export const AdminOverview: React.FC = () => {
 
           {/* Quick Shortcuts & Database Status */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-[#EBE6DC] shadow-sm space-y-6">
+            <div className="lg:col-span-2 bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-zinc-800 space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <h3 className="font-serif text-2xl text-[#122B22]">Recent Journal Entries</h3>
-                  <p className="text-xs text-[#8EA595]">Recently published and pending reflections</p>
+                  <h3 className="font-serif text-2xl text-zinc-100">Recent Articles</h3>
+                  <p className="text-xs text-zinc-500">Recently published and pending drafts</p>
                 </div>
                 <Link
                   to="/admin/articles"
-                  className="text-xs font-semibold uppercase tracking-wider text-[#6F8A77] hover:text-[#122B22] flex items-center gap-1"
+                  className="text-xs font-semibold uppercase tracking-wider text-red-400 hover:text-red-300 flex items-center gap-1"
                 >
                   <span>All Articles</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -228,15 +228,15 @@ export const AdminOverview: React.FC = () => {
               </div>
 
               {loading ? (
-                <div className="py-12 text-center text-xs text-[#8EA595] animate-pulse">
-                  Loading editorial data from Firestore...
+                <div className="py-12 text-center text-xs text-zinc-500 animate-pulse">
+                  Loading editorial data...
                 </div>
               ) : posts.length === 0 ? (
                 <div className="py-10 text-center space-y-3">
-                  <p className="text-xs text-[#8EA595]">No reflections found in Firestore collection.</p>
+                  <p className="text-xs text-zinc-500">No articles found in collection.</p>
                   <Link
                     to="/admin/articles/new"
-                    className="inline-block px-4 py-2 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider"
+                    className="inline-block px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider"
                   >
                     Draft First Article
                   </Link>
@@ -245,62 +245,62 @@ export const AdminOverview: React.FC = () => {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm">
                     <thead>
-                      <tr className="border-b border-[#F2ECE4] text-[11px] uppercase tracking-wider text-[#8EA595]">
+                      <tr className="border-b border-zinc-800 text-[11px] uppercase tracking-wider text-zinc-500">
                         <th className="pb-3 font-semibold">Title</th>
                         <th className="pb-3 font-semibold">Category</th>
                         <th className="pb-3 font-semibold">Status</th>
                         <th className="pb-3 font-semibold text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#F2ECE4]">
+                    <tbody className="divide-y divide-zinc-800/80">
                       {posts.slice(0, 5).map((post) => (
-                        <tr key={post.id} className="hover:bg-[#FAF7F2] transition-colors">
+                        <tr key={post.id} className="hover:bg-zinc-900/60 transition-colors">
                           <td className="py-3.5 pr-4">
                             <div className="flex items-center gap-3">
                               {post.coverImage && (
                                 <img
                                   src={post.coverImage}
                                   alt=""
-                                  className="w-10 h-10 rounded-xl object-cover shrink-0 border border-[#EBE6DC]"
+                                  className="w-10 h-10 rounded-lg object-cover shrink-0 border border-zinc-800"
                                 />
                               )}
                               <div className="min-w-0">
-                                <div className="font-medium text-[#122B22] max-w-xs truncate">{post.title}</div>
-                                <div className="text-[11px] text-[#8EA595] truncate">/journal/{post.slug}</div>
+                                <div className="font-medium text-zinc-200 max-w-xs truncate">{post.title}</div>
+                                <div className="text-[11px] text-zinc-500 truncate">/journal/{post.slug}</div>
                               </div>
                             </div>
                           </td>
                           <td className="py-3.5 pr-4">
-                            <span className="px-2.5 py-0.5 rounded-full text-xs bg-[#FAF7F2] border border-[#EBE6DC] text-[#6F8A77]">
+                            <span className="px-2.5 py-0.5 rounded-full text-xs bg-zinc-900 border border-zinc-800 text-zinc-400">
                               {post.category}
                             </span>
                           </td>
                           <td className="py-3.5 pr-4">
                             <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
                               post.status === 'published'
-                                ? 'bg-[#B8E0D2]/50 text-[#122B22]'
-                                : 'bg-[#FAF7F2] text-[#8EA595]'
+                                ? 'bg-red-950/60 text-red-400 border border-red-900/50'
+                                : 'bg-zinc-900 text-zinc-500'
                             }`}>
                               {post.status}
                             </span>
                           </td>
-                          <td className="py-3.5 text-right space-x-2">
+                          <td className="py-3.5 text-right space-x-3">
                             <Link
                               to={`/admin/articles/${post.id}/edit`}
-                              className="text-xs font-semibold text-[#122B22] hover:text-[#6F8A77] underline"
+                              className="text-xs font-semibold text-zinc-300 hover:text-white underline"
                             >
                               Edit
                             </Link>
                             <Link
                               to={`/journal/${post.slug}`}
                               target="_blank"
-                              className="text-xs text-[#8EA595] hover:text-[#122B22]"
+                              className="text-xs text-zinc-500 hover:text-zinc-300"
                             >
                               View
                             </Link>
                             <button
                               onClick={() => setPostToDelete(post)}
-                              className="text-xs text-red-600 hover:text-red-700 underline"
+                              className="text-xs text-red-400 hover:text-red-300 underline"
                               title="Delete reflection"
                             >
                               Delete
@@ -317,79 +317,79 @@ export const AdminOverview: React.FC = () => {
             {/* Quick Actions & System Info */}
             <div className="space-y-6">
               {/* Quick Actions Card */}
-              <div className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm space-y-4">
-                <h4 className="font-serif text-lg text-[#122B22]">Editorial Shortcuts</h4>
+              <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-zinc-800 space-y-4">
+                <h4 className="font-serif text-lg text-zinc-100">Editorial Shortcuts</h4>
                 <div className="space-y-2">
                   <Link
                     to="/admin/articles/new"
-                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F2] hover:bg-[#EAE5DB] transition-colors text-xs font-semibold text-[#122B22]"
+                    className="w-full flex items-center justify-between p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition-colors text-xs font-semibold text-zinc-200"
                   >
                     <div className="flex items-center gap-2.5">
-                      <Plus className="w-4 h-4 text-[#6F8A77]" />
+                      <Plus className="w-4 h-4 text-red-400" />
                       <span>Create New Article</span>
                     </div>
-                    <span className="text-[#8EA595]">→</span>
+                    <span className="text-zinc-500">→</span>
                   </Link>
 
                   <Link
                     to="/admin/users"
-                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F2] hover:bg-[#EAE5DB] transition-colors text-xs font-semibold text-[#122B22]"
+                    className="w-full flex items-center justify-between p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition-colors text-xs font-semibold text-zinc-200"
                   >
                     <div className="flex items-center gap-2.5">
-                      <Users className="w-4 h-4 text-[#6F8A77]" />
+                      <Users className="w-4 h-4 text-zinc-400" />
                       <span>Manage Roles & Permissions</span>
                     </div>
-                    <span className="text-[#8EA595]">→</span>
+                    <span className="text-zinc-500">→</span>
                   </Link>
 
                   <Link
                     to="/admin/subscribers"
-                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F2] hover:bg-[#EAE5DB] transition-colors text-xs font-semibold text-[#122B22]"
+                    className="w-full flex items-center justify-between p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition-colors text-xs font-semibold text-zinc-200"
                   >
                     <div className="flex items-center gap-2.5">
-                      <Mail className="w-4 h-4 text-[#6F8A77]" />
+                      <Mail className="w-4 h-4 text-zinc-400" />
                       <span>Export Subscriber List</span>
                     </div>
-                    <span className="text-[#8EA595]">→</span>
+                    <span className="text-zinc-500">→</span>
                   </Link>
 
                   <Link
                     to="/admin/settings"
-                    className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F2] hover:bg-[#EAE5DB] transition-colors text-xs font-semibold text-[#122B22]"
+                    className="w-full flex items-center justify-between p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition-colors text-xs font-semibold text-zinc-200"
                   >
                     <div className="flex items-center gap-2.5">
-                      <ShieldCheck className="w-4 h-4 text-[#6F8A77]" />
+                      <ShieldCheck className="w-4 h-4 text-zinc-400" />
                       <span>Admin Security & Password</span>
                     </div>
-                    <span className="text-[#8EA595]">→</span>
+                    <span className="text-zinc-500">→</span>
                   </Link>
                 </div>
               </div>
 
               {/* Database & Cloud Health */}
-              <div className="bg-[#122B22] text-[#FAF7F2] rounded-3xl p-6 shadow-sm space-y-4">
+              <div className="bg-[#0e0e0e] text-[#f1f0ed] rounded-2xl p-6 border border-zinc-800 space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Database className="w-4 h-4 text-[#B8E0D2]" />
-                    <span className="font-serif text-base">Firebase Cloud Status</span>
+                    <Database className="w-4 h-4 text-red-400" />
+                    <span className="font-serif text-base text-zinc-200">Firebase Cloud Status</span>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-950/80 text-emerald-400 border border-emerald-800/80">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     Online
                   </span>
                 </div>
 
-                <div className="space-y-2 text-xs text-[#FAF7F2]/75 font-sans">
-                  <div className="flex justify-between border-b border-white/10 pb-1.5">
-                    <span className="text-[#8EA595]">Project</span>
-                    <span className="font-mono text-[11px] text-[#FAF7F2]">mental-tactic-65c43</span>
+                <div className="space-y-2 text-xs text-zinc-400 font-sans">
+                  <div className="flex justify-between border-b border-zinc-800 pb-1.5">
+                    <span className="text-zinc-500">Project</span>
+                    <span className="font-mono text-[11px] text-zinc-300">mental-tactic-65c43</span>
                   </div>
-                  <div className="flex justify-between border-b border-white/10 pb-1.5">
-                    <span className="text-[#8EA595]">Database</span>
+                  <div className="flex justify-between border-b border-zinc-800 pb-1.5">
+                    <span className="text-zinc-500">Database</span>
                     <span>Cloud Firestore</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-[#8EA595]">Auth Engine</span>
+                    <span className="text-zinc-500">Auth Engine</span>
                     <span>Firebase Auth (RBAC)</span>
                   </div>
                 </div>
@@ -399,21 +399,21 @@ export const AdminOverview: React.FC = () => {
 
           {/* Delete Reflection Modal */}
           {postToDelete && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-[#EBE6DC] shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
-                <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center border border-red-100">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
+              <div className="bg-[#0e0e0e] rounded-2xl p-6 sm:p-8 max-w-md w-full border border-zinc-800 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+                <div className="w-12 h-12 rounded-xl bg-red-950/60 text-red-400 flex items-center justify-center border border-red-900/50">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="font-serif text-2xl text-[#122B22]">Delete Reflection?</h3>
-                  <p className="text-xs text-[#122B22]/80 leading-relaxed font-sans">
+                  <h3 className="font-serif text-2xl text-zinc-100">Delete Reflection?</h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed font-sans">
                     Are you sure you want to permanently delete{' '}
-                    <span className="font-semibold text-[#122B22]">"{postToDelete.title}"</span>?
+                    <span className="font-semibold text-zinc-200">"{postToDelete.title}"</span>?
                   </p>
                 </div>
 
-                <p className="text-[11px] text-[#8EA595] leading-relaxed">
+                <p className="text-[11px] text-zinc-500 leading-relaxed">
                   This will remove the article from Cloud Firestore permanently.
                 </p>
 
@@ -421,7 +421,7 @@ export const AdminOverview: React.FC = () => {
                   <button
                     disabled={isDeleting}
                     onClick={() => setPostToDelete(null)}
-                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-[#122B22] hover:bg-[#FAF7F2] transition-colors disabled:opacity-50"
+                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>

@@ -72,7 +72,7 @@ export const AdminSettings: React.FC = () => {
     setSeedLoading(true);
     try {
       await seedInitialPostsIfEmpty();
-      showToast('Database verified. Sanctuary reflections active in Firestore.', 'success');
+      showToast('Database verified. Articles active in Firestore.', 'success');
     } catch (err: any) {
       console.error(err);
       showToast('Unable to seed articles.', 'error');
@@ -88,70 +88,70 @@ export const AdminSettings: React.FC = () => {
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-10">
           {/* Header */}
-          <div className="pb-6 border-b border-[#EBE6DC]">
-            <h1 className="font-serif text-3xl sm:text-4xl text-[#122B22] font-normal tracking-tight">
+          <div className="pb-6 border-b border-zinc-800">
+            <h1 className="font-serif text-3xl sm:text-4xl text-zinc-100 font-normal tracking-tight">
               Settings & Security
             </h1>
-            <p className="text-xs text-[#122B22]/70 font-sans mt-1">
+            <p className="text-xs text-zinc-400 font-sans mt-1">
               Manage administrator authentication, credentials, and platform infrastructure.
             </p>
           </div>
 
           {/* Administrator Profile Card */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EBE6DC] shadow-sm space-y-6">
+          <div className="bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-zinc-800 shadow-sm space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#122B22] text-[#B8E0D2] flex items-center justify-center shadow-xs">
+              <div className="w-12 h-12 rounded-xl bg-red-950 border border-red-800 text-red-400 flex items-center justify-center shadow-xs">
                 <Shield className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="font-serif text-xl text-[#122B22]">Administrator Profile</h3>
-                <p className="text-xs text-[#8EA595]">Authenticated Firebase Administrator</p>
+                <h3 className="font-serif text-xl text-zinc-100">Administrator Profile</h3>
+                <p className="text-xs text-zinc-500">Authenticated Firebase Administrator</p>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#EBE6DC] space-y-1">
-                <div className="text-[11px] uppercase tracking-wider text-[#8EA595] font-semibold">
+              <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-1">
+                <div className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
                   Administrator Email
                 </div>
-                <div className="font-mono text-xs text-[#122B22] font-semibold truncate">
+                <div className="font-mono text-xs text-zinc-200 font-semibold truncate">
                   {user?.email || BOOTSTRAP_ADMIN_EMAIL}
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#EBE6DC] space-y-1">
-                <div className="text-[11px] uppercase tracking-wider text-[#8EA595] font-semibold">
+              <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-1">
+                <div className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">
                   Role Authorization
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#122B22] text-[#B8E0D2]">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider bg-red-950 text-red-400 border border-red-900">
                     {profile?.role || 'admin'}
                   </span>
-                  <span className="text-xs text-[#6F8A77]">Full Superuser Access</span>
+                  <span className="text-xs text-zinc-400">Full Superuser Access</span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Change Password Form (Secure Firebase Auth) */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EBE6DC] shadow-sm space-y-6">
+          <div className="bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-zinc-800 shadow-sm space-y-6">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <KeyRound className="w-5 h-5 text-[#6F8A77]" />
-                <h3 className="font-serif text-xl text-[#122B22]">Change Administrator Password</h3>
+                <KeyRound className="w-5 h-5 text-red-400" />
+                <h3 className="font-serif text-xl text-zinc-100">Change Administrator Password</h3>
               </div>
-              <p className="text-xs text-[#122B22]/70 leading-relaxed font-sans">
+              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
                 Update your administrator password through Firebase Authentication's secure encryption flow.
               </p>
             </div>
 
             <form onSubmit={handlePasswordChange} className="space-y-4 max-w-lg">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#122B22]/80">
+                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   New Password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-[#8EA595] absolute left-4 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-zinc-500 absolute left-4 top-1/2 -translate-y-1/2" />
                   <input
                     type="password"
                     required
@@ -159,17 +159,17 @@ export const AdminSettings: React.FC = () => {
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
                     placeholder="Minimum 6 characters"
-                    className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl pl-11 pr-4 py-2.5 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595]"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-11 pr-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600"
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold uppercase tracking-wider text-[#122B22]/80">
+                <label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
                   Confirm New Password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 text-[#8EA595] absolute left-4 top-1/2 -translate-y-1/2" />
+                  <Lock className="w-4 h-4 text-zinc-500 absolute left-4 top-1/2 -translate-y-1/2" />
                   <input
                     type="password"
                     required
@@ -177,7 +177,7 @@ export const AdminSettings: React.FC = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Re-enter password"
-                    className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl pl-11 pr-4 py-2.5 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595]"
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-xl pl-11 pr-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600"
                   />
                 </div>
               </div>
@@ -186,7 +186,7 @@ export const AdminSettings: React.FC = () => {
                 <button
                   type="submit"
                   disabled={passwordLoading}
-                  className="px-6 py-2.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center gap-2 shadow-xs disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2 shadow-xs disabled:opacity-50"
                 >
                   <Lock className="w-3.5 h-3.5" />
                   <span>{passwordLoading ? 'Updating Password...' : 'Save New Password'}</span>
@@ -195,14 +195,14 @@ export const AdminSettings: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleSendResetEmail}
-                  className="px-4 py-2.5 rounded-full border border-[#EBE6DC] bg-[#FAF7F2] text-xs font-semibold text-[#122B22] hover:bg-[#EAE5DB] transition-colors"
+                  className="px-4 py-2.5 rounded-full border border-zinc-800 bg-zinc-900 text-xs font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors"
                 >
                   Send Reset Link to Email
                 </button>
               </div>
 
               {resetEmailSent && (
-                <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
+                <div className="p-3 rounded-xl bg-emerald-950/60 border border-emerald-800/80 text-emerald-300 text-xs flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Password reset email has been dispatched.</span>
                 </div>
@@ -211,22 +211,22 @@ export const AdminSettings: React.FC = () => {
           </div>
 
           {/* Database & Seed Operations */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EBE6DC] shadow-sm space-y-6">
+          <div className="bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-zinc-800 shadow-sm space-y-6">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Database className="w-5 h-5 text-[#6F8A77]" />
-                <h3 className="font-serif text-xl text-[#122B22]">Database Maintenance</h3>
+                <Database className="w-5 h-5 text-red-400" />
+                <h3 className="font-serif text-xl text-zinc-100">Database Maintenance</h3>
               </div>
-              <p className="text-xs text-[#122B22]/70 leading-relaxed font-sans">
+              <p className="text-xs text-zinc-400 leading-relaxed font-sans">
                 Verify Firestore collections, replenish curated sample articles, and synchronize indexes.
               </p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-[#FAF7F2] border border-[#EBE6DC] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <div className="font-semibold text-xs text-[#122B22]">Verify & Seed Initial Articles</div>
-                <div className="text-xs text-[#8EA595] mt-0.5">
-                  Populate foundational essays on mindfulness, rest, emotional agility, and neurobiology if collection is empty.
+                <div className="font-semibold text-xs text-zinc-200">Verify & Seed Initial Articles</div>
+                <div className="text-xs text-zinc-400 mt-0.5">
+                  Populate foundational essays on psychology, focus, emotional agility, and mental tactics if collection is empty.
                 </div>
               </div>
 
@@ -234,9 +234,9 @@ export const AdminSettings: React.FC = () => {
                 type="button"
                 onClick={handleSeedArticles}
                 disabled={seedLoading}
-                className="px-5 py-2.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center gap-2 shrink-0 disabled:opacity-50"
+                className="px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2 shrink-0 disabled:opacity-50"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#B8E0D2]" />
+                <Sparkles className="w-3.5 h-3.5 text-white" />
                 <span>{seedLoading ? 'Verifying...' : 'Verify Articles'}</span>
               </button>
             </div>

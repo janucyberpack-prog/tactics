@@ -105,7 +105,7 @@ export const Contact: React.FC = () => {
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    placeholder="marcus@sanctuary.org"
+                    placeholder="marcus@mentaltactic.com"
                     className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs pl-10 pr-4 py-3 outline-none transition-colors"
                   />
                 </div>

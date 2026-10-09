@@ -10,12 +10,14 @@ interface SEOProps {
 
 export const SEO: React.FC<SEOProps> = ({
   title,
-  description = "A sanctuary for deliberate focus, restorative rest, and psychological clarity in an age of noise.",
-  image = "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80",
-  url = window.location.href,
+  description = "Mental Tactic — evidence-informed psychology, practical tools, and ideas for a stronger mind.",
+  image = "https://images.unsplash.com/photo-1583769929769-48339ffd75e8?auto=format&fit=crop&w=1200&q=80",
+  url = typeof window !== 'undefined' ? window.location.href : '',
   type = "website"
 }) => {
-  const fullTitle = title ? `${title} — Mental Tactic` : "Mental Tactic — A Sanctuary for Stillness & Clarity";
+  const fullTitle = title
+    ? (title.includes('Mental Tactic') ? title : `${title} — Mental Tactic`)
+    : "Mental Tactic — Understand the Mind";
 
   useEffect(() => {
     document.title = fullTitle;

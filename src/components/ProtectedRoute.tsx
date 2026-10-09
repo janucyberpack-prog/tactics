@@ -18,7 +18,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAF7F2] py-20 flex items-center justify-center">
+      <div className="min-h-screen bg-[#050505] py-20 flex items-center justify-center">
         <ProfileSkeleton />
       </div>
     );
@@ -34,31 +34,31 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   // Strict administrator check: editors and regular users do not receive admin privileges
   if (requireAdmin && !isAdmin) {
     return (
-      <div className="min-h-[75vh] flex items-center justify-center p-6 text-center bg-[#FAF7F2]">
-        <div className="max-w-md bg-white rounded-3xl p-8 border border-[#EBE6DC] shadow-sm space-y-5">
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-800 flex items-center justify-center mx-auto border border-amber-200">
+      <div className="min-h-[75vh] flex items-center justify-center p-6 text-center bg-[#050505]">
+        <div className="max-w-md bg-[#0e0e0e] rounded-2xl p-8 border border-zinc-800 shadow-xl space-y-5">
+          <div className="w-12 h-12 rounded-xl bg-red-950/60 text-red-400 flex items-center justify-center mx-auto border border-red-900/50">
             <ShieldAlert className="w-6 h-6" />
           </div>
           <div className="space-y-2">
-            <h2 className="font-serif text-3xl text-[#122B22]">Administrator Access Required</h2>
-            <p className="text-xs text-[#122B22]/70 leading-relaxed font-sans">
-              You are signed in as <span className="font-medium text-[#122B22]">{user.email}</span> with role <span className="font-semibold uppercase tracking-wider text-xs px-2 py-0.5 rounded-full bg-[#FAF7F2] border border-[#EBE6DC] text-[#6F8A77]">{profile?.role || 'user'}</span>.
+            <h2 className="font-serif text-3xl text-zinc-100">Administrator Access Required</h2>
+            <p className="text-xs text-zinc-400 leading-relaxed font-sans">
+              You are signed in as <span className="font-medium text-zinc-200">{user.email}</span> with role <span className="font-semibold uppercase tracking-wider text-xs px-2 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300">{profile?.role || 'user'}</span>.
             </p>
-            <p className="text-xs text-[#122B22]/60 leading-relaxed font-sans pt-1">
+            <p className="text-xs text-zinc-500 leading-relaxed font-sans pt-1">
               Access to the Mental Tactic CMS Studio is restricted strictly to administrators. Editors and seekers cannot access administrator controls.
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
             <Link
               to="/admin/login"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-colors"
             >
               <LogIn className="w-3.5 h-3.5" />
               <span>Switch to Admin</span>
             </Link>
             <Link
               to="/"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-[#FAF7F2] text-[#122B22] border border-[#EBE6DC] text-xs font-semibold uppercase tracking-wider hover:bg-[#EAE5DB] transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 text-xs font-semibold uppercase tracking-wider transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Return Home</span>

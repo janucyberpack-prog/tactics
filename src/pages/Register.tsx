@@ -77,7 +77,7 @@ export const Register: React.FC = () => {
             Join Mental Tactic
           </h1>
           <p className="text-xs text-[#888] font-light leading-relaxed">
-            Create your personal sanctuary for articles, models, and notes.
+            Create your account for articles, mental models, and saved notes.
           </p>
         </div>
 

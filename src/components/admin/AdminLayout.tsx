@@ -56,29 +56,29 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#122B22] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#050505] text-[#f1f0ed] flex flex-col font-sans">
       {/* Top Admin Header Bar */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#EBE6DC]">
+      <header className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur-md border-b border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
           {/* Brand & Studio Tag */}
           <div className="flex items-center gap-4">
             <Link to="/admin" className="flex items-center gap-3 group">
-              <div className="w-9 h-9 rounded-xl bg-[#122B22] text-[#B8E0D2] flex items-center justify-center font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
+              <div className="w-9 h-9 rounded-xl bg-red-950/80 border border-red-800/80 text-red-400 flex items-center justify-center font-bold text-sm shadow-sm group-hover:scale-105 transition-transform">
                 <Compass className="w-5 h-5" />
               </div>
               <div className="flex flex-col">
-                <span className="font-serif text-lg tracking-tight text-[#122B22] font-semibold">
+                <span className="font-serif text-lg tracking-tight text-zinc-100 font-semibold">
                   MENTAL TACTIC
                 </span>
-                <span className="text-[10px] uppercase font-bold tracking-widest text-[#6F8A77]">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-500">
                   Editorial Studio
                 </span>
               </div>
             </Link>
 
             {/* Admin Badge */}
-            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-[#122B22] text-[#FAF7F2]">
-              <Shield className="w-3 h-3 text-[#B8E0D2]" />
+            <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-950/50 text-red-400 border border-red-900/50">
+              <Shield className="w-3 h-3 text-red-400" />
               <span>Admin</span>
             </span>
           </div>
@@ -94,8 +94,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                   to={item.path}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${
                     active
-                      ? 'bg-[#122B22] text-[#FAF7F2] shadow-sm'
-                      : 'text-[#122B22]/70 hover:text-[#122B22] hover:bg-[#FAF7F2]'
+                      ? 'bg-zinc-800 text-white shadow-xs'
+                      : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -109,7 +109,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="hidden sm:flex items-center gap-3">
             <Link
               to="/admin/articles/new"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all shadow-sm"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-all shadow-sm"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Write</span>
@@ -119,16 +119,16 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               to="/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-3 py-2 rounded-full border border-[#EBE6DC] bg-white text-xs font-medium text-[#122B22]/80 hover:text-[#122B22] hover:bg-[#FAF7F2] transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-2 rounded-full border border-zinc-800 bg-zinc-900 text-xs font-medium text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
               title="View Public Site in New Tab"
             >
-              <ExternalLink className="w-3.5 h-3.5 text-[#6F8A77]" />
+              <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
               <span className="hidden lg:inline">View Site</span>
             </Link>
 
             <button
               onClick={handleLogout}
-              className="p-2 rounded-full text-[#122B22]/60 hover:text-red-700 hover:bg-red-50 transition-colors"
+              className="p-2 rounded-full text-zinc-400 hover:text-red-400 hover:bg-zinc-900 transition-colors"
               title="Sign Out of Admin"
             >
               <LogOut className="w-4 h-4" />
@@ -139,14 +139,14 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <div className="flex md:hidden items-center gap-2">
             <Link
               to="/admin/articles/new"
-              className="p-2 rounded-full bg-[#122B22] text-[#FAF7F2]"
+              className="p-2 rounded-full bg-red-600 text-white"
               title="New Article"
             >
               <Plus className="w-4 h-4" />
             </Link>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-full text-[#122B22] hover:bg-[#FAF7F2]"
+              className="p-2 rounded-full text-zinc-300 hover:bg-zinc-900"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -155,13 +155,13 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-[#EBE6DC] bg-white px-6 py-5 space-y-3">
-            <div className="flex items-center justify-between pb-3 border-b border-[#F2ECE4]">
+          <div className="md:hidden border-t border-zinc-800 bg-[#0a0a0a] px-6 py-5 space-y-3">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-800">
               <div className="text-xs">
-                <div className="font-semibold text-[#122B22]">{profile?.displayName || 'Administrator'}</div>
-                <div className="text-[#8EA595] text-[11px] truncate max-w-[200px]">{user?.email}</div>
+                <div className="font-semibold text-zinc-200">{profile?.displayName || 'Administrator'}</div>
+                <div className="text-zinc-500 text-[11px] truncate max-w-[200px]">{user?.email}</div>
               </div>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#122B22] text-[#FAF7F2]">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-950/60 text-red-400 border border-red-900/40">
                 Admin
               </span>
             </div>
@@ -175,10 +175,10 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
                     key={item.path}
                     to={item.path}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-2 p-3 rounded-2xl text-xs font-semibold transition-all ${
+                    className={`flex items-center gap-2 p-3 rounded-xl text-xs font-semibold transition-all ${
                       active
-                        ? 'bg-[#122B22] text-[#FAF7F2]'
-                        : 'bg-[#FAF7F2] text-[#122B22] hover:bg-[#EAE5DB]'
+                        ? 'bg-zinc-800 text-white'
+                        : 'bg-zinc-900 text-zinc-300 hover:bg-zinc-800'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
@@ -188,18 +188,18 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
               })}
             </div>
 
-            <div className="pt-3 border-t border-[#F2ECE4] flex items-center justify-between">
+            <div className="pt-3 border-t border-zinc-800 flex items-center justify-between">
               <Link
                 to="/"
                 target="_blank"
-                className="text-xs text-[#6F8A77] hover:underline flex items-center gap-1"
+                className="text-xs text-zinc-400 hover:underline flex items-center gap-1"
               >
                 <ExternalLink className="w-3.5 h-3.5" />
-                <span>Open Public Sanctuary</span>
+                <span>Open Public Site</span>
               </Link>
               <button
                 onClick={handleLogout}
-                className="text-xs text-red-600 hover:underline flex items-center gap-1 font-medium"
+                className="text-xs text-red-400 hover:underline flex items-center gap-1 font-medium"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Log Out</span>
@@ -210,7 +210,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1">
+      <main className="flex-1 bg-[#050505]">
         {children}
       </main>
     </div>

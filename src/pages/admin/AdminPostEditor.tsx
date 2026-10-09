@@ -234,21 +234,21 @@ export const AdminPostEditor: React.FC = () => {
   return (
     <AdminLayout>
       <div className="py-10 md:py-14">
-        <SEO title={isEditing ? 'Edit Reflection — CMS' : 'Write Reflection — CMS'} />
+        <SEO title={isEditing ? 'Edit Article — CMS' : 'Write Article — CMS'} />
 
         <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8">
           {/* Top Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#EBE6DC]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
             <div className="space-y-1">
               <Link
                 to="/admin/articles"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#6F8A77] hover:text-[#122B22]"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-zinc-400 hover:text-zinc-200"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to Articles</span>
               </Link>
-              <h1 className="font-serif text-3xl sm:text-4xl text-[#122B22] font-normal">
-                {isEditing ? 'Edit Reflection' : 'Compose Reflection'}
+              <h1 className="font-serif text-3xl sm:text-4xl text-zinc-100 font-normal">
+                {isEditing ? 'Edit Article' : 'Compose Article'}
               </h1>
             </div>
 
@@ -257,7 +257,7 @@ export const AdminPostEditor: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setShowDeleteModal(true)}
-                  className="px-4 py-2.5 rounded-full border border-red-200 bg-red-50 text-xs font-semibold text-red-600 hover:bg-red-100 transition-colors flex items-center gap-1.5 shadow-2xs"
+                  className="px-4 py-2.5 rounded-full border border-red-900/60 bg-red-950/60 text-xs font-semibold text-red-400 hover:bg-red-900/80 transition-colors flex items-center gap-1.5 shadow-2xs"
                   title="Permanently delete this article"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -267,15 +267,15 @@ export const AdminPostEditor: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setPreviewMode(!previewMode)}
-                className="px-4 py-2.5 rounded-full border border-[#EBE6DC] bg-white text-xs font-semibold text-[#122B22] hover:bg-[#FAF7F2] transition-colors flex items-center gap-2"
+                className="px-4 py-2.5 rounded-full border border-zinc-800 bg-zinc-900 text-xs font-semibold text-zinc-200 hover:bg-zinc-800 transition-colors flex items-center gap-2"
               >
-                <Eye className="w-4 h-4 text-[#6F8A77]" />
+                <Eye className="w-4 h-4 text-zinc-400" />
                 <span>{previewMode ? 'Editor Mode' : 'Live Preview'}</span>
               </button>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="px-6 py-2.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center gap-2 shadow-sm disabled:opacity-50"
+                className="px-6 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2 shadow-sm disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
                 <span>{loading ? 'Saving...' : 'Save Article'}</span>
@@ -285,38 +285,38 @@ export const AdminPostEditor: React.FC = () => {
 
           {/* Live Preview Mode */}
           {previewMode ? (
-            <div className="bg-white rounded-3xl p-8 sm:p-14 border border-[#EBE6DC] shadow-sm max-w-3xl mx-auto space-y-8">
+            <div className="bg-[#0a0a0a] rounded-2xl p-8 sm:p-14 border border-zinc-800 shadow-sm max-w-3xl mx-auto space-y-8">
               <div className="flex items-center gap-3">
-                <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-[#B8E0D2]/40 text-[#122B22]">
+                <span className="px-3.5 py-1 rounded-full text-xs font-semibold bg-red-950/60 text-red-400 border border-red-900/50">
                   {category}
                 </span>
-                <span className="text-xs text-[#8EA595] flex items-center gap-1">
+                <span className="text-xs text-zinc-500 flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
                   {readingTime} min read
                 </span>
               </div>
-              <h1 className="font-serif text-4xl sm:text-5xl text-[#122B22] leading-tight">
-                {title || 'Untitled Reflection'}
+              <h1 className="font-serif text-4xl sm:text-5xl text-zinc-100 leading-tight">
+                {title || 'Untitled Article'}
               </h1>
               {excerpt && (
-                <p className="text-lg text-[#122B22]/75 leading-relaxed italic border-l-2 border-[#122B22] pl-4">
+                <p className="text-lg text-zinc-300 leading-relaxed italic border-l-2 border-red-600 pl-4">
                   {excerpt}
                 </p>
               )}
               {coverImage && (
-                <div className="w-full h-80 rounded-2xl overflow-hidden border border-[#EBE6DC]">
+                <div className="w-full h-80 rounded-xl overflow-hidden border border-zinc-800">
                   <img src={coverImage} alt="" className="w-full h-full object-cover" />
                 </div>
               )}
-              <div className="space-y-6 text-[#122B22]/85 text-base sm:text-lg leading-relaxed font-sans">
+              <div className="space-y-6 text-zinc-300 text-base sm:text-lg leading-relaxed font-sans">
                 {(content || 'Article content will appear here...').split('\n\n').map((para, idx) => {
                   const imgMatch = para.match(/^!\[(.*?)\]\((.*?)\)$/);
                   if (imgMatch) {
                     return (
-                      <figure key={idx} className="my-6 rounded-2xl overflow-hidden border border-[#EBE6DC] bg-white">
+                      <figure key={idx} className="my-6 rounded-xl overflow-hidden border border-zinc-800 bg-[#0e0e0e]">
                         <img src={imgMatch[2]} alt={imgMatch[1] || ''} className="w-full max-h-96 object-cover" />
                         {imgMatch[1] && (
-                          <figcaption className="text-center text-xs text-[#8EA595] py-2 px-4 italic">
+                          <figcaption className="text-center text-xs text-zinc-500 py-2 px-4 italic">
                             {imgMatch[1]}
                           </figcaption>
                         )}
@@ -325,7 +325,7 @@ export const AdminPostEditor: React.FC = () => {
                   }
                   if (para.startsWith('### ')) {
                     return (
-                      <h3 key={idx} className="font-serif text-2xl text-[#122B22] pt-2">
+                      <h3 key={idx} className="font-serif text-2xl text-zinc-100 pt-2">
                         {para.replace('### ', '')}
                       </h3>
                     );
@@ -340,9 +340,9 @@ export const AdminPostEditor: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Main Content Area (2 cols) */}
                 <div className="md:col-span-2 space-y-6">
-                  <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EBE6DC] shadow-sm space-y-5">
+                  <div className="bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-zinc-800 shadow-sm space-y-5">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+                      <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                         Article Title
                       </label>
                       <input
@@ -350,37 +350,37 @@ export const AdminPostEditor: React.FC = () => {
                         required
                         value={title}
                         onChange={handleTitleChange}
-                        placeholder="e.g. The Architecture of Stillness"
-                        className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl px-4 py-3 text-lg text-[#122B22] font-serif focus:outline-none focus:border-[#8EA595]"
+                        placeholder="e.g. Master the Mind and Overcome Noise"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-lg text-zinc-100 placeholder-zinc-500 font-serif focus:outline-none focus:border-red-600"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+                      <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                         URL Slug
                       </label>
-                      <div className="flex items-center bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl px-4 py-3 text-xs text-[#6F8A77]">
+                      <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-xs text-zinc-500">
                         <span>/journal/</span>
                         <input
                           type="text"
                           required
                           value={slug}
                           onChange={(e) => setSlug(e.target.value)}
-                          className="bg-transparent text-[#122B22] font-medium focus:outline-none w-full ml-1"
+                          className="bg-transparent text-zinc-100 font-medium focus:outline-none w-full ml-1"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
-                        Excerpt / Contemplative Summary
+                      <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                        Excerpt / Summary
                       </label>
                       <textarea
                         rows={3}
                         value={excerpt}
                         onChange={(e) => setExcerpt(e.target.value)}
-                        placeholder="A short meditative hook that previews this reflection in cards and feeds..."
-                        className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl p-4 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] resize-none leading-relaxed"
+                        placeholder="A concise hook that previews this article in cards and feeds..."
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600 resize-none leading-relaxed"
                       />
                     </div>
 
@@ -395,24 +395,24 @@ export const AdminPostEditor: React.FC = () => {
 
                     <div className="space-y-1.5">
                       <div className="flex items-center justify-between">
-                        <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
-                          Full Essay Body
+                        <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                          Full Article Body
                         </label>
                         <button
                           type="button"
                           disabled={isInlineUploading}
                           onClick={() => inlineFileInputRef.current?.click()}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#122B22] bg-[#FAF7F2] hover:bg-[#EBE6DC] px-3 py-1 rounded-full border border-[#EBE6DC] transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-200 bg-zinc-900 hover:bg-zinc-800 px-3 py-1 rounded-full border border-zinc-800 transition-colors"
                           title="Choose an image from device storage and save to Firestore"
                         >
                           {isInlineUploading ? (
                             <>
-                              <Loader2 className="w-3.5 h-3.5 animate-spin text-[#122B22]" />
+                              <Loader2 className="w-3.5 h-3.5 animate-spin text-red-500" />
                               <span>Saving to Firestore...</span>
                             </>
                           ) : (
                             <>
-                              <Upload className="w-3.5 h-3.5 text-[#6F8A77]" />
+                              <Upload className="w-3.5 h-3.5 text-red-500" />
                               <span>Add Image from Device</span>
                             </>
                           )}
@@ -424,10 +424,10 @@ export const AdminPostEditor: React.FC = () => {
                         required
                         value={content}
                         onChange={handleContentChange}
-                        placeholder="Write your contemplative essay here. Paragraph breaks are formatted automatically for readers..."
-                        className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl p-4 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] font-sans leading-relaxed"
+                        placeholder="Write your article here. Paragraph breaks are formatted automatically for readers..."
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600 font-sans leading-relaxed"
                       />
-                      <p className="text-[11px] text-[#8EA595] flex items-center gap-1">
+                      <p className="text-[11px] text-zinc-500 flex items-center gap-1">
                         <HardDrive className="w-3 h-3" />
                         <span>Images uploaded from device storage are compressed and stored directly in Cloud Firestore.</span>
                       </p>
@@ -437,17 +437,17 @@ export const AdminPostEditor: React.FC = () => {
 
                 {/* Sidebar Settings (1 col) */}
                 <div className="space-y-6">
-                  <div className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm space-y-5">
-                    <h3 className="font-serif text-lg text-[#122B22]">Publication Settings</h3>
+                  <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-zinc-800 shadow-sm space-y-5">
+                    <h3 className="font-serif text-lg text-zinc-100">Publication Settings</h3>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+                      <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                         Status
                       </label>
                       <select
                         value={status}
                         onChange={(e) => setStatus(e.target.value as PostStatus)}
-                        className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl px-4 py-2.5 text-xs text-[#122B22] focus:outline-none focus:border-[#8EA595]"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-red-600"
                       >
                         <option value="published">Published</option>
                         <option value="draft">Draft</option>
@@ -456,13 +456,13 @@ export const AdminPostEditor: React.FC = () => {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+                      <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                         Category
                       </label>
                       <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl px-4 py-2.5 text-xs text-[#122B22] focus:outline-none focus:border-[#8EA595]"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2.5 text-xs text-zinc-200 focus:outline-none focus:border-red-600"
                       >
                         {CATEGORIES.map(c => (
                           <option key={c} value={c}>{c}</option>
@@ -471,7 +471,7 @@ export const AdminPostEditor: React.FC = () => {
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+                      <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                         Estimated Reading Time (min)
                       </label>
                       <input
@@ -480,33 +480,33 @@ export const AdminPostEditor: React.FC = () => {
                         max={60}
                         value={readingTime}
                         onChange={(e) => setReadingTime(parseInt(e.target.value, 10) || 1)}
-                        className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl px-4 py-2 text-xs text-[#122B22] focus:outline-none"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-200 focus:outline-none"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+                      <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
                         Tags (comma separated)
                       </label>
                       <input
                         type="text"
                         value={tagsInput}
                         onChange={(e) => setTagsInput(e.target.value)}
-                        placeholder="Clarity, Breath, Rest, Stillness"
-                        className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl px-4 py-2 text-xs text-[#122B22] focus:outline-none"
+                        placeholder="Clarity, Mind, Focus, Psychology"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-2 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none"
                       />
                     </div>
 
-                    <div className="flex items-center gap-2 pt-2 border-t border-[#F2ECE4]">
+                    <div className="flex items-center gap-2 pt-2 border-t border-zinc-800">
                       <input
                         type="checkbox"
                         id="featured"
                         checked={featured}
                         onChange={(e) => setFeatured(e.target.checked)}
-                        className="w-4 h-4 rounded text-[#122B22] focus:ring-0"
+                        className="w-4 h-4 rounded text-red-600 focus:ring-0 bg-zinc-900 border-zinc-700"
                       />
-                      <label htmlFor="featured" className="text-xs font-medium text-[#122B22]">
-                        Feature on Homepage Hero Grid
+                      <label htmlFor="featured" className="text-xs font-medium text-zinc-300">
+                        Feature on Homepage Grid
                       </label>
                     </div>
                   </div>
@@ -526,21 +526,21 @@ export const AdminPostEditor: React.FC = () => {
 
           {/* Delete Article Modal */}
           {showDeleteModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-[#EBE6DC] shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
-                <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center border border-red-100">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
+              <div className="bg-[#0e0e0e] rounded-2xl p-6 sm:p-8 max-w-md w-full border border-zinc-800 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+                <div className="w-12 h-12 rounded-xl bg-red-950/60 text-red-400 flex items-center justify-center border border-red-900/50">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="font-serif text-2xl text-[#122B22]">Delete Reflection?</h3>
-                  <p className="text-xs text-[#122B22]/80 leading-relaxed font-sans">
+                  <h3 className="font-serif text-2xl text-zinc-100">Delete Article?</h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed font-sans">
                     Are you sure you want to permanently delete{' '}
-                    <span className="font-semibold text-[#122B22]">"{title || 'this reflection'}"</span>?
+                    <span className="font-semibold text-zinc-200">"{title || 'this article'}"</span>?
                   </p>
                 </div>
 
-                <p className="text-[11px] text-[#8EA595] leading-relaxed">
+                <p className="text-[11px] text-zinc-500 leading-relaxed">
                   This will remove the article from your Cloud Firestore database and take down its public URL. This action cannot be reversed.
                 </p>
 
@@ -548,7 +548,7 @@ export const AdminPostEditor: React.FC = () => {
                   <button
                     disabled={isDeleting}
                     onClick={() => setShowDeleteModal(false)}
-                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-[#122B22] hover:bg-[#FAF7F2] transition-colors disabled:opacity-50"
+                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>

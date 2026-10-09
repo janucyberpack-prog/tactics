@@ -196,13 +196,13 @@ export const AdminPosts: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#EBE6DC]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
             <div>
-              <h1 className="font-serif text-3xl sm:text-4xl text-[#122B22] font-normal tracking-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl text-zinc-100 font-normal tracking-tight">
                 Journal Articles
               </h1>
-              <p className="text-xs text-[#122B22]/70 font-sans mt-1">
-                Manage, edit, publish, duplicate, or delete your contemplative reflections.
+              <p className="text-xs text-zinc-400 font-sans mt-1">
+                Manage, edit, publish, duplicate, or delete your articles.
               </p>
             </div>
 
@@ -211,14 +211,14 @@ export const AdminPosts: React.FC = () => {
                 onClick={fetchPosts}
                 disabled={loading}
                 title="Refresh Articles List"
-                className="p-2.5 rounded-full border border-[#EBE6DC] bg-white text-[#122B22] hover:bg-[#FAF7F2] transition-colors shadow-xs"
+                className="p-2.5 rounded-full border border-zinc-800 bg-zinc-900 text-zinc-200 hover:bg-zinc-800 transition-colors shadow-xs"
               >
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#6F8A77]' : ''}`} />
+                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-red-500' : ''}`} />
               </button>
 
               <Link
                 to="/admin/articles/new"
-                className="px-6 py-3 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center gap-2 shadow-sm"
+                className="px-6 py-3 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-semibold uppercase tracking-wider transition-all flex items-center gap-2 shadow-sm"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create Article</span>
@@ -227,16 +227,16 @@ export const AdminPosts: React.FC = () => {
           </div>
 
           {/* Filter & Search Bar */}
-          <div className="bg-white rounded-3xl p-5 border border-[#EBE6DC] shadow-sm flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
+          <div className="bg-[#0a0a0a] rounded-2xl p-5 border border-zinc-800 shadow-sm flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
             {/* Search Input */}
             <div className="relative flex-1 max-w-lg">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8EA595]" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
               <input
                 type="text"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search by title, slug, category, or author..."
-                className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-full pl-11 pr-4 py-2.5 text-xs text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors"
+                className="w-full bg-zinc-900 border border-zinc-800 rounded-full pl-11 pr-4 py-2.5 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-red-600 transition-colors"
               />
             </div>
 
@@ -245,7 +245,7 @@ export const AdminPosts: React.FC = () => {
               <select
                 value={categoryFilter}
                 onChange={e => setCategoryFilter(e.target.value)}
-                className="bg-[#FAF7F2] border border-[#EBE6DC] rounded-full px-3.5 py-2 text-xs font-medium text-[#122B22] focus:outline-none"
+                className="bg-zinc-900 border border-zinc-800 rounded-full px-3.5 py-2 text-xs font-medium text-zinc-200 focus:outline-none"
               >
                 {CATEGORIES.map(c => (
                   <option key={c} value={c}>
@@ -254,15 +254,15 @@ export const AdminPosts: React.FC = () => {
                 ))}
               </select>
 
-              <div className="flex items-center gap-1 bg-[#FAF7F2] p-1 rounded-full border border-[#EBE6DC]">
+              <div className="flex items-center gap-1 bg-zinc-900 p-1 rounded-full border border-zinc-800">
                 {(['all', 'published', 'draft', 'archived'] as const).map(status => (
                   <button
                     key={status}
                     onClick={() => setStatusFilter(status)}
                     className={`px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider transition-colors capitalize ${
                       statusFilter === status
-                        ? 'bg-[#122B22] text-[#FAF7F2] shadow-xs'
-                        : 'text-[#122B22]/70 hover:text-[#122B22]'
+                        ? 'bg-zinc-800 text-white shadow-xs'
+                        : 'text-zinc-400 hover:text-zinc-200'
                     }`}
                   >
                     {status}
@@ -274,9 +274,9 @@ export const AdminPosts: React.FC = () => {
 
           {/* Bulk Actions Bar (Visible when items selected) */}
           {selectedIds.length > 0 && (
-            <div className="bg-[#122B22] text-[#FAF7F2] rounded-2xl px-5 py-3.5 shadow-lg flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2">
+            <div className="bg-[#0e0e0e] border border-zinc-800 text-[#f1f0ed] rounded-2xl px-5 py-3.5 shadow-lg flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-2">
               <div className="flex items-center gap-2 text-xs font-medium">
-                <span className="w-5 h-5 rounded-full bg-[#B8E0D2] text-[#122B22] flex items-center justify-center text-[10px] font-bold">
+                <span className="w-5 h-5 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] font-bold">
                   {selectedIds.length}
                 </span>
                 <span>article{selectedIds.length > 1 ? 's' : ''} selected</span>
@@ -285,16 +285,16 @@ export const AdminPosts: React.FC = () => {
               <div className="flex items-center gap-2 flex-wrap">
                 <button
                   onClick={() => handleBulkStatusChange('published')}
-                  className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-medium transition-colors flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-xs font-medium transition-colors flex items-center gap-1.5"
                 >
-                  <Globe className="w-3.5 h-3.5 text-[#B8E0D2]" />
+                  <Globe className="w-3.5 h-3.5 text-red-400" />
                   <span>Publish</span>
                 </button>
                 <button
                   onClick={() => handleBulkStatusChange('draft')}
-                  className="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-xs font-medium transition-colors flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-full bg-zinc-800 hover:bg-zinc-700 text-xs font-medium transition-colors flex items-center gap-1.5"
                 >
-                  <EyeOff className="w-3.5 h-3.5 text-amber-300" />
+                  <EyeOff className="w-3.5 h-3.5 text-zinc-400" />
                   <span>Unpublish</span>
                 </button>
                 <button
@@ -306,7 +306,7 @@ export const AdminPosts: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setSelectedIds([])}
-                  className="p-1.5 rounded-full text-white/70 hover:text-white transition-colors"
+                  className="p-1.5 rounded-full text-zinc-400 hover:text-white transition-colors"
                   title="Clear selection"
                 >
                   <X className="w-4 h-4" />
@@ -316,14 +316,14 @@ export const AdminPosts: React.FC = () => {
           )}
 
           {/* Articles Table */}
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EBE6DC] shadow-sm overflow-hidden">
+          <div className="bg-[#0a0a0a] rounded-2xl p-6 sm:p-8 border border-zinc-800 shadow-sm overflow-hidden">
             {loading ? (
-              <div className="py-16 text-center text-xs text-[#8EA595] animate-pulse">
-                Fetching journal collection from Firestore...
+              <div className="py-16 text-center text-xs text-zinc-500 animate-pulse">
+                Fetching journal collection...
               </div>
             ) : filtered.length === 0 ? (
               <div className="py-16 text-center space-y-4">
-                <p className="text-sm font-serif text-[#122B22]">
+                <p className="text-sm font-serif text-zinc-300">
                   No articles found matching your criteria.
                 </p>
                 <button
@@ -332,7 +332,7 @@ export const AdminPosts: React.FC = () => {
                     setStatusFilter('all');
                     setCategoryFilter('All');
                   }}
-                  className="px-4 py-2 rounded-full border border-[#EBE6DC] text-xs font-semibold text-[#122B22] hover:bg-[#FAF7F2]"
+                  className="px-4 py-2 rounded-full border border-zinc-800 text-xs font-semibold text-zinc-200 hover:bg-zinc-900"
                 >
                   Clear Filters
                 </button>
@@ -341,16 +341,16 @@ export const AdminPosts: React.FC = () => {
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-sm">
                   <thead>
-                    <tr className="border-b border-[#F2ECE4] text-[11px] uppercase tracking-wider text-[#8EA595]">
+                    <tr className="border-b border-zinc-800 text-[11px] uppercase tracking-wider text-zinc-500">
                       <th className="pb-4 w-10">
                         <button
                           type="button"
                           onClick={toggleSelectAll}
-                          className="text-[#6F8A77] hover:text-[#122B22] transition-colors"
+                          className="text-zinc-500 hover:text-zinc-200 transition-colors"
                           title={allFilteredSelected ? 'Deselect all' : 'Select all'}
                         >
                           {allFilteredSelected ? (
-                            <CheckSquare className="w-4 h-4 text-[#122B22]" />
+                            <CheckSquare className="w-4 h-4 text-red-500" />
                           ) : (
                             <Square className="w-4 h-4" />
                           )}
@@ -364,14 +364,14 @@ export const AdminPosts: React.FC = () => {
                       <th className="pb-4 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#F2ECE4]">
+                  <tbody className="divide-y divide-zinc-800/80">
                     {filtered.map(post => {
                       const isSelected = selectedIds.includes(post.id);
                       return (
                         <tr
                           key={post.id}
-                          className={`hover:bg-[#FAF7F2]/60 transition-colors ${
-                            isSelected ? 'bg-[#FAF7F2]/80' : ''
+                          className={`hover:bg-zinc-900/60 transition-colors ${
+                            isSelected ? 'bg-zinc-900/80' : ''
                           }`}
                         >
                           {/* Selection Checkbox */}
@@ -379,10 +379,10 @@ export const AdminPosts: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => toggleSelectOne(post.id)}
-                              className="text-[#6F8A77] hover:text-[#122B22] transition-colors"
+                              className="text-zinc-500 hover:text-zinc-200 transition-colors"
                             >
                               {isSelected ? (
-                                <CheckSquare className="w-4 h-4 text-[#122B22]" />
+                                <CheckSquare className="w-4 h-4 text-red-500" />
                               ) : (
                                 <Square className="w-4 h-4" />
                               )}
@@ -396,14 +396,14 @@ export const AdminPosts: React.FC = () => {
                                 <img
                                   src={post.coverImage}
                                   alt=""
-                                  className="w-12 h-12 rounded-xl object-cover shrink-0 border border-[#EBE6DC]"
+                                  className="w-12 h-12 rounded-lg object-cover shrink-0 border border-zinc-800"
                                 />
                               )}
                               <div className="min-w-0">
-                                <div className="font-medium text-[#122B22] truncate max-w-sm sm:max-w-md">
+                                <div className="font-medium text-zinc-200 truncate max-w-sm sm:max-w-md">
                                   {post.title}
                                 </div>
-                                <div className="text-[11px] text-[#8EA595] truncate">
+                                <div className="text-[11px] text-zinc-500 truncate">
                                   /journal/{post.slug}
                                 </div>
                               </div>
@@ -412,7 +412,7 @@ export const AdminPosts: React.FC = () => {
 
                           {/* Category */}
                           <td className="py-4 pr-4">
-                            <span className="px-2.5 py-0.5 rounded-full text-xs bg-[#FAF7F2] border border-[#EBE6DC] text-[#6F8A77]">
+                            <span className="px-2.5 py-0.5 rounded-full text-xs bg-zinc-900 border border-zinc-800 text-zinc-400">
                               {post.category}
                             </span>
                           </td>
@@ -423,27 +423,27 @@ export const AdminPosts: React.FC = () => {
                               onClick={() => handleTogglePublish(post)}
                               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors ${
                                 post.status === 'published'
-                                  ? 'bg-[#B8E0D2]/50 text-[#122B22] hover:bg-[#B8E0D2]'
-                                  : 'bg-[#FAF7F2] text-[#8EA595] hover:bg-[#EAE5DB]'
+                                  ? 'bg-red-950/60 text-red-400 border border-red-900/50 hover:bg-red-900/60'
+                                  : 'bg-zinc-900 text-zinc-500 hover:bg-zinc-800'
                               }`}
                               title="Click to toggle status"
                             >
                               {post.status === 'published' ? (
-                                <Globe className="w-3 h-3 text-emerald-700" />
+                                <Globe className="w-3 h-3 text-red-400" />
                               ) : (
-                                <EyeOff className="w-3 h-3 text-amber-700" />
+                                <EyeOff className="w-3 h-3 text-zinc-500" />
                               )}
                               <span>{post.status}</span>
                             </button>
                           </td>
 
                           {/* Reading time */}
-                          <td className="py-4 pr-4 text-xs text-[#6F8A77]">
+                          <td className="py-4 pr-4 text-xs text-zinc-500">
                             {post.readingTime} min
                           </td>
 
                           {/* Author */}
-                          <td className="py-4 pr-4 text-xs text-[#6F8A77] truncate max-w-[120px]">
+                          <td className="py-4 pr-4 text-xs text-zinc-500 truncate max-w-[120px]">
                             {post.authorName || 'Elena Vance'}
                           </td>
 
@@ -454,7 +454,7 @@ export const AdminPosts: React.FC = () => {
                               <Link
                                 to={`/journal/${post.slug}`}
                                 target="_blank"
-                                className="p-1.5 rounded-full hover:bg-[#FAF7F2] text-[#6F8A77] hover:text-[#122B22] transition-colors"
+                                className="p-1.5 rounded-full hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 transition-colors"
                                 title="View Live Article"
                               >
                                 <ExternalLink className="w-4 h-4" />
@@ -464,12 +464,12 @@ export const AdminPosts: React.FC = () => {
                               <button
                                 onClick={() => handleDuplicate(post)}
                                 disabled={duplicatingId === post.id}
-                                className="p-1.5 rounded-full hover:bg-[#FAF7F2] text-[#6F8A77] hover:text-[#122B22] transition-colors"
+                                className="p-1.5 rounded-full hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 transition-colors"
                                 title="Duplicate Article"
                               >
                                 <Copy
                                   className={`w-4 h-4 ${
-                                    duplicatingId === post.id ? 'animate-spin text-[#122B22]' : ''
+                                    duplicatingId === post.id ? 'animate-spin text-red-500' : ''
                                   }`}
                                 />
                               </button>
@@ -477,7 +477,7 @@ export const AdminPosts: React.FC = () => {
                               {/* Edit */}
                               <Link
                                 to={`/admin/articles/${post.id}/edit`}
-                                className="p-1.5 rounded-full hover:bg-[#FAF7F2] text-[#122B22] transition-colors"
+                                className="p-1.5 rounded-full hover:bg-zinc-900 text-zinc-200 transition-colors"
                                 title="Edit Article"
                               >
                                 <Edit3 className="w-4 h-4" />
@@ -486,7 +486,7 @@ export const AdminPosts: React.FC = () => {
                               {/* Delete */}
                               <button
                                 onClick={() => setPostToDelete(post)}
-                                className="p-1.5 rounded-full hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors"
+                                className="p-1.5 rounded-full hover:bg-red-950/50 text-red-400 hover:text-red-300 transition-colors"
                                 title="Delete Article"
                               >
                                 <Trash2 className="w-4 h-4" />
@@ -504,29 +504,29 @@ export const AdminPosts: React.FC = () => {
 
           {/* Single Delete Confirmation Modal */}
           {postToDelete && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-[#EBE6DC] shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
-                <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center border border-red-100">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
+              <div className="bg-[#0e0e0e] rounded-2xl p-6 sm:p-8 max-w-md w-full border border-zinc-800 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+                <div className="w-12 h-12 rounded-xl bg-red-950/60 text-red-400 flex items-center justify-center border border-red-900/50">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="font-serif text-2xl text-[#122B22]">Delete Reflection?</h3>
-                  <p className="text-xs text-[#122B22]/80 leading-relaxed font-sans">
+                  <h3 className="font-serif text-2xl text-zinc-100">Delete Reflection?</h3>
+                  <p className="text-xs text-zinc-400 leading-relaxed font-sans">
                     Are you sure you want to permanently delete{' '}
-                    <span className="font-semibold text-[#122B22]">"{postToDelete.title}"</span>?
+                    <span className="font-semibold text-zinc-200">"{postToDelete.title}"</span>?
                   </p>
                 </div>
 
-                <p className="text-[11px] text-[#8EA595] leading-relaxed">
-                  This will remove the article and all associated reader data from your Cloud Firestore database. This action cannot be reversed.
+                <p className="text-[11px] text-zinc-500 leading-relaxed">
+                  This will remove the article and all associated data from Cloud Firestore. This action cannot be reversed.
                 </p>
 
                 <div className="flex items-center justify-end gap-3 pt-3">
                   <button
                     disabled={isDeleting}
                     onClick={() => setPostToDelete(null)}
-                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-[#122B22] hover:bg-[#FAF7F2] transition-colors disabled:opacity-50"
+                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>
@@ -545,22 +545,22 @@ export const AdminPosts: React.FC = () => {
 
           {/* Bulk Delete Confirmation Modal */}
           {showBulkDeleteModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-[#EBE6DC] shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
-                <div className="w-12 h-12 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center border border-red-100">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xs p-4">
+              <div className="bg-[#0e0e0e] rounded-2xl p-6 sm:p-8 max-w-md w-full border border-zinc-800 shadow-2xl space-y-4 animate-in fade-in zoom-in-95">
+                <div className="w-12 h-12 rounded-xl bg-red-950/60 text-red-400 flex items-center justify-center border border-red-900/50">
                   <AlertTriangle className="w-6 h-6" />
                 </div>
 
                 <div className="space-y-1">
-                  <h3 className="font-serif text-2xl text-[#122B22]">
-                    Delete {selectedIds.length} Reflections?
+                  <h3 className="font-serif text-2xl text-zinc-100">
+                    Delete {selectedIds.length} Articles?
                   </h3>
-                  <p className="text-xs text-[#122B22]/80 leading-relaxed font-sans">
+                  <p className="text-xs text-zinc-400 leading-relaxed font-sans">
                     This will permanently delete the {selectedIds.length} selected articles from Cloud Firestore.
                   </p>
                 </div>
 
-                <p className="text-[11px] text-[#8EA595] leading-relaxed">
+                <p className="text-[11px] text-zinc-500 leading-relaxed">
                   This operation cannot be undone. All selected articles will be removed from both public viewing and the admin studio.
                 </p>
 
@@ -568,7 +568,7 @@ export const AdminPosts: React.FC = () => {
                   <button
                     disabled={isBulkDeleting}
                     onClick={() => setShowBulkDeleteModal(false)}
-                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-[#122B22] hover:bg-[#FAF7F2] transition-colors disabled:opacity-50"
+                    className="px-4 py-2.5 rounded-full text-xs font-semibold text-zinc-300 hover:bg-zinc-800 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>

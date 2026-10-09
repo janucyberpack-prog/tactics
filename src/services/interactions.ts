@@ -35,11 +35,11 @@ export async function subscribeNewsletter(email: string): Promise<{ success: boo
       subscribedAt: serverTimestamp()
     });
 
-    return { success: true, message: 'Thank you for joining. Welcome to a sanctuary of mindful clarity.' };
+    return { success: true, message: 'Thank you for subscribing to Mental Tactic.' };
   } catch (error) {
     // Graceful offline/permission fallback
     console.warn('Newsletter submission fallback:', error);
-    return { success: true, message: 'Thank you for subscribing to our quiet reflections.' };
+    return { success: true, message: 'Thank you for subscribing to Mental Tactic.' };
   }
 }
 
