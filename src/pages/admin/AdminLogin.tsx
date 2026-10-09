@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Shield, Lock, Mail, ArrowRight, ArrowLeft, KeyRound } from 'lucide-react';
-import { loginWithEmail, BOOTSTRAP_ADMIN_EMAIL, BOOTSTRAP_ADMIN_PASSWORD } from '../../services/auth';
+import { Shield, Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
+import { loginWithEmail, BOOTSTRAP_ADMIN_EMAIL } from '../../services/auth';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../components/Toast';
 import { SEO } from '../../components/SEO';
@@ -25,12 +25,6 @@ export const AdminLogin: React.FC = () => {
       navigate('/admin', { replace: true });
     }
   }, [user, isAdmin, navigate]);
-
-  const handleFillDemoAdmin = () => {
-    setEmail(BOOTSTRAP_ADMIN_EMAIL);
-    setPassword(BOOTSTRAP_ADMIN_PASSWORD);
-    setErrorMsg('');
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,21 +146,6 @@ export const AdminLogin: React.FC = () => {
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </form>
-
-          {/* Quick primary administrator autofill button */}
-          <div className="pt-3 border-t border-[#1c1c1c]">
-            <button
-              type="button"
-              onClick={handleFillDemoAdmin}
-              className="w-full py-2.5 px-4 bg-[#111] hover:bg-[#161616] border border-[#262626] text-xs text-white flex items-center justify-between transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <KeyRound className="w-3.5 h-3.5 text-[#ce354b]" />
-                <span className="text-[11px] font-semibold">Primary Admin Credentials</span>
-              </div>
-              <span className="text-[10px] text-[#ce354b] uppercase tracking-wider font-bold">Autofill</span>
-            </button>
-          </div>
         </div>
 
         <p className="text-center text-[10px] uppercase tracking-wider text-[#666]">

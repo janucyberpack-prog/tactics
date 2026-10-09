@@ -170,86 +170,8 @@ export const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. FEATURE STRIP (Four Minimalist Features with Vertical Separators) */}
-      <section className="bg-[#070707] border-b border-[#252525] scroll-mt-20" id="features" aria-label="Key features">
-        <div className="site-container">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Feature 1 */}
-            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] border-l lg:border-l border-[#252525] items-start">
-              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
-                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                  <circle cx="16" cy="16" r="11" stroke="currentColor" strokeWidth="1.2" />
-                  <path d="M11 16.5l3 3 7-8M16 2v3M16 27v3M2 16h3M27 16h3" stroke="currentColor" strokeWidth="1.2" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
-                  Evidence-Informed Insights
-                </h3>
-                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
-                  Ideas grounded in psychological research.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] items-start">
-              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
-                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                  <path d="M7 25 22.5 9.5l-3-3L4 22v3h3ZM18 8l3 3M17 24h11M17 19h7" stroke="currentColor" strokeWidth="1.2" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
-                  Practical Tools
-                </h3>
-                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
-                  Frameworks designed for everyday life.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] items-start">
-              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
-                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                  <rect x="7" y="14" width="18" height="14" stroke="currentColor" strokeWidth="1.2" />
-                  <path d="M11 14V9a5 5 0 0 1 10 0v5M16 19v5" stroke="currentColor" strokeWidth="1.2" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
-                  Private & Personal
-                </h3>
-                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
-                  Your inner work remains entirely yours.
-                </p>
-              </div>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-r border-[#252525] items-start">
-              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
-                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                  <path d="M5 7.5c6-2 9 .3 11 3.5 2-3.2 5-5.5 11-3.5V25c-6-2-9 .3-11 3.5C14 25.3 11 23 5 25V7.5Z" stroke="currentColor" strokeWidth="1.2" />
-                  <path d="M16 11v17" stroke="currentColor" strokeWidth="1.2" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
-                  Lifetime Learning
-                </h3>
-                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
-                  A growing library for continued discovery.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. MAIN EDITORIAL CONTENT (Articles on Left + Resources on Right) */}
-      <section className="py-24 lg:py-28 scroll-mt-20" id="articles">
+      {/* 2. MAIN EDITORIAL CONTENT (Articles on Left + Resources on Right) */}
+      <section className="py-24 lg:py-28 scroll-mt-20 border-b border-[#252525]" id="articles">
         <div className="site-container">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,3.25fr)_minmax(270px,1fr)] gap-12 lg:gap-0">
             {/* Left Column: Featured Articles (Wide) */}
@@ -402,6 +324,84 @@ export const Home: React.FC = () => {
                 </button>
               </div>
             </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. FEATURE STRIP (Four Minimalist Features with Vertical Separators) */}
+      <section className="bg-[#070707] border-b border-[#252525] scroll-mt-20" id="features" aria-label="Key features">
+        <div className="site-container">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Feature 1 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] border-l lg:border-l border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <circle cx="16" cy="16" r="11" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M11 16.5l3 3 7-8M16 2v3M16 27v3M2 16h3M27 16h3" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Evidence-Informed Insights
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  Ideas grounded in psychological research.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <path d="M7 25 22.5 9.5l-3-3L4 22v3h3ZM18 8l3 3M17 24h11M17 19h7" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Practical Tools
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  Frameworks designed for everyday life.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <rect x="7" y="14" width="18" height="14" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M11 14V9a5 5 0 0 1 10 0v5M16 19v5" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Private & Personal
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  Your inner work remains entirely yours.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-r border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <path d="M5 7.5c6-2 9 .3 11 3.5 2-3.2 5-5.5 11-3.5V25c-6-2-9 .3-11 3.5C14 25.3 11 23 5 25V7.5Z" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M16 11v17" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Lifetime Learning
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  A growing library for continued discovery.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

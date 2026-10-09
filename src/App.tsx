@@ -35,6 +35,104 @@ function AppContent() {
   const location = useLocation();
   const isAdminPath = location.pathname.startsWith('/admin');
 
+  // Block and remove ads when navigating inside the admin panel
+  React.useEffect(() => {
+    if (isAdminPath) {
+      document.body.classList.add('is-admin-panel');
+
+      // Remove ad scripts, iframes, and injected popunder/overlay elements
+      const purgeAdElements = () => {
+        const adSelectors = [
+          'script[src*="nap5k.com"]',
+          'script[src*="5gvci.com"]',
+          'script[src*="al5sm.com"]',
+          'script[src*="3nbf4.com"]',
+          'script[data-zone="11992349"]',
+          'script[data-zone="11992357"]',
+          'iframe[src*="nap5k.com"]',
+          'iframe[src*="5gvci.com"]',
+          'iframe[src*="al5sm.com"]',
+          'iframe[src*="3nbf4.com"]',
+          'div[id*="nap5k"]',
+          'div[id*="5gvci"]',
+          'div[id*="al5sm"]',
+          'div[id*="3nbf4"]',
+          'body > div:not(#root):not(.portal-root)',
+          'body > iframe'
+        ];
+
+        adSelectors.forEach((selector) => {
+          document.querySelectorAll(selector).forEach((el) => {
+            try {
+              el.remove();
+            } catch {
+              // Ignore removal errors
+            }
+          });
+        });
+      };
+
+      purgeAdElements();
+
+      // Guard window.open against ad network popups/popunders while in admin panel
+      const originalWindowOpen = window.open;
+      window.open = function (url?: string | URL, target?: string, features?: string) {
+        const urlStr = String(url || '').toLowerCase();
+        if (
+          urlStr.includes('nap5k.com') ||
+          urlStr.includes('5gvci.com') ||
+          urlStr.includes('al5sm.com') ||
+          urlStr.includes('3nbf4.com') ||
+          urlStr.includes('propeller') ||
+          urlStr.includes('monetag')
+        ) {
+          return null;
+        }
+        return originalWindowOpen.call(window, url, target, features);
+      };
+
+      // Watch for and promptly destroy any ad DOM nodes injected while in admin panel
+      const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          for (const node of Array.from(mutation.addedNodes)) {
+            if (node instanceof HTMLElement) {
+              const html = (node.outerHTML || '').toLowerCase();
+              const isAd =
+                html.includes('nap5k') ||
+                html.includes('5gvci') ||
+                html.includes('al5sm') ||
+                html.includes('3nbf4') ||
+                html.includes('11992349') ||
+                html.includes('11992350') ||
+                html.includes('11992357') ||
+                (node.tagName === 'IFRAME' && node.parentElement === document.body) ||
+                (node.parentElement === document.body && node.id !== 'root' && !node.classList.contains('portal-root'));
+
+              if (isAd) {
+                try {
+                  node.remove();
+                } catch {
+                  // Ignore removal errors
+                }
+              }
+            }
+          }
+        }
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+      observer.observe(document.head, { childList: true });
+
+      return () => {
+        document.body.classList.remove('is-admin-panel');
+        window.open = originalWindowOpen;
+        observer.disconnect();
+      };
+    } else {
+      document.body.classList.remove('is-admin-panel');
+    }
+  }, [isAdminPath]);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#050505] text-[#f1f0ed] selection:bg-[#b51f35] selection:text-white">
       <Cursor />

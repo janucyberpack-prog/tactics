@@ -126,4 +126,23 @@
   }
 }
 
+/* Admin Panel Ad Blocker */
+body.is-admin-panel iframe:not([data-allowed="true"]),
+body.is-admin-panel [id*="nap5k"],
+body.is-admin-panel [src*="nap5k"],
+body.is-admin-panel [src*="5gvci"],
+body.is-admin-panel [src*="al5sm"],
+body.is-admin-panel [src*="3nbf4"],
+body.is-admin-panel [data-zone="11992349"],
+body.is-admin-panel [data-zone="11992350"],
+body.is-admin-panel [data-zone="11992357"],
+body.is-admin-panel > div:not(#root) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 
