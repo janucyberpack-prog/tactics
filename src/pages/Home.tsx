@@ -80,7 +80,7 @@ export const Home: React.FC = () => {
       <section className="border-b border-[#252525] relative overflow-hidden scroll-mt-20" id="home">
         <div className="site-container min-h-[710px] grid grid-cols-1 lg:grid-cols-[47%_53%] items-stretch">
           {/* Left Narrative Column */}
-          <div className="relative z-10 flex flex-col justify-center pt-4 pb-12 lg:pt-2 lg:pb-14 -translate-y-3 lg:-translate-y-8 pr-0 lg:pr-12">
+          <div className="relative z-10 flex flex-col justify-start pt-12 lg:pt-[84px] pb-12 pr-0 lg:pr-12">
             {/* Red Eyebrow Text with Accent Line */}
             <p className="flex items-center gap-3 text-[#ce354b] text-[10px] font-bold tracking-[0.26em] uppercase mb-5">
               <span className="w-[34px] h-[1px] bg-[#b51f35] inline-block shrink-0" aria-hidden="true" />
