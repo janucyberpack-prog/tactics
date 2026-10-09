@@ -84,6 +84,8 @@ export const SEO: React.FC<SEOProps> = ({
       document.head.appendChild(jsonLdScript);
     }
 
+    const baseOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://mental-tactic-65c43.web.app';
+
     if (type === 'article' && article) {
       const articleSchema = {
         "@context": "https://schema.org",
@@ -102,7 +104,7 @@ export const SEO: React.FC<SEOProps> = ({
           "name": "Mental Tactic",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://mental-tactic-65c43.web.app/favicon.ico"
+            "url": `${baseOrigin}/favicon.ico`
           }
         },
         "mainEntityOfPage": {
@@ -116,11 +118,11 @@ export const SEO: React.FC<SEOProps> = ({
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Mental Tactic",
-        "url": "https://mental-tactic-65c43.web.app/",
+        "url": `${baseOrigin}/`,
         "description": "Evidence-informed psychology, practical tools, and ideas for a stronger mind.",
         "potentialAction": {
           "@type": "SearchAction",
-          "target": "https://mental-tactic-65c43.web.app/journal?q={search_term_string}",
+          "target": `${baseOrigin}/journal?q={search_term_string}`,
           "query-input": "required name=search_term_string"
         }
       };

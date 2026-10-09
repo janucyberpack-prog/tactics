@@ -6,7 +6,23 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-const DEFAULT_DOMAIN = process.env.VITE_SITE_DOMAIN || 'https://mental-tactic-65c43.web.app';
+export function resolveDomain() {
+  if (process.env.VITE_SITE_DOMAIN && process.env.VITE_SITE_DOMAIN.trim()) {
+    return process.env.VITE_SITE_DOMAIN.trim().replace(/\/+$/, '');
+  }
+  if (process.env.SITE_URL && process.env.SITE_URL.trim()) {
+    return process.env.SITE_URL.trim().replace(/\/+$/, '');
+  }
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL && process.env.VERCEL_PROJECT_PRODUCTION_URL.trim()) {
+    return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL.trim()}`.replace(/\/+$/, '');
+  }
+  if (process.env.VERCEL_URL && process.env.VERCEL_URL.trim()) {
+    return `https://${process.env.VERCEL_URL.trim()}`.replace(/\/+$/, '');
+  }
+  return 'https://mental-tactic-65c43.web.app';
+}
+
+const DEFAULT_DOMAIN = resolveDomain();
 const FIREBASE_PROJECT_ID = process.env.VITE_FIREBASE_PROJECT_ID || 'mental-tactic-65c43';
 
 function escapeXml(unsafe) {
@@ -19,18 +35,12 @@ function escapeXml(unsafe) {
     .replace(/'/g, '&apos;');
 }
 
+// Canonical, indexable public routes only (no query parameters or duplicate filters)
 const STATIC_ROUTES = [
-  { path: '', priority: '1.0', changefreq: 'daily' },
-  { path: 'journal', priority: '0.9', changefreq: 'daily' },
-  { path: 'journal?category=Mindfulness', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Rest%20%26%20Renewal', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Emotional%20Agility', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Neuroscience', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Daily%20Rituals', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Behavior', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Mental%20Strength', priority: '0.8', changefreq: 'daily' },
-  { path: 'about', priority: '0.6', changefreq: 'monthly' },
-  { path: 'contact', priority: '0.5', changefreq: 'monthly' }
+  { path: '', priority: '1.0', changefreq: 'daily', lastmod: '2026-10-09' },
+  { path: 'journal', priority: '0.9', changefreq: 'daily', lastmod: '2026-10-09' },
+  { path: 'about', priority: '0.7', changefreq: 'monthly', lastmod: '2026-10-01' },
+  { path: 'contact', priority: '0.6', changefreq: 'monthly', lastmod: '2026-10-01' }
 ];
 
 async function fetchFirestorePosts() {
@@ -116,7 +126,7 @@ export async function generateSitemap(domain = DEFAULT_DOMAIN) {
     const loc = route.path ? `${cleanDomain}/${route.path}` : `${cleanDomain}/`;
     xml += `  <url>\n`;
     xml += `    <loc>${escapeXml(loc)}</loc>\n`;
-    xml += `    <lastmod>${today}</lastmod>\n`;
+    xml += `    <lastmod>${route.lastmod || '2026-10-09'}</lastmod>\n`;
     xml += `    <changefreq>${route.changefreq}</changefreq>\n`;
     xml += `    <priority>${route.priority}</priority>\n`;
     xml += `  </url>\n`;
@@ -126,7 +136,7 @@ export async function generateSitemap(domain = DEFAULT_DOMAIN) {
   xml += `\n  <!-- Published Articles (${allPosts.length} entries) -->\n`;
   for (const post of allPosts) {
     const loc = `${cleanDomain}/journal/${post.slug}`;
-    const lastmod = post.updatedAt ? post.updatedAt.split('T')[0] : today;
+    const lastmod = post.updatedAt ? post.updatedAt.split('T')[0] : '2026-10-01';
 
     xml += `  <url>\n`;
     xml += `    <loc>${escapeXml(loc)}</loc>\n`;
@@ -146,24 +156,77 @@ export async function generateSitemap(domain = DEFAULT_DOMAIN) {
 
   xml += `</urlset>\n`;
 
-  // Ensure public directory exists
+  // Write to public/sitemap.xml
   const publicDir = path.join(rootDir, 'public');
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
   }
-
   const publicSitemapPath = path.join(publicDir, 'sitemap.xml');
   fs.writeFileSync(publicSitemapPath, xml, 'utf-8');
-  console.log(`[sitemap-generator] Wrote ${publicSitemapPath} (${allPosts.length} posts indexed).`);
+
+  // Also write to project root sitemap.xml as a fail-safe
+  const rootSitemapPath = path.join(rootDir, 'sitemap.xml');
+  fs.writeFileSync(rootSitemapPath, xml, 'utf-8');
 
   // If dist already exists, keep it in sync
   const distDir = path.join(rootDir, 'dist');
   if (fs.existsSync(distDir)) {
     const distSitemapPath = path.join(distDir, 'sitemap.xml');
     fs.writeFileSync(distSitemapPath, xml, 'utf-8');
-    console.log(`[sitemap-generator] Wrote ${distSitemapPath}`);
   }
 
+  // Keep robots.txt in sync with the canonical sitemap URL
+  const robotsContent = `# Robots.txt for Mental Tactic
+User-agent: *
+Allow: /
+Allow: /journal
+Allow: /journal/*
+Allow: /about
+Allow: /contact
+
+# Static and media asset crawling
+Allow: /assets/
+Allow: /*.js$
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.webp$
+Allow: /*.svg$
+Allow: /*.ico$
+
+# Block private user profiles, login state, and CMS administration
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /account
+Disallow: /account/*
+Disallow: /saved-articles
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+
+# Google Search crawler configuration
+User-agent: Googlebot
+Allow: /
+Allow: /journal
+Allow: /journal/*
+Disallow: /admin/
+Disallow: /account/
+Disallow: /saved-articles
+
+# Sitemaps
+Sitemap: ${cleanDomain}/sitemap.xml
+
+Host: ${cleanDomain}
+`;
+
+  fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsContent, 'utf-8');
+  fs.writeFileSync(path.join(rootDir, 'robots.txt'), robotsContent, 'utf-8');
+  if (fs.existsSync(distDir)) {
+    fs.writeFileSync(path.join(distDir, 'robots.txt'), robotsContent, 'utf-8');
+  }
+
+  console.log(`[sitemap-generator] Wrote sitemap.xml and robots.txt (${allPosts.length} posts indexed for ${cleanDomain}).`);
   return xml;
 }
 

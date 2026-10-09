@@ -23,17 +23,10 @@ export interface SitemapRoute {
 }
 
 export const STATIC_SITEMAP_ROUTES: SitemapRoute[] = [
-  { path: '', priority: '1.0', changefreq: 'daily' },
-  { path: 'journal', priority: '0.9', changefreq: 'daily' },
-  { path: 'journal?category=Mindfulness', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Rest%20%26%20Renewal', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Emotional%20Agility', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Neuroscience', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Daily%20Rituals', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Behavior', priority: '0.8', changefreq: 'daily' },
-  { path: 'journal?category=Mental%20Strength', priority: '0.8', changefreq: 'daily' },
-  { path: 'about', priority: '0.6', changefreq: 'monthly' },
-  { path: 'contact', priority: '0.5', changefreq: 'monthly' }
+  { path: '', priority: '1.0', changefreq: 'daily', lastmod: '2026-10-09' },
+  { path: 'journal', priority: '0.9', changefreq: 'daily', lastmod: '2026-10-09' },
+  { path: 'about', priority: '0.7', changefreq: 'monthly', lastmod: '2026-10-01' },
+  { path: 'contact', priority: '0.6', changefreq: 'monthly', lastmod: '2026-10-01' }
 ];
 
 export function escapeXml(unsafe: string): string {
@@ -48,7 +41,7 @@ export function escapeXml(unsafe: string): string {
 
 export function formatW3CDate(val: any): string {
   if (!val) {
-    return new Date().toISOString().split('T')[0];
+    return '2026-10-01';
   }
   if (typeof val === 'object' && val !== null && typeof val.toDate === 'function') {
     return val.toDate().toISOString().split('T')[0];
@@ -63,7 +56,7 @@ export function formatW3CDate(val: any): string {
   if (!isNaN(parsed.getTime())) {
     return parsed.toISOString().split('T')[0];
   }
-  return new Date().toISOString().split('T')[0];
+  return '2026-10-01';
 }
 
 /**

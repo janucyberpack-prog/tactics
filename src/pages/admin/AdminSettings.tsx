@@ -35,13 +35,28 @@ export const AdminSettings: React.FC = () => {
   const [seedLoading, setSeedLoading] = useState(false);
   const [sitemapLoading, setSitemapLoading] = useState(false);
   const [copiedXml, setCopiedXml] = useState(false);
+  const [siteDomainInput, setSiteDomainInput] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('mental_tactic_site_domain') || window.location.origin;
+    }
+    return SITE_DOMAIN;
+  });
+
+  const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setSiteDomainInput(val);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('mental_tactic_site_domain', val);
+    }
+  };
 
   const handleDownloadLiveSitemap = async () => {
     setSitemapLoading(true);
     try {
       const posts = await getPublishedPosts();
-      downloadSitemap(posts);
-      showToast('Live sitemap.xml generated and downloaded.', 'success');
+      const domain = siteDomainInput.trim() || (typeof window !== 'undefined' ? window.location.origin : SITE_DOMAIN);
+      downloadSitemap(posts, domain);
+      showToast(`Live sitemap.xml for ${domain} generated and downloaded.`, 'success');
     } catch (err: any) {
       showToast('Failed to generate live sitemap.', 'error');
     } finally {
@@ -52,10 +67,11 @@ export const AdminSettings: React.FC = () => {
   const handleCopySitemapXml = async () => {
     try {
       const posts = await getPublishedPosts();
-      const xml = buildDynamicSitemapXml(posts);
+      const domain = siteDomainInput.trim() || (typeof window !== 'undefined' ? window.location.origin : SITE_DOMAIN);
+      const xml = buildDynamicSitemapXml(posts, domain);
       await navigator.clipboard.writeText(xml);
       setCopiedXml(true);
-      showToast('Dynamic sitemap XML copied to clipboard.', 'success');
+      showToast(`Dynamic sitemap XML for ${domain} copied to clipboard.`, 'success');
       setTimeout(() => setCopiedXml(false), 2500);
     } catch {
       showToast('Could not copy XML.', 'error');
@@ -338,6 +354,37 @@ export const AdminSettings: React.FC = () => {
                   </a>
                 </div>
               </div>
+            </div>
+
+            {/* Domain Configuration */}
+            <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-2">
+              <label className="text-[11px] uppercase tracking-wider text-zinc-400 font-semibold block">
+                Primary Domain for Googlebot (Canonical Base)
+              </label>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                <input
+                  type="url"
+                  value={siteDomainInput}
+                  onChange={handleDomainChange}
+                  placeholder="https://your-domain.com"
+                  className="flex-1 bg-zinc-950 border border-zinc-800 focus:border-red-600 rounded-lg px-3 py-2 text-xs text-zinc-200 font-mono outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const origin = typeof window !== 'undefined' ? window.location.origin : SITE_DOMAIN;
+                    setSiteDomainInput(origin);
+                    if (typeof window !== 'undefined') localStorage.setItem('mental_tactic_site_domain', origin);
+                    showToast(`Set to current origin: ${origin}`, 'success');
+                  }}
+                  className="px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition-colors shrink-0"
+                >
+                  Use Current Origin
+                </button>
+              </div>
+              <p className="text-[11px] text-zinc-500 font-sans">
+                URLs in Google Search Console must match the exact host verified in your property (e.g. your Vercel or custom domain).
+              </p>
             </div>
 
             {/* Quick Actions Bar */}

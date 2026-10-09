@@ -28,7 +28,7 @@ function sitemapXmlPlugin(): Plugin {
           const urlObj = new URL(req.url || '/', 'http://localhost');
           const overrideDomain = urlObj.searchParams.get('domain');
 
-          let currentOrigin = 'https://mental-tactic-65c43.web.app';
+          let currentOrigin = process.env.VITE_SITE_DOMAIN || process.env.SITE_URL || 'https://mental-tactic-65c43.web.app';
           if (overrideDomain) {
             currentOrigin = overrideDomain.replace(/\/+$/, '');
           } else if (xHost) {
