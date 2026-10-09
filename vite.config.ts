@@ -14,14 +14,44 @@ function sitemapXmlPlugin(): Plugin {
           pathname === '/sitemap' ||
           pathname === '/sitemap/' ||
           pathname === '/sitemap.xml' ||
-          pathname === '/sitemap-news.xml'
+          pathname === '/sitemap-news.xml' ||
+          pathname === '/robots.txt'
         ) {
-          const fileName = pathname === '/sitemap-news.xml' ? 'sitemap-news.xml' : 'sitemap.xml';
+          const fileName = pathname === '/sitemap-news.xml'
+            ? 'sitemap-news.xml'
+            : pathname === '/robots.txt'
+              ? 'robots.txt'
+              : 'sitemap.xml';
           const filePath = path.resolve('public', fileName);
           if (fs.existsSync(filePath)) {
-            res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-            res.setHeader('Cache-Control', 'public, max-age=3600');
-            return res.end(fs.readFileSync(filePath, 'utf-8'));
+            let content = fs.readFileSync(filePath, 'utf-8');
+
+            // Detect current host from Cloud Run / reverse proxy headers so Google Search Console
+            // never flags 'URL not allowed' cross-domain mismatch
+            const xHost = (req.headers['x-forwarded-host'] || '').toString().trim();
+            const rawHost = xHost || (req.headers.host || '').toString().trim();
+            const urlObj = new URL(req.url || '/', 'http://localhost');
+            const overrideDomain = urlObj.searchParams.get('domain');
+
+            let currentOrigin = 'https://mental-tactic-65c43.web.app';
+            if (overrideDomain) {
+              currentOrigin = overrideDomain.replace(/\/+$/, '');
+            } else if (xHost) {
+              const proto = (req.headers['x-forwarded-proto'] || 'https').toString().split(',')[0].trim();
+              currentOrigin = `${proto}://${xHost}`;
+            } else if (rawHost && !rawHost.includes('localhost') && !rawHost.includes('127.0.0.1') && !rawHost.includes('0.0.0.0')) {
+              const proto = (req.headers['x-forwarded-proto'] || 'https').toString().split(',')[0].trim();
+              currentOrigin = `${proto}://${rawHost}`;
+            }
+
+            content = content.replace(/https:\/\/mental-tactic-65c43\.web\.app/g, currentOrigin);
+
+            const contentType = fileName === 'robots.txt'
+              ? 'text/plain; charset=utf-8'
+              : 'application/xml; charset=utf-8';
+            res.setHeader('Content-Type', contentType);
+            res.setHeader('Cache-Control', 'no-cache');
+            return res.end(content);
           }
         }
         next();
@@ -39,6 +69,7 @@ export default defineConfig(() => {
       },
     },
     server: {
+      allowedHosts: true as const,
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
       // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',

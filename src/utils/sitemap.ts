@@ -1,6 +1,15 @@
 import { Post } from '../types';
 
-export const SITE_DOMAIN = 'https://mental-tactic-65c43.web.app';
+export function getSiteDomain(): string {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin;
+  }
+  return 'https://mental-tactic-65c43.web.app';
+}
+
+export const SITE_DOMAIN = typeof window !== 'undefined' && window.location?.origin
+  ? window.location.origin
+  : 'https://mental-tactic-65c43.web.app';
 
 export const STATIC_SITEMAP_ROUTES = [
   { path: '', priority: '1.0', changefreq: 'daily' },
@@ -94,8 +103,8 @@ export function buildDynamicSitemapXml(posts: Post[], baseUrl: string = SITE_DOM
 /**
  * Initiates browser download of the generated sitemap.xml
  */
-export function downloadSitemap(posts: Post[]): void {
-  const xml = buildDynamicSitemapXml(posts);
+export function downloadSitemap(posts: Post[], baseUrl: string = getSiteDomain()): void {
+  const xml = buildDynamicSitemapXml(posts, baseUrl);
   const blob = new Blob([xml], { type: 'application/xml' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
