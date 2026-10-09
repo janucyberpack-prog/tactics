@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import {
   getAllPostsAdmin,
+  subscribeToAllPostsAdmin,
   deletePost,
   deleteMultiplePosts,
   updatePost,
@@ -73,7 +74,19 @@ export const AdminPosts: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPosts();
+    setLoading(true);
+    const unsubscribe = subscribeToAllPostsAdmin(
+      (livePosts) => {
+        setPosts(livePosts);
+        setLoading(false);
+      },
+      (err) => {
+        console.error('Real-time admin sync error, falling back to manual fetch:', err);
+        fetchPosts();
+      }
+    );
+
+    return () => unsubscribe();
   }, []);
 
   const handleTogglePublish = async (post: Post) => {

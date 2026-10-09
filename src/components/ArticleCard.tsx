@@ -25,6 +25,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const [savingLoading, setSavingLoading] = useState(false);
 
   const formattedIndex = String(index).padStart(2, '0');
+  const defaultCover = "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1200&q=80";
+  const displayCover = post.coverImage || defaultCover;
+  const postUrl = `/journal/${post.slug || post.id}`;
 
   const handleToggleSave = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -58,11 +61,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
 
   return (
     <article className="group min-w-0 bg-[#0a0a0a] border-b border-[#292929] hover:border-[#b51f35] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
-      <Link to={`/journal/${post.slug}`} className="block">
+      <Link to={postUrl} className="block">
         {/* Cinematic Grayscale Cover Image */}
         <div className="relative aspect-[1.16/1] overflow-hidden bg-[#111111]">
           <img
-            src={post.coverImage}
+            src={displayCover}
             alt={post.title}
             loading="lazy"
             className="w-full h-full object-cover filter grayscale contrast-[1.17] brightness-[0.66] group-hover:grayscale-[0.8] group-hover:brightness-[0.76] group-hover:scale-105 transition-all duration-700 ease-out"

@@ -5,7 +5,7 @@ import { SEO } from '../components/SEO';
 import { ArticleSkeleton } from '../components/Skeletons';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
-import { getPostBySlug, getPublishedPosts, savePost, removeSavedPost, isPostSaved } from '../services/posts';
+import { getPostBySlug, getPostById, getPublishedPosts, savePost, removeSavedPost, isPostSaved } from '../services/posts';
 import { getCommentsForPost, addComment, deleteComment } from '../services/comments';
 import { Post, Comment } from '../types';
 
@@ -32,7 +32,10 @@ export const ArticleDetail: React.FC = () => {
       if (!slug) return;
       setLoading(true);
       try {
-        const found = await getPostBySlug(slug);
+        let found = await getPostBySlug(slug);
+        if (!found) {
+          found = await getPostById(slug);
+        }
         setPost(found);
 
         const list = await getPublishedPosts();
@@ -223,7 +226,7 @@ export const ArticleDetail: React.FC = () => {
         {/* Cover Artwork */}
         <div className="relative overflow-hidden mb-14 border border-[#222] bg-[#0c0c0c] max-h-[520px]">
           <img
-            src={post.coverImage}
+            src={post.coverImage || "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5?auto=format&fit=crop&w=1200&q=80"}
             alt={post.title}
             className="w-full h-full object-cover filter grayscale contrast-110 brightness-75"
           />

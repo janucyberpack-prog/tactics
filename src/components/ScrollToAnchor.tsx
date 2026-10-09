@@ -13,7 +13,13 @@ export const ScrollToAnchor: React.FC = () => {
       const timer = setTimeout(() => {
         const element = document.getElementById(id);
         if (element) {
-          element.scrollIntoView({ behavior, block: 'start' });
+          const navHeight = 78;
+          const rect = element.getBoundingClientRect();
+          const targetTop = rect.top + window.pageYOffset - navHeight;
+          window.scrollTo({
+            top: Math.max(0, targetTop),
+            behavior
+          });
         }
       }, 60);
       return () => clearTimeout(timer);

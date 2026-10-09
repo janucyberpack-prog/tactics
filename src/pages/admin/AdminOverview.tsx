@@ -18,7 +18,7 @@ import {
   Trash2,
   AlertTriangle
 } from 'lucide-react';
-import { getAllPostsAdmin, deletePost } from '../../services/posts';
+import { getAllPostsAdmin, subscribeToAllPostsAdmin, deletePost } from '../../services/posts';
 import { getAllUsers } from '../../services/auth';
 import { getAllSubscribers, getAllContactMessages } from '../../services/interactions';
 import { Post, UserProfile, NewsletterSubscription, ContactMessage } from '../../types';
@@ -37,15 +37,23 @@ export const AdminOverview: React.FC = () => {
   const { showToast } = useToast();
 
   useEffect(() => {
+    // Real-time listener for posts
+    const unsubscribePosts = subscribeToAllPostsAdmin(
+      (postsData) => {
+        setPosts(postsData);
+      },
+      (err) => {
+        console.warn('Real-time posts sync warning on overview:', err);
+      }
+    );
+
     const fetchAllData = async () => {
       try {
-        const [postsData, usersData, subsData, msgsData] = await Promise.all([
-          getAllPostsAdmin().catch(() => []),
+        const [usersData, subsData, msgsData] = await Promise.all([
           getAllUsers().catch(() => []),
           getAllSubscribers().catch(() => []),
           getAllContactMessages().catch(() => [])
         ]);
-        setPosts(postsData);
         setUsers(usersData);
         setSubscribers(subsData);
         setMessages(msgsData);
@@ -56,6 +64,10 @@ export const AdminOverview: React.FC = () => {
       }
     };
     fetchAllData();
+
+    return () => {
+      unsubscribePosts();
+    };
   }, []);
 
   const publishedCount = posts.filter(p => p.status === 'published').length;

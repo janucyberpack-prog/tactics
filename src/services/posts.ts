@@ -12,6 +12,7 @@ import {
   orderBy,
   limit,
   serverTimestamp,
+  onSnapshot,
   Timestamp
 } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../lib/firebase';
@@ -254,6 +255,91 @@ export async function getPublishedPosts(category?: string, tag?: string): Promis
     console.warn('Error fetching published posts from Firestore:', error);
     return [];
   }
+}
+
+/**
+ * Real-time listener for published posts on the site
+ * Automatically updates whenever Firestore documents change
+ */
+export function subscribeToPublishedPosts(
+  callback: (posts: Post[]) => void,
+  onError?: (error: Error) => void,
+  category?: string,
+  tag?: string
+): () => void {
+  const postsCol = collection(db, 'posts');
+  let q = query(postsCol, where('status', '==', 'published'));
+  
+  if (category && category !== 'All' && category !== 'All notes') {
+    q = query(q, where('category', '==', category));
+  }
+
+  const unsubscribe = onSnapshot(
+    q,
+    (snapshot) => {
+      let posts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Post[];
+
+      if (tag) {
+        posts = posts.filter(p => p.tags && p.tags.includes(tag));
+      }
+
+      // Sort most recent first
+      posts.sort((a, b) => {
+        const timeA = a.publishedAt?.toMillis ? a.publishedAt.toMillis() : new Date(a.createdAt || 0).getTime();
+        const timeB = b.publishedAt?.toMillis ? b.publishedAt.toMillis() : new Date(b.createdAt || 0).getTime();
+        return timeB - timeA;
+      });
+
+      callback(posts);
+    },
+    (error) => {
+      console.warn('Real-time posts subscription notice:', error);
+      if (onError) {
+        onError(error);
+      } else {
+        callback([]);
+      }
+    }
+  );
+
+  return unsubscribe;
+}
+
+/**
+ * Real-time listener for the Admin panel to sync all posts (drafts and published)
+ */
+export function subscribeToAllPostsAdmin(
+  callback: (posts: Post[]) => void,
+  onError?: (error: Error) => void
+): () => void {
+  const postsCol = collection(db, 'posts');
+  const unsubscribe = onSnapshot(
+    postsCol,
+    (snapshot) => {
+      const posts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Post[];
+
+      // Sort most recent first
+      posts.sort((a, b) => {
+        const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : new Date(a.updatedAt || a.createdAt || 0).getTime();
+        const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : new Date(b.updatedAt || b.createdAt || 0).getTime();
+        return timeB - timeA;
+      });
+
+      callback(posts);
+    },
+    (error) => {
+      console.error('Real-time admin posts subscription error:', error);
+      if (onError) onError(error);
+    }
+  );
+
+  return unsubscribe;
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {

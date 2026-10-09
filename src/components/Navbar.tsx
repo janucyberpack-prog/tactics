@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Bookmark, User as UserIcon, Shield, LogOut, Search, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -19,27 +19,102 @@ export const Navbar: React.FC = () => {
   const [searchResults, setSearchResults] = useState<Post[]>([]);
   const [activeSection, setActiveSection] = useState('home');
 
+  const isManualScrollingRef = useRef(false);
+  const manualScrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const isHome = location.pathname === '/';
 
-  // Track active section for indicator line on homepage
+  // Smooth click navigation for homepage anchors with accurate offset
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, sectionId: string) => {
+    if (isHome && href.startsWith('#')) {
+      e.preventDefault();
+      setActiveSection(sectionId);
+
+      // Lock scroll listener while smooth scrolling takes place
+      isManualScrollingRef.current = true;
+      if (manualScrollTimeoutRef.current) clearTimeout(manualScrollTimeoutRef.current);
+      manualScrollTimeoutRef.current = setTimeout(() => {
+        isManualScrollingRef.current = false;
+      }, 750);
+
+      const targetId = href.replace('#', '');
+      const el = document.getElementById(targetId);
+      if (el) {
+        const navHeight = 78;
+        const rect = el.getBoundingClientRect();
+        const targetTop = rect.top + window.pageYOffset - navHeight;
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: 'smooth'
+        });
+        window.history.pushState(null, '', href);
+      }
+    }
+  };
+
+  // Track active section for indicator line on homepage based on viewport visibility
   useEffect(() => {
     if (!isHome) return;
 
-    const sections = ['home', 'features', 'articles', 'tools', 'about'];
     const handleScroll = () => {
-      const scrollPos = window.scrollY + 200;
-      for (const sectionId of [...sections].reverse()) {
-        const el = document.getElementById(sectionId);
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(sectionId);
+      if (isManualScrollingRef.current) return;
+
+      const navHeight = 85;
+      const scrollY = window.scrollY;
+
+      // If at the very top of the page, always 'home'
+      if (scrollY < 180) {
+        setActiveSection('home');
+        return;
+      }
+
+      // Check section bounding rects in reading view
+      const aboutEl = document.getElementById('about');
+      if (aboutEl) {
+        const r = aboutEl.getBoundingClientRect();
+        if (r.top <= navHeight + 80) {
+          setActiveSection('about');
           return;
         }
       }
+
+      // Check tools
+      const toolsEl = document.getElementById('tools');
+      const isDesktop = window.innerWidth >= 1024;
+      if (!isDesktop && toolsEl) {
+        const r = toolsEl.getBoundingClientRect();
+        if (r.top <= navHeight + 80 && r.bottom > navHeight) {
+          setActiveSection('tools');
+          return;
+        }
+      }
+
+      const articlesEl = document.getElementById('articles');
+      if (articlesEl) {
+        const r = articlesEl.getBoundingClientRect();
+        if (r.top <= navHeight + 80 && r.bottom > navHeight) {
+          setActiveSection(prev => (isDesktop && prev === 'tools' ? 'tools' : 'articles'));
+          return;
+        }
+      }
+
+      const featuresEl = document.getElementById('features');
+      if (featuresEl) {
+        const r = featuresEl.getBoundingClientRect();
+        if (r.top <= navHeight + 80 && r.bottom > navHeight) {
+          setActiveSection('features');
+          return;
+        }
+      }
+
       setActiveSection('home');
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (manualScrollTimeoutRef.current) clearTimeout(manualScrollTimeoutRef.current);
+    };
   }, [isHome]);
 
   // Handle Search Modal data fetching
@@ -131,6 +206,7 @@ export const Navbar: React.FC = () => {
                 <li key={link.label} className="flex items-center">
                   <a
                     href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href, link.id)}
                     className={`relative flex items-center h-full px-1 text-[10px] font-semibold tracking-[0.2em] uppercase transition-colors duration-200 ${
                       isActive ? 'text-[#f1f0ed]' : 'text-[#8e8d89] hover:text-[#f1f0ed]'
                     }`}
@@ -252,7 +328,10 @@ export const Navbar: React.FC = () => {
               <li key={link.label}>
                 <a
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    setMobileMenuOpen(false);
+                    handleNavClick(e, link.href, link.id);
+                  }}
                   className="font-serif text-3xl font-light text-[#f1f0ed] hover:text-[#ce354b] transition-colors block"
                 >
                   {link.label}

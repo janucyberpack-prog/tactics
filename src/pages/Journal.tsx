@@ -4,16 +4,18 @@ import { Search, X } from 'lucide-react';
 import { ArticleCard } from '../components/ArticleCard';
 import { CardSkeleton } from '../components/Skeletons';
 import { SEO } from '../components/SEO';
-import { getPublishedPosts } from '../services/posts';
+import { subscribeToPublishedPosts } from '../services/posts';
 import { Post } from '../types';
 
 const CATEGORIES = [
   'All notes',
+  'Rest & Renewal',
+  'Mindfulness',
+  'Emotional Agility',
+  'Neuroscience',
+  'Daily Rituals',
   'Behavior',
-  'Social Psychology',
-  'Mental Strength',
-  'Clarity',
-  'Neuroscience'
+  'Mental Strength'
 ];
 
 export const Journal: React.FC = () => {
@@ -36,19 +38,21 @@ export const Journal: React.FC = () => {
     }
   }, [queryParam]);
 
+  // Live real-time Firestore synchronization for Journal
   useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      try {
-        const data = await getPublishedPosts();
-        setPosts(data);
-      } catch (err) {
-        console.error(err);
-      } finally {
+    setLoading(true);
+    const unsubscribe = subscribeToPublishedPosts(
+      (livePosts) => {
+        setPosts(livePosts);
+        setLoading(false);
+      },
+      (err) => {
+        console.warn('Journal real-time sync warning:', err);
         setLoading(false);
       }
-    };
-    fetchPosts();
+    );
+
+    return () => unsubscribe();
   }, []);
 
   const handleCategorySelect = (cat: string) => {

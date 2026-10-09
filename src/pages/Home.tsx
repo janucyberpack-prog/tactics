@@ -3,69 +3,11 @@ import { Link } from 'react-router-dom';
 import { ArticleCard } from '../components/ArticleCard';
 import { CardSkeleton } from '../components/Skeletons';
 import { SEO } from '../components/SEO';
-import { getPublishedPosts, seedInitialPostsIfEmpty } from '../services/posts';
+import { subscribeToPublishedPosts } from '../services/posts';
 import { subscribeNewsletter } from '../services/interactions';
 import { useToast } from '../components/Toast';
 import { Post } from '../types';
 import { X, BookOpen, PenLine, Compass, CheckCircle2, ArrowRight } from 'lucide-react';
-
-// Fallback high-fidelity posts matching reference cards if initial database query is empty or loading
-const REFERENCE_FALLBACK_POSTS: Post[] = [
-  {
-    id: 'ref-1',
-    title: 'Understanding the Patterns Behind Human Behavior',
-    slug: 'understanding-patterns-behind-human-behavior',
-    excerpt: 'An investigation into recurring cognitive biases, automatic scripts, and how conscious attention disrupts default tendencies.',
-    content: 'Human behavior is governed by layered heuristics developed for evolutionary survival...',
-    category: 'Behavior',
-    authorName: 'Mental Tactic Editorial',
-    authorId: 'admin',
-    coverImage: 'https://images.unsplash.com/photo-1603786419864-d6e953c11830?auto=format&fit=crop&w=900&q=82',
-    readingTime: 8,
-    publishedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    featured: true,
-    status: 'published',
-    tags: ['Behavior', 'Psychology', 'Patterns']
-  },
-  {
-    id: 'ref-2',
-    title: 'The Psychology of Influence and Persuasion',
-    slug: 'psychology-of-influence-and-persuasion',
-    excerpt: 'Deconstructing the subtle psychological mechanisms of social proof, authority, and emotional resonance in interpersonal communication.',
-    content: 'Persuasion begins with deep listening and empathetic attunement to underlying unmet needs...',
-    category: 'Social Psychology',
-    authorName: 'Mental Tactic Editorial',
-    authorId: 'admin',
-    coverImage: 'https://images.unsplash.com/photo-1511812201571-630da3a98887?auto=format&fit=crop&w=900&q=82',
-    readingTime: 11,
-    publishedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    featured: true,
-    status: 'published',
-    tags: ['Social Psychology', 'Influence', 'Communication']
-  },
-  {
-    id: 'ref-3',
-    title: 'Building a Stronger, More Resilient Mind',
-    slug: 'building-stronger-more-resilient-mind',
-    excerpt: 'Actionable protocols for nervous system regulation, cognitive reframing, and cultivating equanimity under acute uncertainty.',
-    content: 'Resilience is not emotional numbness; it is the capacity to experience distress and recover deliberate equilibrium...',
-    category: 'Mental Strength',
-    authorName: 'Mental Tactic Editorial',
-    authorId: 'admin',
-    coverImage: 'https://images.unsplash.com/photo-1708802293271-87adeea9ed82?auto=format&fit=crop&w=900&q=82',
-    readingTime: 6,
-    publishedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    featured: true,
-    status: 'published',
-    tags: ['Mental Strength', 'Resilience', 'Clarity']
-  }
-];
 
 export const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -88,24 +30,21 @@ export const Home: React.FC = () => {
     'What standard am I holding myself to that I would never demand of a friend?'
   ];
 
+  // Subscribe to live Firestore published posts in real time
   useEffect(() => {
-    const loadContent = async () => {
-      try {
-        await seedInitialPostsIfEmpty();
-        const data = await getPublishedPosts();
-        if (data && data.length > 0) {
-          setPosts(data);
-        } else {
-          setPosts(REFERENCE_FALLBACK_POSTS);
-        }
-      } catch (err) {
-        console.error('Failed to load posts:', err);
-        setPosts(REFERENCE_FALLBACK_POSTS);
-      } finally {
+    setLoading(true);
+    const unsubscribe = subscribeToPublishedPosts(
+      (livePosts) => {
+        setPosts(livePosts);
+        setLoading(false);
+      },
+      (error) => {
+        console.warn('Live posts sync warning:', error);
         setLoading(false);
       }
-    };
-    loadContent();
+    );
+
+    return () => unsubscribe();
   }, []);
 
   const handleSubscribe = async (e: React.FormEvent) => {
@@ -125,10 +64,9 @@ export const Home: React.FC = () => {
     }
   };
 
-  // Get top 3 articles for the editorial display
+  // Get top 3 articles directly from live Firestore collection (no mock data)
   const featuredArticles = useMemo(() => {
-    if (posts.length >= 3) return posts.slice(0, 3);
-    return [...posts, ...REFERENCE_FALLBACK_POSTS].slice(0, 3);
+    return posts.slice(0, 3);
   }, [posts]);
 
   return (
@@ -139,12 +77,12 @@ export const Home: React.FC = () => {
       />
 
       {/* 1. HERO SECTION (Split Screen) */}
-      <section className="border-b border-[#252525] relative overflow-hidden" id="home">
+      <section className="border-b border-[#252525] relative overflow-hidden scroll-mt-20" id="home">
         <div className="site-container min-h-[710px] grid grid-cols-1 lg:grid-cols-[47%_53%] items-stretch">
           {/* Left Narrative Column */}
-          <div className="relative z-10 flex flex-col justify-center py-20 lg:py-24 pr-0 lg:pr-12">
+          <div className="relative z-10 flex flex-col justify-center pt-4 pb-12 lg:pt-2 lg:pb-14 -translate-y-3 lg:-translate-y-8 pr-0 lg:pr-12">
             {/* Red Eyebrow Text with Accent Line */}
-            <p className="flex items-center gap-3 text-[#ce354b] text-[10px] font-bold tracking-[0.26em] uppercase mb-7">
+            <p className="flex items-center gap-3 text-[#ce354b] text-[10px] font-bold tracking-[0.26em] uppercase mb-5">
               <span className="w-[34px] h-[1px] bg-[#b51f35] inline-block shrink-0" aria-hidden="true" />
               <span>The science of self</span>
             </p>
@@ -155,12 +93,12 @@ export const Home: React.FC = () => {
             </h1>
 
             {/* Concise Description */}
-            <p className="max-w-[515px] mt-8 text-[#999895] text-[15px] font-light tracking-[0.015em] leading-[1.75]">
+            <p className="max-w-[515px] mt-6 text-[#999895] text-[15px] font-light tracking-[0.015em] leading-[1.75]">
               Explore human behavior, psychological patterns, and practical tools for clearer thinking and personal growth.
             </p>
 
             {/* Dual Actions */}
-            <div className="flex flex-wrap items-center gap-7 mt-11">
+            <div className="flex flex-wrap items-center gap-7 mt-8">
               <a
                 href="#articles"
                 className="inline-flex items-center justify-center min-h-[49px] px-7 border border-[#b51f35] text-white text-[10px] font-bold tracking-[0.19em] uppercase hover:bg-[#b51f35] transition-all duration-200"
@@ -233,7 +171,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* 2. FEATURE STRIP (Four Minimalist Features with Vertical Separators) */}
-      <section className="bg-[#070707] border-b border-[#252525]" id="features" aria-label="Key features">
+      <section className="bg-[#070707] border-b border-[#252525] scroll-mt-20" id="features" aria-label="Key features">
         <div className="site-container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             {/* Feature 1 */}
@@ -311,7 +249,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* 3. MAIN EDITORIAL CONTENT (Articles on Left + Resources on Right) */}
-      <section className="py-24 lg:py-28" id="articles">
+      <section className="py-24 lg:py-28 scroll-mt-20" id="articles">
         <div className="site-container">
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,3.25fr)_minmax(270px,1fr)] gap-12 lg:gap-0">
             {/* Left Column: Featured Articles (Wide) */}
@@ -334,24 +272,43 @@ export const Home: React.FC = () => {
                 </Link>
               </div>
 
-              {/* 3 Articles Grid */}
+              {/* Articles Grid / Live Data */}
               {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                   <CardSkeleton />
                   <CardSkeleton />
-                  <CardSkeleton />
                 </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              ) : featuredArticles.length > 0 ? (
+                <div className={`grid grid-cols-1 ${featuredArticles.length === 1 ? 'sm:grid-cols-1 max-w-md' : featuredArticles.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-3'} gap-5`}>
                   {featuredArticles.map((article, idx) => (
                     <ArticleCard key={article.id} post={article} index={idx + 1} />
                   ))}
+                </div>
+              ) : (
+                <div className="border border-[#222] bg-[#090909] p-8 text-center sm:text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <span className="text-[9px] font-bold tracking-[0.2em] text-[#b51f35] uppercase block mb-1">
+                      Editorial Desk
+                    </span>
+                    <h3 className="font-serif text-xl text-white font-normal m-0 mb-1">
+                      No published articles in Firestore yet.
+                    </h3>
+                    <p className="text-xs text-[#888] m-0">
+                      Articles published in the Editorial Studio will appear here live in real-time.
+                    </p>
+                  </div>
+                  <Link
+                    to="/admin/articles/new"
+                    className="inline-flex items-center justify-center px-4 py-2.5 bg-[#141414] hover:bg-[#1f1f1f] border border-[#333] hover:border-[#b51f35] text-white text-[10px] font-bold tracking-[0.16em] uppercase transition-colors shrink-0"
+                  >
+                    Open CMS Desk
+                  </Link>
                 </div>
               )}
             </div>
 
             {/* Right Column: Premium Resources (Narrower, Vertical Hairline Divider) */}
-            <aside className="pl-0 lg:pl-11 border-t lg:border-t-0 lg:border-l border-[#252525] pt-10 lg:pt-0" id="tools">
+            <aside className="pl-0 lg:pl-11 border-t lg:border-t-0 lg:border-l border-[#252525] pt-10 lg:pt-0 scroll-mt-20" id="tools">
               <div>
                 <span className="block mb-2 text-[#ce354b] text-[9px] font-bold tracking-[0.24em] uppercase">
                   Premium resources
@@ -451,7 +408,7 @@ export const Home: React.FC = () => {
 
       {/* 4. QUOTE BAND */}
       <section
-        className="border-y border-[#252525] bg-[#080808]"
+        className="border-y border-[#252525] bg-[#080808] scroll-mt-20"
         style={{
           background: 'linear-gradient(90deg, rgba(181, 31, 53, 0.07), transparent 30%), #080808'
         }}
