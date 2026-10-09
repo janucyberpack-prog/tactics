@@ -36,7 +36,7 @@ function AppContent() {
   const isAdminPath = location.pathname.startsWith('/admin');
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#122B22] selection:bg-[#B8E0D2] selection:text-[#0D1F18]">
+    <div className="min-h-screen flex flex-col bg-[#050505] text-[#f1f0ed] selection:bg-[#b51f35] selection:text-white">
       <Cursor />
       
       {/* Show public Navbar only when outside admin studio */}

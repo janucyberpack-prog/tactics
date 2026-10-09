@@ -86,19 +86,19 @@ export const Cursor: React.FC = () => {
       {/* Precision Core Dot */}
       <div
         ref={dotRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[9999] -ml-1 -mt-1 w-2 h-2 rounded-full bg-[#122B22] transition-opacity duration-300 custom-cursor-dot ${
+        className={`fixed top-0 left-0 pointer-events-none z-[9999] -ml-1 -mt-1 w-2 h-2 rounded-full bg-[#f1f0ed] transition-opacity duration-300 custom-cursor-dot ${
           isVisible ? 'opacity-100' : 'opacity-0'
-        } ${isHovered ? 'scale-75' : 'scale-100'}`}
+        } ${isHovered ? 'scale-75 bg-[#b51f35]' : 'scale-100'}`}
         style={{ willChange: 'transform' }}
       />
 
       {/* Trailing Responsive Ring */}
       <div
         ref={ringRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[9998] -ml-4 -mt-4 w-8 h-8 rounded-full border border-[#122B22]/35 transition-all duration-200 ease-out custom-cursor-ring ${
+        className={`fixed top-0 left-0 pointer-events-none z-[9998] -ml-4 -mt-4 w-8 h-8 rounded-full border border-white/20 transition-all duration-200 ease-out custom-cursor-ring ${
           isVisible ? 'opacity-100' : 'opacity-0'
-        } ${isPointer ? 'scale-150 bg-[#B8E0D2]/25 border-[#122B22]/60' : 'scale-100'} ${
-          isHovered ? 'scale-90 bg-[#E27D60]/20' : ''
+        } ${isPointer ? 'scale-150 bg-[#b51f35]/15 border-[#b51f35]/80' : 'scale-100'} ${
+          isHovered ? 'scale-90 bg-[#b51f35]/30 border-[#b51f35]' : ''
         }`}
         style={{ willChange: 'transform' }}
       />

@@ -30,42 +30,38 @@ export const Contact: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-16 md:py-24 text-[#122B22]">
+    <div className="min-h-screen bg-[#050505] py-16 md:py-24 text-[#f1f0ed]">
       <SEO
-        title="Contact & Reflections"
-        description="Connect with the editorial sanctuary of Mental Tactic."
+        title="Correspondence — Mental Tactic"
+        description="Connect with the editorial team of Mental Tactic."
       />
 
-      <div className="max-w-3xl mx-auto px-6">
+      <div className="site-container max-w-3xl mx-auto">
         <div className="text-center max-w-xl mx-auto mb-12 space-y-3">
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#6F8A77]">
+          <span className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#ce354b]">
             Correspondence
           </span>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#122B22] font-normal">
-            Reach Out to Sanctuary
+          <h1 className="font-serif text-4xl md:text-5xl text-white font-normal uppercase tracking-tight">
+            Reach Out to the Editors
           </h1>
-          <p className="text-sm text-[#122B22]/70 leading-relaxed font-sans">
-            Whether inquiring about editorial collaborations, sharing a personal breakthrough in focus, or offering constructive feedback.
+          <p className="text-xs sm:text-sm text-[#888] leading-relaxed font-light">
+            Inquire about research collaborations, suggest topics for editorial coverage, or share your observations.
           </p>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-[#EBE6DC] shadow-lg">
+        <div className="bg-[#090909] border border-[#222] p-8 sm:p-10">
           {error && (
-            <div className="p-3.5 rounded-2xl bg-[#FFF0F0] border border-[#E27D60]/30 text-xs text-[#992222] font-medium leading-relaxed mb-6">
+            <div className="p-3.5 bg-[#1a080a] border border-[#b51f35]/40 text-xs text-[#ce354b] font-medium leading-relaxed mb-6">
               {error}
             </div>
           )}
 
           {submitted ? (
-            <div className="text-center py-10 space-y-4">
-              <div className="w-14 h-14 rounded-full bg-[#B8E0D2]/40 text-[#122B22] flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-7 h-7 text-[#6F8A77]" />
-              </div>
-              <h3 className="font-serif text-2xl text-[#122B22]">
-                Your words have landed gently.
-              </h3>
-              <p className="text-xs text-[#122B22]/70 leading-relaxed max-w-sm mx-auto">
-                We review inquiries with unhurried care. You will hear back from our editorial team in stillness.
+            <div className="text-center py-12 space-y-4">
+              <CheckCircle2 className="w-10 h-10 text-[#ce354b] mx-auto" />
+              <h3 className="font-serif text-2xl text-white font-normal">Message Received</h3>
+              <p className="text-xs text-[#888] max-w-sm mx-auto leading-relaxed">
+                Thank you for your note. Our editors review incoming correspondence weekly.
               </p>
               <button
                 onClick={() => {
@@ -74,75 +70,74 @@ export const Contact: React.FC = () => {
                   setEmail('');
                   setMessage('');
                 }}
-                className="mt-2 px-6 py-2.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all"
+                className="mt-4 px-6 py-2.5 border border-[#333] hover:border-[#b51f35] text-white text-[10px] uppercase font-bold tracking-widest transition-colors"
               >
-                Send Another Note
+                Send Another
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
-                    Your Name
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8EA595]" />
-                    <input
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Marcus Thorne"
-                      className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl pl-11 pr-4 py-3 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8EA595]" />
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="marcus@sanctuary.com"
-                      className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl pl-11 pr-4 py-3 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
-                  Your Reflection or Inquiry
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#888] mb-2">
+                  Your Name
                 </label>
                 <div className="relative">
-                  <textarea
-                    rows={5}
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#666]" />
+                  <input
+                    type="text"
                     required
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tell us what is on your mind..."
-                    className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl p-4 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors resize-none"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Marcus Aurelius"
+                    className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs pl-10 pr-4 py-3 outline-none transition-colors"
                   />
                 </div>
               </div>
 
-              <div className="pt-2 flex justify-end">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-8 py-3.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center gap-2 shadow-sm disabled:opacity-50"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>{loading ? 'Dispatching...' : 'Dispatch Message'}</span>
-                </button>
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#888] mb-2">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#666]" />
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="marcus@sanctuary.org"
+                    className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs pl-10 pr-4 py-3 outline-none transition-colors"
+                  />
+                </div>
               </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#888] mb-2">
+                  Message
+                </label>
+                <textarea
+                  rows={5}
+                  required
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  placeholder="Share your thoughts or inquiry..."
+                  className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs p-3.5 outline-none resize-none leading-relaxed transition-colors"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3.5 bg-[#b51f35] hover:bg-[#ce354b] text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  'Transmitting...'
+                ) : (
+                  <>
+                    <Send className="w-3.5 h-3.5" /> Transmit Message
+                  </>
+                )}
+              </button>
             </form>
           )}
         </div>

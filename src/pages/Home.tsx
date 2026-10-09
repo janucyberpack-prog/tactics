@@ -7,23 +7,100 @@ import { getPublishedPosts, seedInitialPostsIfEmpty } from '../services/posts';
 import { subscribeNewsletter } from '../services/interactions';
 import { useToast } from '../components/Toast';
 import { Post } from '../types';
+import { X, BookOpen, PenLine, Compass, CheckCircle2, ArrowRight } from 'lucide-react';
+
+// Fallback high-fidelity posts matching reference cards if initial database query is empty or loading
+const REFERENCE_FALLBACK_POSTS: Post[] = [
+  {
+    id: 'ref-1',
+    title: 'Understanding the Patterns Behind Human Behavior',
+    slug: 'understanding-patterns-behind-human-behavior',
+    excerpt: 'An investigation into recurring cognitive biases, automatic scripts, and how conscious attention disrupts default tendencies.',
+    content: 'Human behavior is governed by layered heuristics developed for evolutionary survival...',
+    category: 'Behavior',
+    authorName: 'Mental Tactic Editorial',
+    authorId: 'admin',
+    coverImage: 'https://images.unsplash.com/photo-1603786419864-d6e953c11830?auto=format&fit=crop&w=900&q=82',
+    readingTime: 8,
+    publishedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    featured: true,
+    status: 'published',
+    tags: ['Behavior', 'Psychology', 'Patterns']
+  },
+  {
+    id: 'ref-2',
+    title: 'The Psychology of Influence and Persuasion',
+    slug: 'psychology-of-influence-and-persuasion',
+    excerpt: 'Deconstructing the subtle psychological mechanisms of social proof, authority, and emotional resonance in interpersonal communication.',
+    content: 'Persuasion begins with deep listening and empathetic attunement to underlying unmet needs...',
+    category: 'Social Psychology',
+    authorName: 'Mental Tactic Editorial',
+    authorId: 'admin',
+    coverImage: 'https://images.unsplash.com/photo-1511812201571-630da3a98887?auto=format&fit=crop&w=900&q=82',
+    readingTime: 11,
+    publishedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    featured: true,
+    status: 'published',
+    tags: ['Social Psychology', 'Influence', 'Communication']
+  },
+  {
+    id: 'ref-3',
+    title: 'Building a Stronger, More Resilient Mind',
+    slug: 'building-stronger-more-resilient-mind',
+    excerpt: 'Actionable protocols for nervous system regulation, cognitive reframing, and cultivating equanimity under acute uncertainty.',
+    content: 'Resilience is not emotional numbness; it is the capacity to experience distress and recover deliberate equilibrium...',
+    category: 'Mental Strength',
+    authorName: 'Mental Tactic Editorial',
+    authorId: 'admin',
+    coverImage: 'https://images.unsplash.com/photo-1708802293271-87adeea9ed82?auto=format&fit=crop&w=900&q=82',
+    readingTime: 6,
+    publishedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    featured: true,
+    status: 'published',
+    tags: ['Mental Strength', 'Resilience', 'Clarity']
+  }
+];
 
 export const Home: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState<'all' | string>('all');
   const [email, setEmail] = useState('');
   const [subscribing, setSubscribing] = useState(false);
   const { showToast } = useToast();
+
+  // Active Tool Modal state
+  const [activeToolModal, setActiveToolModal] = useState<'guide' | 'journal' | 'toolkit' | null>(null);
+
+  // Journal tool state
+  const [journalNote, setJournalNote] = useState('');
+  const [journalPromptIndex, setJournalPromptIndex] = useState(0);
+
+  const JOURNAL_PROMPTS = [
+    'What belief did I protect today that may actually be holding me back?',
+    'Where in my day did I mistake temporary discomfort for a genuine emergency?',
+    'What is one situation where I can practice responding rather than reacting?',
+    'What standard am I holding myself to that I would never demand of a friend?'
+  ];
 
   useEffect(() => {
     const loadContent = async () => {
       try {
         await seedInitialPostsIfEmpty();
         const data = await getPublishedPosts();
-        setPosts(data);
+        if (data && data.length > 0) {
+          setPosts(data);
+        } else {
+          setPosts(REFERENCE_FALLBACK_POSTS);
+        }
       } catch (err) {
         console.error('Failed to load posts:', err);
+        setPosts(REFERENCE_FALLBACK_POSTS);
       } finally {
         setLoading(false);
       }
@@ -41,678 +118,621 @@ export const Home: React.FC = () => {
       showToast(res.message, 'success');
       setEmail('');
     } catch (err: any) {
-      showToast(err.message || "You're on the list.", 'info');
+      showToast(err.message || "You are subscribed to Mental Tactic.", 'info');
+      setEmail('');
     } finally {
       setSubscribing(false);
     }
   };
 
-  const filteredPosts = useMemo(() => {
-    if (activeFilter === 'all') return posts;
-    return posts.filter(p => {
-      const cat = p.category.toLowerCase();
-      if (activeFilter === 'anxiety') return cat.includes('anxiety') || cat.includes('emotional') || p.tags?.some(t => t.toLowerCase().includes('anxiety'));
-      if (activeFilter === 'rest') return cat.includes('rest') || cat.includes('sleep') || cat.includes('mindful');
-      if (activeFilter === 'growth') return cat.includes('growth') || cat.includes('ritual') || cat.includes('neuroscience') || cat.includes('clarity');
-      return cat.includes(activeFilter.toLowerCase());
-    });
-  }, [posts, activeFilter]);
+  // Get top 3 articles for the editorial display
+  const featuredArticles = useMemo(() => {
+    if (posts.length >= 3) return posts.slice(0, 3);
+    return [...posts, ...REFERENCE_FALLBACK_POSTS].slice(0, 3);
+  }, [posts]);
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--paper)', color: 'var(--ink)' }}>
+    <div className="min-h-screen bg-[#050505] text-[#f1f0ed]">
       <SEO
-        title="Mental Tactic — Make space for your mind"
-        description="A quieter corner of the internet. Thoughtful tools, lived experiences, and small shifts for navigating the beautifully complicated work of being human."
+        title="Mental Tactic — Understand the Mind"
+        description="Explore human behavior, psychological patterns, and practical tools for clearer thinking and personal growth."
       />
 
-      {/* HERO SECTION */}
-      <header
-        className="hero"
-        id="home"
-        style={{
-          position: 'relative',
-          overflow: 'hidden',
-          borderBottom: '1px solid var(--line)',
-          background: 'radial-gradient(circle at 87% 75%, rgba(201, 190, 246, 0.6), transparent 26%), radial-gradient(circle at 74% 22%, rgba(185, 210, 190, 0.55), transparent 29%), var(--paper)'
-        }}
-      >
-        <div
-          className="hero-grid wrap"
-          style={{
-            minHeight: 'calc(100vh - 92px)',
-            display: 'grid',
-            gridTemplateColumns: '1.32fr 0.68fr',
-            gap: '50px',
-            alignItems: 'center',
-            padding: '70px 0'
-          }}
-        >
-          {/* Left Narrative */}
-          <div>
-            <p
-              className="eyebrow"
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--dark)',
-                margin: '0 0 25px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}
-            >
-              <span style={{ display: 'inline-block', width: '28px', height: '1px', backgroundColor: 'currentColor' }} />
-              <span>A quieter corner of the internet</span>
+      {/* 1. HERO SECTION (Split Screen) */}
+      <section className="border-b border-[#252525] relative overflow-hidden" id="home">
+        <div className="site-container min-h-[710px] grid grid-cols-1 lg:grid-cols-[47%_53%] items-stretch">
+          {/* Left Narrative Column */}
+          <div className="relative z-10 flex flex-col justify-center py-20 lg:py-24 pr-0 lg:pr-12">
+            {/* Red Eyebrow Text with Accent Line */}
+            <p className="flex items-center gap-3 text-[#ce354b] text-[10px] font-bold tracking-[0.26em] uppercase mb-7">
+              <span className="w-[34px] h-[1px] bg-[#b51f35] inline-block shrink-0" aria-hidden="true" />
+              <span>The science of self</span>
             </p>
 
-            <h1
-              className="serif"
-              style={{
-                fontSize: 'clamp(64px, 8.5vw, 136px)',
-                lineHeight: 0.84,
-                letterSpacing: '-0.06em',
-                margin: '0 0 30px',
-                fontWeight: 400
-              }}
-            >
-              Make space<br />
-              for your <em style={{ color: 'var(--dark)', fontStyle: 'italic' }}>mind.</em>
+            {/* Oversized Serif Headline */}
+            <h1 className="max-w-[740px] m-0 font-serif text-[clamp(52px,5.1vw,84px)] font-normal tracking-[-0.02em] leading-[0.94] uppercase text-[#f1f0ed]">
+              Understand the mind. <em className="text-[#9b9a96] italic font-normal">Master</em> yourself.
             </h1>
 
-            <div className="hero-bottom flex items-center gap-6 pt-2">
+            {/* Concise Description */}
+            <p className="max-w-[515px] mt-8 text-[#999895] text-[15px] font-light tracking-[0.015em] leading-[1.75]">
+              Explore human behavior, psychological patterns, and practical tools for clearer thinking and personal growth.
+            </p>
+
+            {/* Dual Actions */}
+            <div className="flex flex-wrap items-center gap-7 mt-11">
               <a
-                className="circle hover:scale-105"
-                href="#stories"
-                style={{
-                  width: '62px',
-                  height: '62px',
-                  border: '1px solid var(--ink)',
-                  borderRadius: '50%',
-                  display: 'grid',
-                  placeItems: 'center',
-                  fontSize: '24px',
-                  color: 'var(--ink)',
-                  flexShrink: 0,
-                  transition: 'transform 0.3s ease'
-                }}
+                href="#articles"
+                className="inline-flex items-center justify-center min-h-[49px] px-7 border border-[#b51f35] text-white text-[10px] font-bold tracking-[0.19em] uppercase hover:bg-[#b51f35] transition-all duration-200"
               >
-                ↘
+                Explore articles
               </a>
-              <p
-                className="hero-copy"
-                style={{
-                  maxWidth: '430px',
-                  lineHeight: 1.65,
-                  color: 'rgba(24, 34, 29, 0.72)',
-                  fontSize: '15px',
-                  margin: 0
-                }}
+              <a
+                href="#tools"
+                className="inline-flex items-center gap-3 text-[#d2d1ce] hover:text-white text-[10px] font-bold tracking-[0.18em] uppercase group transition-colors"
               >
-                Thoughtful tools, lived experiences, and small shifts for navigating the beautifully complicated work of being human.
-              </p>
+                <span className="w-[31px] h-[31px] rounded-full border border-[#343434] group-hover:border-[#b51f35] grid place-items-center transition-all group-hover:translate-x-1">
+                  <svg className="w-2.5 h-2.5 text-white" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="m3 2 6 4-6 4V2Z" fill="currentColor" />
+                  </svg>
+                </span>
+                Discover tools
+              </a>
             </div>
           </div>
 
-          {/* Right Art Display */}
-          <div
-            className="art"
-            style={{
-              height: '520px',
-              display: 'grid',
-              placeItems: 'center',
-              position: 'relative'
-            }}
-          >
-            {/* Spinning Orbit with Peach Dot */}
+          {/* Right Visual Column (Monochrome Sculpture + Crimson Light) */}
+          <div className="relative min-w-0 min-h-[520px] lg:min-h-[710px] bg-[#080808] overflow-hidden">
+            {/* Shading scrims */}
             <div
-              className="orbit"
+              className="absolute inset-0 z-10 pointer-events-none"
               style={{
-                position: 'absolute',
-                border: '1px solid rgba(35, 78, 59, 0.33)',
-                borderRadius: '50%',
-                aspectRatio: '1',
-                width: 'min(38vw, 500px)',
-                animation: 'spin 26s linear infinite'
-              }}
-            >
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '-7px',
-                  width: '14px',
-                  height: '14px',
-                  backgroundColor: 'var(--peach)',
-                  borderRadius: '50%',
-                  transform: 'translateX(-50%)'
-                }}
-              />
-            </div>
-
-            {/* Pulsing rings */}
-            <div
-              className="ring"
-              style={{
-                position: 'absolute',
-                border: '1px solid rgba(35, 78, 59, 0.33)',
-                borderRadius: '50%',
-                aspectRatio: '1',
-                width: 'min(32vw, 420px)',
-                animation: 'pulse 4.5s ease-out infinite'
-              }}
-            />
-            <div
-              className="ring two"
-              style={{
-                position: 'absolute',
-                border: '1px solid rgba(35, 78, 59, 0.33)',
-                borderRadius: '50%',
-                aspectRatio: '1',
-                width: 'min(32vw, 420px)',
-                animation: 'pulse 4.5s ease-out infinite',
-                animationDelay: '-2.25s'
+                background:
+                  'linear-gradient(90deg, #050505 0%, transparent 24%), linear-gradient(0deg, rgba(5,5,5,0.82) 0%, transparent 32%), radial-gradient(circle at 72% 42%, transparent 12%, rgba(0, 0, 0, 0.3) 72%)'
               }}
             />
 
-            {/* Organic Shape Artwork */}
+            {/* Subtle crimson laser lighting line */}
             <div
-              className="shape"
+              className="absolute z-20 top-[14%] right-[8%] w-[1px] h-[40%]"
               style={{
-                width: 'min(26vw, 348px)',
-                aspectRatio: '0.76',
-                borderRadius: '49% 49% 44% 44% / 34% 34% 61% 61%',
-                overflow: 'hidden',
-                transform: 'rotate(5deg)',
-                boxShadow: '18px 22px 0 rgba(185, 210, 190, 0.55)',
-                position: 'relative',
-                zIndex: 2
+                background: 'linear-gradient(#b51f35, transparent)',
+                boxShadow: '0 0 24px rgba(181, 31, 53, 0.7)'
               }}
+            />
+
+            {/* Classical Sculpture Image */}
+            <img
+              src="https://images.unsplash.com/photo-1583769929769-48339ffd75e8?auto=format&fit=crop&w=1400&q=88"
+              alt="Dramatically lit classical sculpture"
+              className="w-full h-full object-cover object-[53%_38%] filter grayscale contrast-[1.16] brightness-[0.71] scale-[1.015]"
+            />
+
+            {/* Vertically arranged sequence words */}
+            <div
+              className="absolute z-30 top-1/2 right-[23px] flex items-center gap-5 text-white/50 text-[8px] font-semibold tracking-[0.35em] uppercase select-none pointer-events-none"
+              style={{
+                transform: 'translateY(-50%) rotate(90deg) translateX(50%)',
+                transformOrigin: 'right center'
+              }}
+              aria-hidden="true"
             >
-              <img
-                src="https://images.unsplash.com/photo-1522075782449-e45a34f1ddfb?auto=format&fit=crop&w=900&q=85"
-                alt="Mindful contemplation"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  filter: 'saturate(0.7)'
-                }}
-              />
+              <span>Observe</span>
+              <i className="w-[26px] h-[1px] bg-white/30 not-italic inline-block" />
+              <span>Understand</span>
+              <i className="w-[26px] h-[1px] bg-white/30 not-italic inline-block" />
+              <span>Grow</span>
             </div>
 
-            {/* Floating Lilac Pill */}
-            <div
-              className="pill serif"
-              style={{
-                position: 'absolute',
-                right: '0',
-                bottom: '8%',
-                width: '150px',
-                height: '150px',
-                borderRadius: '50%',
-                display: 'grid',
-                placeItems: 'center',
-                padding: '25px',
-                textAlign: 'center',
-                backgroundColor: 'var(--lilac)',
-                fontSize: '20px',
-                lineHeight: 1.1,
-                color: 'var(--ink)',
-                animation: 'float 5s ease-in-out infinite alternate',
-                zIndex: 4,
-                boxShadow: '0 8px 20px rgba(24,34,29,0.06)'
-              }}
-            >
-              You don't have to hold it all.
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* MANIFESTO SECTION */}
-      <section
-        className="manifesto"
-        id="about"
-        style={{
-          minHeight: '85vh',
-          backgroundColor: 'var(--ink)',
-          color: 'var(--white)',
-          display: 'grid',
-          placeItems: 'center',
-          padding: '120px 20px',
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        <div
-          className="orb"
-          style={{
-            position: 'absolute',
-            width: 'min(48vw, 660px)',
-            aspectRatio: '1',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle at 35% 30%, #d8cff9, #719783 58%, transparent 71%)',
-            opacity: 0.45,
-            filter: 'blur(4px)',
-            animation: 'breathe 6s ease-in-out infinite',
-            pointerEvents: 'none'
-          }}
-        />
-        <h2
-          className="serif"
-          style={{
-            maxWidth: '1050px',
-            fontSize: 'clamp(40px, 6vw, 88px)',
-            lineHeight: 1.05,
-            letterSpacing: '-0.04em',
-            margin: 0,
-            position: 'relative',
-            zIndex: 2,
-            fontWeight: 400
-          }}
-        >
-          Mental wellness isn't about fixing yourself. It's about learning to meet yourself with{' '}
-          <span style={{ color: 'var(--sage)', fontStyle: 'italic' }}>more curiosity</span> and less judgment.
-        </h2>
-      </section>
-
-      {/* ROTATED MARQUEE */}
-      <div
-        className="marquee"
-        style={{
-          overflow: 'hidden',
-          backgroundColor: 'var(--lilac)',
-          padding: '36px 0',
-          transform: 'rotate(-1.5deg) scale(1.03)',
-          whiteSpace: 'nowrap',
-          borderTop: '1px solid var(--line)',
-          borderBottom: '1px solid var(--line)'
-        }}
-      >
-        <div className="track" style={{ display: 'inline-flex', animation: 'marquee 23s linear infinite' }}>
-          {['Pause', 'Feel', 'Notice', 'Begin again', 'Pause', 'Feel', 'Notice', 'Begin again'].map((word, idx) => (
-            <span
-              key={idx}
-              className="serif flex items-center"
-              style={{
-                fontSize: 'clamp(46px, 6.5vw, 92px)',
-                color: 'var(--ink)'
-              }}
-            >
-              <span>{word}</span>
-              <span
-                style={{
-                  display: 'inline-block',
-                  width: '16px',
-                  height: '16px',
-                  margin: '0 34px',
-                  backgroundColor: 'var(--peach)',
-                  borderRadius: '50%'
-                }}
-              />
+            {/* Figure label */}
+            <span className="absolute z-30 right-[7%] bottom-[31px] text-white/40 font-serif italic text-[11px] tracking-[0.15em] select-none">
+              Fig. 01 / The Self
             </span>
-          ))}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* FLOW / SMALL PRACTICE SECTION */}
+      {/* 2. FEATURE STRIP (Four Minimalist Features with Vertical Separators) */}
+      <section className="bg-[#070707] border-b border-[#252525]" id="features" aria-label="Key features">
+        <div className="site-container">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Feature 1 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] border-l lg:border-l border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <circle cx="16" cy="16" r="11" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M11 16.5l3 3 7-8M16 2v3M16 27v3M2 16h3M27 16h3" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Evidence-Informed Insights
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  Ideas grounded in psychological research.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <path d="M7 25 22.5 9.5l-3-3L4 22v3h3ZM18 8l3 3M17 24h11M17 19h7" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Practical Tools
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  Frameworks designed for everyday life.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-b sm:border-b-0 border-r border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <rect x="7" y="14" width="18" height="14" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M11 14V9a5 5 0 0 1 10 0v5M16 19v5" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Private & Personal
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  Your inner work remains entirely yours.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="grid grid-cols-[38px_1fr] gap-4 min-h-[137px] p-[35px_30px] border-r border-[#252525] items-start">
+              <div className="w-[34px] h-[34px] grid place-items-center text-[#c2c1bd]">
+                <svg className="w-7 h-7" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                  <path d="M5 7.5c6-2 9 .3 11 3.5 2-3.2 5-5.5 11-3.5V25c-6-2-9 .3-11 3.5C14 25.3 11 23 5 25V7.5Z" stroke="currentColor" strokeWidth="1.2" />
+                  <path d="M16 11v17" stroke="currentColor" strokeWidth="1.2" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="m-0 text-[10px] font-bold tracking-[0.15em] leading-[1.35] uppercase text-[#f1f0ed]">
+                  Lifetime Learning
+                </h3>
+                <p className="mt-1.5 text-[11px] text-[#686866] leading-[1.55]">
+                  A growing library for continued discovery.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. MAIN EDITORIAL CONTENT (Articles on Left + Resources on Right) */}
+      <section className="py-24 lg:py-28" id="articles">
+        <div className="site-container">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,3.25fr)_minmax(270px,1fr)] gap-12 lg:gap-0">
+            {/* Left Column: Featured Articles (Wide) */}
+            <div className="min-w-0 pr-0 lg:pr-12">
+              {/* Header */}
+              <div className="flex items-end justify-between mb-8 pb-1">
+                <div>
+                  <span className="block mb-2.5 text-[#ce354b] text-[9px] font-bold tracking-[0.24em] uppercase">
+                    Selected reading
+                  </span>
+                  <h2 className="m-0 font-serif text-[clamp(32px,3vw,47px)] font-normal tracking-[-0.01em] text-[#f1f0ed]">
+                    Latest Insights
+                  </h2>
+                </div>
+                <Link
+                  to="/journal"
+                  className="inline-flex items-center gap-2 pb-1.5 border-b border-[#393939] hover:border-[#b51f35] text-[#aaa] hover:text-white text-[9px] font-bold tracking-[0.18em] uppercase transition-colors"
+                >
+                  View all <span>→</span>
+                </Link>
+              </div>
+
+              {/* 3 Articles Grid */}
+              {loading ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  <CardSkeleton />
+                  <CardSkeleton />
+                  <CardSkeleton />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {featuredArticles.map((article, idx) => (
+                    <ArticleCard key={article.id} post={article} index={idx + 1} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Right Column: Premium Resources (Narrower, Vertical Hairline Divider) */}
+            <aside className="pl-0 lg:pl-11 border-t lg:border-t-0 lg:border-l border-[#252525] pt-10 lg:pt-0" id="tools">
+              <div>
+                <span className="block mb-2 text-[#ce354b] text-[9px] font-bold tracking-[0.24em] uppercase">
+                  Premium resources
+                </span>
+                <h2 className="m-0 font-serif text-[clamp(28px,2.2vw,38px)] font-normal text-[#f1f0ed]">
+                  Tools for Your Mind
+                </h2>
+              </div>
+
+              {/* 3 Resource Items */}
+              <div className="grid grid-cols-1 gap-3 mt-8">
+                {/* Resource 1 */}
+                <button
+                  type="button"
+                  onClick={() => setActiveToolModal('guide')}
+                  className="text-left grid grid-cols-[82px_1fr] gap-5 min-h-[112px] p-3 border border-[#252525] bg-[#090909] hover:bg-[#0d0d0d] hover:border-[#4c2027] transition-all group cursor-pointer"
+                >
+                  <div className="relative overflow-hidden bg-[#171717]">
+                    <img
+                      src="https://images.unsplash.com/photo-1588318073352-d650b19fc7e0?auto=format&fit=crop&w=400&q=80"
+                      alt="Psychology Guide"
+                      className="w-full h-full object-cover filter grayscale brightness-50 contrast-125 group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-2 border border-white/25 pointer-events-none" />
+                  </div>
+                  <div className="self-center min-w-0">
+                    <span className="text-[#b51f35] text-[7px] font-bold tracking-[0.2em] uppercase block">
+                      Digital field guide
+                    </span>
+                    <h3 className="m-0 mt-1.5 mb-2 font-serif text-[18px] font-normal text-[#f1f0ed] group-hover:text-white transition-colors">
+                      Psychology Guide
+                    </h3>
+                    <span className="inline-flex items-center gap-1.5 text-[#747472] group-hover:text-[#c9c8c4] text-[8px] font-semibold tracking-[0.14em] uppercase">
+                      Explore resource <b className="font-normal">→</b>
+                    </span>
+                  </div>
+                </button>
+
+                {/* Resource 2 */}
+                <button
+                  type="button"
+                  onClick={() => setActiveToolModal('journal')}
+                  className="text-left grid grid-cols-[82px_1fr] gap-5 min-h-[112px] p-3 border border-[#252525] bg-[#090909] hover:bg-[#0d0d0d] hover:border-[#4c2027] transition-all group cursor-pointer"
+                >
+                  <div className="relative overflow-hidden bg-[#171717]">
+                    <img
+                      src="https://images.unsplash.com/photo-1552912140-6b3c254f5214?auto=format&fit=crop&w=400&q=80"
+                      alt="Reflection Journal"
+                      className="w-full h-full object-cover filter grayscale brightness-50 contrast-125 group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-2 border border-white/25 pointer-events-none" />
+                  </div>
+                  <div className="self-center min-w-0">
+                    <span className="text-[#b51f35] text-[7px] font-bold tracking-[0.2em] uppercase block">
+                      Guided workbook
+                    </span>
+                    <h3 className="m-0 mt-1.5 mb-2 font-serif text-[18px] font-normal text-[#f1f0ed] group-hover:text-white transition-colors">
+                      Reflection Journal
+                    </h3>
+                    <span className="inline-flex items-center gap-1.5 text-[#747472] group-hover:text-[#c9c8c4] text-[8px] font-semibold tracking-[0.14em] uppercase">
+                      Explore resource <b className="font-normal">→</b>
+                    </span>
+                  </div>
+                </button>
+
+                {/* Resource 3 */}
+                <button
+                  type="button"
+                  onClick={() => setActiveToolModal('toolkit')}
+                  className="text-left grid grid-cols-[82px_1fr] gap-5 min-h-[112px] p-3 border border-[#252525] bg-[#090909] hover:bg-[#0d0d0d] hover:border-[#4c2027] transition-all group cursor-pointer"
+                >
+                  <div className="relative overflow-hidden bg-[#171717]">
+                    <img
+                      src="https://images.unsplash.com/photo-1512580770426-cbed71c40e94?auto=format&fit=crop&w=400&q=80"
+                      alt="Mindset Toolkit"
+                      className="w-full h-full object-cover filter grayscale brightness-50 contrast-125 group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-2 border border-white/25 pointer-events-none" />
+                  </div>
+                  <div className="self-center min-w-0">
+                    <span className="text-[#b51f35] text-[7px] font-bold tracking-[0.2em] uppercase block">
+                      Methods & models
+                    </span>
+                    <h3 className="m-0 mt-1.5 mb-2 font-serif text-[18px] font-normal text-[#f1f0ed] group-hover:text-white transition-colors">
+                      Mindset Toolkit
+                    </h3>
+                    <span className="inline-flex items-center gap-1.5 text-[#747472] group-hover:text-[#c9c8c4] text-[8px] font-semibold tracking-[0.14em] uppercase">
+                      Explore resource <b className="font-normal">→</b>
+                    </span>
+                  </div>
+                </button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. QUOTE BAND */}
       <section
-        className="flow"
-        id="practice"
+        className="border-y border-[#252525] bg-[#080808]"
         style={{
-          minHeight: '110vh',
-          backgroundColor: 'var(--paper)',
-          position: 'relative',
-          display: 'grid',
-          placeItems: 'center',
-          overflow: 'hidden',
-          padding: '100px 20px'
+          background: 'linear-gradient(90deg, rgba(181, 31, 53, 0.07), transparent 30%), #080808'
         }}
+        id="about"
       >
-        <div
-          className="flow-orbit"
-          style={{
-            position: 'absolute',
-            width: 'min(70vw, 850px)',
-            aspectRatio: '1',
-            border: '1px solid var(--line)',
-            borderRadius: '50%'
-          }}
-        />
-
-        {/* Orbit Inner Ring 1 */}
-        <div
-          style={{
-            position: 'absolute',
-            width: 'min(54vw, 650px)',
-            aspectRatio: '1',
-            border: '1px solid var(--line)',
-            borderRadius: '50%'
-          }}
-        />
-        {/* Orbit Inner Ring 2 */}
-        <div
-          style={{
-            position: 'absolute',
-            width: 'min(38vw, 450px)',
-            aspectRatio: '1',
-            border: '1px solid var(--line)',
-            borderRadius: '50%'
-          }}
-        />
-
-        {/* Center Content */}
-        <div className="flow-center" style={{ textAlign: 'center', zIndex: 10, position: 'relative' }}>
-          <p
-            className="eyebrow"
-            style={{
-              fontSize: '11px',
-              fontWeight: 700,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'var(--dark)',
-              margin: '0 0 20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '10px'
-            }}
-          >
-            <span style={{ display: 'inline-block', width: '28px', height: '1px', backgroundColor: 'currentColor' }} />
-            <span>A small practice</span>
-            <span style={{ display: 'inline-block', width: '28px', height: '1px', backgroundColor: 'currentColor' }} />
-          </p>
-          <h2
-            className="flow-title serif"
-            style={{
-              fontSize: 'clamp(55px, 8vw, 120px)',
-              lineHeight: 0.88,
-              margin: 0,
-              letterSpacing: '-0.055em',
-              fontWeight: 400
-            }}
-          >
-            Let it move <em style={{ color: 'var(--dark)', fontStyle: 'italic' }}>through.</em>
-          </h2>
-        </div>
-
-        {/* Four Thought Pills */}
-        <div
-          className="thought one hidden sm:flex"
-          style={{
-            position: 'absolute',
-            left: '8%',
-            top: '20%',
-            padding: '13px 20px',
-            border: '1px solid var(--ink)',
-            borderRadius: '999px',
-            backgroundColor: 'var(--white)',
-            boxShadow: '6px 7px rgba(24, 34, 29, 0.1)',
-            fontSize: '13px',
-            alignItems: 'center',
-            gap: '9px',
-            zIndex: 5
-          }}
-        >
-          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--dark)' }} />
-          <span>I should be further ahead</span>
-        </div>
-
-        <div
-          className="thought two hidden sm:flex"
-          style={{
-            position: 'absolute',
-            right: '9%',
-            top: '18%',
-            padding: '13px 20px',
-            border: '1px solid var(--ink)',
-            borderRadius: '999px',
-            backgroundColor: 'var(--white)',
-            boxShadow: '6px 7px rgba(24, 34, 29, 0.1)',
-            fontSize: '13px',
-            alignItems: 'center',
-            gap: '9px',
-            zIndex: 5
-          }}
-        >
-          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--dark)' }} />
-          <span>What if I get it wrong?</span>
-        </div>
-
-        <div
-          className="thought three hidden sm:flex"
-          style={{
-            position: 'absolute',
-            left: '12%',
-            bottom: '18%',
-            padding: '13px 20px',
-            border: '1px solid var(--ink)',
-            borderRadius: '999px',
-            backgroundColor: 'var(--white)',
-            boxShadow: '6px 7px rgba(24, 34, 29, 0.1)',
-            fontSize: '13px',
-            alignItems: 'center',
-            gap: '9px',
-            zIndex: 5
-          }}
-        >
-          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--dark)' }} />
-          <span>Everyone else has it together</span>
-        </div>
-
-        <div
-          className="thought four hidden sm:flex"
-          style={{
-            position: 'absolute',
-            right: '11%',
-            bottom: '22%',
-            padding: '13px 20px',
-            border: '1px solid var(--ink)',
-            borderRadius: '999px',
-            backgroundColor: 'var(--white)',
-            boxShadow: '6px 7px rgba(24, 34, 29, 0.1)',
-            fontSize: '13px',
-            alignItems: 'center',
-            gap: '9px',
-            zIndex: 5
-          }}
-        >
-          <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--dark)' }} />
-          <span>I can meet this moment</span>
+        <div className="site-container">
+          <div className="grid grid-cols-1 md:grid-cols-[190px_1fr_170px] items-center min-h-[217px] py-10 gap-6">
+            <span className="text-[#b51f35] text-[9px] font-bold tracking-[0.22em] uppercase">
+              A thought to keep
+            </span>
+            <blockquote className="m-0 max-w-[790px] font-serif text-[clamp(24px,2.5vw,37px)] italic leading-[1.3] text-[#f1f0ed]">
+              “Until you make the unconscious conscious, it will direct your life and you will call it fate.”
+            </blockquote>
+            <span className="hidden md:block justify-self-end text-[#212121] font-serif text-[120px] leading-[0.6] select-none" aria-hidden="true">
+              ”
+            </span>
+          </div>
         </div>
       </section>
 
-      {/* POSTS / STORIES SECTION */}
-      <section className="posts wrap" id="stories" style={{ padding: '120px 0 140px' }}>
-        <div
-          className="head flex flex-col sm:flex-row justify-between sm:items-end gap-8 mb-12"
-          style={{ marginBottom: '45px' }}
-        >
-          <h2
-            className="serif"
-            style={{
-              fontSize: 'clamp(50px, 6.5vw, 92px)',
-              lineHeight: 0.9,
-              margin: 0,
-              fontWeight: 400
-            }}
-          >
-            Latest<br />
-            <em style={{ color: 'var(--dark)', fontStyle: 'italic' }}>thinking</em>
-          </h2>
-          <p
-            style={{
-              maxWidth: '390px',
-              lineHeight: 1.6,
-              color: 'rgba(24, 34, 29, 0.65)',
-              fontSize: '15px',
-              margin: 0
-            }}
-          >
-            No quick fixes. Just grounded ideas, honest conversations, and practices you can actually carry into your day.
-          </p>
-        </div>
+      {/* 5. NEWSLETTER DISPATCH (Dark Luxury Aesthetic) */}
+      <section className="py-24 border-b border-[#1f1f1f] bg-[#060606]" id="dispatch">
+        <div className="site-container max-w-4xl mx-auto">
+          <div className="border border-[#222] bg-[#0a0a0a] p-10 sm:p-14 relative overflow-hidden">
+            {/* Subtle crimson accent bar */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#b51f35] to-transparent" />
 
-        {/* Category Filters */}
-        <div className="filters flex gap-2 flex-wrap mb-10">
-          {[
-            { id: 'all', label: 'All notes' },
-            { id: 'anxiety', label: 'Anxiety' },
-            { id: 'rest', label: 'Rest' },
-            { id: 'growth', label: 'Growth' }
-          ].map(tab => (
+            <div className="text-center max-w-xl mx-auto space-y-4">
+              <span className="text-[9px] font-bold tracking-[0.26em] text-[#ce354b] uppercase">
+                Fortnightly Dispatch
+              </span>
+              <h2 className="font-serif text-[clamp(28px,3vw,42px)] font-normal text-white m-0">
+                Sharper insights for your mental model.
+              </h2>
+              <p className="text-[#888] text-sm font-light leading-relaxed">
+                Bi-weekly reflections on behavioral neuroscience, psychological cognitive frameworks, and practical mental tactics. Never spam.
+              </p>
+
+              <form onSubmit={handleSubscribe} className="pt-4 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="Enter your email address"
+                  className="flex-1 bg-[#121212] border border-[#2a2a2a] focus:border-[#b51f35] text-white text-xs px-4 py-3.5 outline-none transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={subscribing}
+                  className="px-6 py-3.5 bg-[#b51f35] hover:bg-[#ce354b] text-white text-[10px] font-bold tracking-[0.2em] uppercase transition-colors shrink-0 disabled:opacity-50"
+                >
+                  {subscribing ? 'Sending...' : 'Subscribe'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* INTERACTIVE TOOL MODAL 1: Psychology Guide */}
+      {activeToolModal === 'guide' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="w-full max-w-2xl bg-[#0a0a0a] border border-[#262626] p-7 sm:p-9 max-h-[90vh] overflow-y-auto relative animate-in fade-in duration-200">
             <button
-              key={tab.id}
-              onClick={() => setActiveFilter(tab.id)}
-              style={{
-                padding: '9px 18px',
-                border: '1px solid var(--line)',
-                borderRadius: '999px',
-                backgroundColor: activeFilter === tab.id ? 'var(--ink)' : 'transparent',
-                color: activeFilter === tab.id ? 'var(--white)' : 'var(--ink)',
-                fontSize: '13px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-              }}
+              onClick={() => setActiveToolModal(null)}
+              className="absolute top-6 right-6 text-[#777] hover:text-white"
+              aria-label="Close guide"
             >
-              {tab.label}
+              <X className="w-5 h-5" />
             </button>
-          ))}
-        </div>
 
-        {/* 3-Column Stories Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <CardSkeleton />
-            <CardSkeleton />
-            <CardSkeleton />
-          </div>
-        ) : (
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
-            style={{ rowGap: '54px', columnGap: '28px' }}
-          >
-            {filteredPosts.map(post => (
-              <ArticleCard key={post.id} post={post} />
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* NEWSLETTER SECTION */}
-      <section className="newsletter wrap" id="newsletter" style={{ paddingBottom: '35px' }}>
-        <div
-          className="newsletter-box"
-          style={{
-            minHeight: '480px',
-            padding: 'clamp(40px, 6vw, 85px)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            alignItems: 'center',
-            gap: '50px',
-            backgroundColor: 'var(--sage)',
-            overflow: 'hidden'
-          }}
-        >
-          <div>
-            <p
-              className="eyebrow"
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--dark)',
-                margin: '0 0 20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}
-            >
-              <span style={{ display: 'inline-block', width: '28px', height: '1px', backgroundColor: 'currentColor' }} />
-              <span>A note for your inner world</span>
-            </p>
-            <h2
-              className="serif"
-              style={{
-                fontSize: 'clamp(46px, 5.5vw, 84px)',
-                lineHeight: 0.9,
-                margin: '0 0 20px',
-                fontWeight: 400
-              }}
-            >
-              Take a softer thought <em style={{ color: 'var(--dark)', fontStyle: 'italic' }}>with you.</em>
+            <span className="text-[9px] font-bold tracking-[0.24em] text-[#ce354b] uppercase">
+              Digital Field Guide
+            </span>
+            <h2 className="font-serif text-3xl font-normal text-white mt-1 mb-4">
+              Core Psychology Architecture
             </h2>
-            <p style={{ lineHeight: 1.7, fontSize: '15px', color: 'rgba(24, 34, 29, 0.8)', maxWidth: '440px', margin: 0 }}>
-              One thoughtful letter every other Sunday. No noise, no life hacks — just something worth sitting with.
+            <p className="text-xs text-[#888] leading-relaxed mb-6">
+              Essential mental mechanisms to identify, unpack, and master in daily high-stakes decision making.
             </p>
-          </div>
 
-          <form onSubmit={handleSubscribe}>
-            <p
-              className="eyebrow"
-              style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--dark)',
-                margin: '0 0 16px'
-              }}
-            >
-              Your email address
-            </p>
-            <div
-              className="input flex items-center"
-              style={{
-                display: 'flex',
-                borderBottom: '1px solid var(--ink)',
-                paddingBottom: '4px'
-              }}
-            >
-              <input
-                type="email"
-                placeholder="you@somewhere.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={{
-                  width: '100%',
-                  border: 0,
-                  background: 'none',
-                  padding: '18px 5px',
-                  outline: 0,
-                  fontSize: '16px',
-                  color: 'var(--ink)'
-                }}
-              />
+            <div className="space-y-4">
+              <div className="p-4 border border-[#202020] bg-[#0e0e0e]">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#ce354b] mb-1">
+                  01. The Default Mode Network (DMN)
+                </h4>
+                <p className="text-xs text-[#ccc] leading-relaxed m-0">
+                  When not focused on an external task, the brain defaults to self-referential narratives, rumination, and past/future simulations. Deliberate sensory grounding disengages hyperactivity here.
+                </p>
+              </div>
+
+              <div className="p-4 border border-[#202020] bg-[#0e0e0e]">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#ce354b] mb-1">
+                  02. Cognitive Cognitive Reframing
+                </h4>
+                <p className="text-xs text-[#ccc] leading-relaxed m-0">
+                  Separating raw sensory data from emotional interpretation. Asking: <em>"What objective evidence supports this reaction, and what alternative hypothesis fits equally well?"</em>
+                </p>
+              </div>
+
+              <div className="p-4 border border-[#202020] bg-[#0e0e0e]">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#ce354b] mb-1">
+                  03. The Internal Locus of Control
+                </h4>
+                <p className="text-xs text-[#ccc] leading-relaxed m-0">
+                  Focusing nervous energy strictly on agency (deliberate effort, interpretation, ethical conduct) rather than exogenous outcomes (market reaction, opinions of peers).
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-7 pt-5 border-t border-[#202020] flex justify-end">
               <button
-                type="submit"
-                disabled={subscribing}
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  border: 0,
-                  borderRadius: '50%',
-                  backgroundColor: 'var(--ink)',
-                  color: 'var(--white)',
-                  fontSize: '18px',
-                  display: 'grid',
-                  placeItems: 'center',
-                  cursor: 'pointer',
-                  flexShrink: 0
-                }}
+                onClick={() => setActiveToolModal(null)}
+                className="px-6 py-2.5 border border-[#333] hover:border-[#b51f35] text-xs uppercase tracking-wider font-bold text-white transition-colors"
               >
-                ↗
+                Close Guide
               </button>
             </div>
-          </form>
+          </div>
         </div>
-      </section>
+      )}
+
+      {/* INTERACTIVE TOOL MODAL 2: Reflection Journal */}
+      {activeToolModal === 'journal' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="w-full max-w-2xl bg-[#0a0a0a] border border-[#262626] p-7 sm:p-9 max-h-[90vh] overflow-y-auto relative animate-in fade-in duration-200">
+            <button
+              onClick={() => setActiveToolModal(null)}
+              className="absolute top-6 right-6 text-[#777] hover:text-white"
+              aria-label="Close workbook"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <span className="text-[9px] font-bold tracking-[0.24em] text-[#ce354b] uppercase">
+              Guided Workbook
+            </span>
+            <h2 className="font-serif text-3xl font-normal text-white mt-1 mb-2">
+              Reflection Journal
+            </h2>
+            <p className="text-xs text-[#888] leading-relaxed mb-5">
+              An unhurried space for private inquiry. Note down clear thoughts; entries remain strictly on your local device.
+            </p>
+
+            {/* Prompt Selector */}
+            <div className="p-4 border border-[#222] bg-[#0e0e0e] mb-4">
+              <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-wider text-[#ce354b] mb-2">
+                <span>Inquiry Prompt #{journalPromptIndex + 1}</span>
+                <button
+                  type="button"
+                  onClick={() => setJournalPromptIndex((journalPromptIndex + 1) % JOURNAL_PROMPTS.length)}
+                  className="hover:text-white underline text-[9px]"
+                >
+                  Shuffle Prompt →
+                </button>
+              </div>
+              <p className="font-serif italic text-base text-[#f1f0ed] m-0">
+                "{JOURNAL_PROMPTS[journalPromptIndex]}"
+              </p>
+            </div>
+
+            {/* Textarea */}
+            <textarea
+              rows={6}
+              value={journalNote}
+              onChange={e => setJournalNote(e.target.value)}
+              placeholder="Record your observations here with honesty..."
+              className="w-full bg-[#121212] border border-[#2a2a2a] focus:border-[#b51f35] text-white text-sm p-4 outline-none resize-none leading-relaxed"
+            />
+
+            <div className="mt-5 flex items-center justify-between">
+              <span className="text-[10px] text-[#666]">
+                {journalNote.length} characters written
+              </span>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(journalNote);
+                    showToast('Journal notes copied to clipboard.', 'success');
+                  }}
+                  disabled={!journalNote.trim()}
+                  className="px-4 py-2 border border-[#333] hover:border-[#b51f35] text-xs uppercase tracking-wider font-bold text-white transition-colors disabled:opacity-30"
+                >
+                  Copy Notes
+                </button>
+                <button
+                  onClick={() => setActiveToolModal(null)}
+                  className="px-5 py-2 bg-[#b51f35] hover:bg-[#ce354b] text-xs uppercase tracking-wider font-bold text-white transition-colors"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* INTERACTIVE TOOL MODAL 3: Mindset Toolkit */}
+      {activeToolModal === 'toolkit' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="w-full max-w-2xl bg-[#0a0a0a] border border-[#262626] p-7 sm:p-9 max-h-[90vh] overflow-y-auto relative animate-in fade-in duration-200">
+            <button
+              onClick={() => setActiveToolModal(null)}
+              className="absolute top-6 right-6 text-[#777] hover:text-white"
+              aria-label="Close toolkit"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <span className="text-[9px] font-bold tracking-[0.24em] text-[#ce354b] uppercase">
+              Methods & Models
+            </span>
+            <h2 className="font-serif text-3xl font-normal text-white mt-1 mb-2">
+              Mental Tactic Models
+            </h2>
+            <p className="text-xs text-[#888] leading-relaxed mb-6">
+              Applied heuristics to stress-test your thinking during complexity.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 border border-[#222] bg-[#0e0e0e]">
+                <span className="text-[8px] font-bold tracking-widest text-[#ce354b] uppercase block">
+                  Model A
+                </span>
+                <h4 className="font-serif text-base text-white mt-1 mb-2 font-normal">
+                  Inversion (Jacobi's Rule)
+                </h4>
+                <p className="text-xs text-[#999] leading-relaxed m-0">
+                  Instead of asking "How do I succeed?", ask "What behaviors guarantee failure?" Eliminate them systematically.
+                </p>
+              </div>
+
+              <div className="p-4 border border-[#222] bg-[#0e0e0e]">
+                <span className="text-[8px] font-bold tracking-widest text-[#ce354b] uppercase block">
+                  Model B
+                </span>
+                <h4 className="font-serif text-base text-white mt-1 mb-2 font-normal">
+                  First-Principles Reduction
+                </h4>
+                <p className="text-xs text-[#999] leading-relaxed m-0">
+                  Strip a challenge down to its rawest, undeniable physics. Rebuild your conclusion upwards without analogies.
+                </p>
+              </div>
+
+              <div className="p-4 border border-[#222] bg-[#0e0e0e]">
+                <span className="text-[8px] font-bold tracking-widest text-[#ce354b] uppercase block">
+                  Model C
+                </span>
+                <h4 className="font-serif text-base text-white mt-1 mb-2 font-normal">
+                  Second-Order Thinking
+                </h4>
+                <p className="text-xs text-[#999] leading-relaxed m-0">
+                  Always ask: <em>"And then what?"</em> Short-term immediate relief frequently breeds medium-term compounding debt.
+                </p>
+              </div>
+
+              <div className="p-4 border border-[#222] bg-[#0e0e0e]">
+                <span className="text-[8px] font-bold tracking-widest text-[#ce354b] uppercase block">
+                  Model D
+                </span>
+                <h4 className="font-serif text-base text-white mt-1 mb-2 font-normal">
+                  4-7-8 Physiological Reset
+                </h4>
+                <p className="text-xs text-[#999] leading-relaxed m-0">
+                  Inhale for 4 seconds, hold for 7, slow audible exhale for 8. Engages parasympathetic tone in under two minutes.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-5 border-t border-[#202020] flex justify-end">
+              <button
+                onClick={() => setActiveToolModal(null)}
+                className="px-6 py-2.5 border border-[#333] hover:border-[#b51f35] text-xs uppercase tracking-wider font-bold text-white transition-colors"
+              >
+                Close Toolkit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

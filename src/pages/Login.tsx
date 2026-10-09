@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { loginWithEmail, loginWithGoogle } from '../services/auth';
 import { useToast } from '../components/Toast';
 import { SEO } from '../components/SEO';
@@ -25,7 +25,7 @@ export const Login: React.FC = () => {
 
     try {
       await loginWithEmail(email, password);
-      showToast('Welcome back to stillness.', 'success');
+      showToast('Signed in successfully.', 'success');
       navigate(redirectPath);
     } catch (err: any) {
       console.error(err);
@@ -45,14 +45,14 @@ export const Login: React.FC = () => {
 
     try {
       await loginWithGoogle();
-      showToast('Welcome back to Mental Tactic.', 'success');
+      showToast('Signed in with Google.', 'success');
       navigate(redirectPath);
     } catch (err: any) {
       console.error(err);
       if (err.code === 'auth/popup-closed-by-user') {
         setError('Google sign-in popup was closed.');
       } else if (err.code === 'auth/popup-blocked') {
-        setError('Popup was blocked by your browser. Please allow popups for this site.');
+        setError('Popup was blocked by your browser. Please allow popups.');
       } else {
         setError(err.message || 'Unable to sign in with Google.');
       }
@@ -62,26 +62,26 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-16 px-6 bg-[#FAF7F2]">
-      <SEO title="Sign In" description="Enter your Mental Tactic sanctuary." />
+    <div className="min-h-[85vh] flex items-center justify-center py-16 px-6 bg-[#050505] text-[#f1f0ed]">
+      <SEO title="Sign In — Mental Tactic" description="Sign in to your Mental Tactic collection." />
 
-      <div className="max-w-md w-full bg-white/90 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-[#EBE6DC] shadow-lg space-y-8">
+      <div className="max-w-md w-full bg-[#090909] p-8 sm:p-10 border border-[#222] space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-full bg-[#122B22] text-[#FAF7F2] font-serif font-bold text-base flex items-center justify-center mx-auto mb-3">
-            M
-          </div>
-          <h1 className="font-serif text-3xl font-normal text-[#122B22]">
-            Return to Sanctuary
+          <span className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#ce354b]">
+            Member Access
+          </span>
+          <h1 className="font-serif text-3xl font-normal text-white uppercase tracking-tight m-0">
+            Sign In
           </h1>
-          <p className="text-xs text-[#6F8A77] font-medium">
-            Sign in to access your saved reflections and mindful space.
+          <p className="text-xs text-[#888] font-light leading-relaxed">
+            Access your personal archive, saved insights, and reading notes.
           </p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="p-3.5 rounded-2xl bg-[#FFF0F0] border border-[#E27D60]/30 text-xs text-[#992222] font-medium leading-relaxed">
+          <div className="p-3.5 bg-[#1a080a] border border-[#b51f35]/40 text-xs text-[#ce354b] font-medium leading-relaxed">
             {error}
           </div>
         )}
@@ -90,7 +90,7 @@ export const Login: React.FC = () => {
         <button
           onClick={handleGoogleLogin}
           disabled={googleLoading}
-          className="w-full py-3.5 px-4 rounded-full border border-[#EBE6DC] bg-[#FAF7F2] hover:bg-[#F2ECE4] text-[#122B22] text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-3 transition-colors disabled:opacity-50 shadow-sm"
+          className="w-full py-3.5 px-4 border border-[#262626] bg-[#121212] hover:bg-[#181818] hover:border-[#b51f35] text-white text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-3 transition-colors disabled:opacity-50"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
             <path
@@ -110,56 +110,53 @@ export const Login: React.FC = () => {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
             />
           </svg>
-          <span>{googleLoading ? 'Signing in...' : 'Continue with Google'}</span>
+          <span>{googleLoading ? 'Connecting...' : 'Continue with Google'}</span>
         </button>
 
         <div className="relative flex items-center justify-center">
-          <div className="border-t border-[#EBE6DC] w-full" />
-          <span className="bg-white px-3 text-[11px] uppercase tracking-wider text-[#8EA595] font-semibold absolute">
+          <div className="border-t border-[#222] w-full" />
+          <span className="bg-[#090909] px-3 text-[10px] uppercase tracking-wider text-[#666] font-semibold absolute">
             or with email
           </span>
         </div>
 
         {/* Email Form */}
         <form onSubmit={handleEmailLogin} className="space-y-4">
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-[#888] uppercase tracking-wider">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8EA595]" />
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#666]" />
               <input
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl pl-11 pr-4 py-3 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors"
+                className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs pl-10 pr-4 py-3 outline-none transition-colors"
               />
             </div>
           </div>
 
-          <div className="space-y-1">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+          <div className="space-y-1.5">
+            <div className="flex justify-between items-center">
+              <label className="text-[10px] font-bold text-[#888] uppercase tracking-wider">
                 Password
               </label>
-              <Link
-                to="/forgot-password"
-                className="text-xs text-[#6F8A77] hover:text-[#122B22] transition-colors"
-              >
-                Forgot password?
+              <Link to="/forgot-password" className="text-[10px] text-[#ce354b] hover:underline uppercase tracking-wider">
+                Forgot?
               </Link>
             </div>
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8EA595]" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#666]" />
               <input
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl pl-11 pr-4 py-3 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors"
+                className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs pl-10 pr-4 py-3 outline-none transition-colors"
               />
             </div>
           </div>
@@ -167,23 +164,18 @@ export const Login: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-md mt-2"
+            className="w-full py-3.5 bg-[#b51f35] hover:bg-[#ce354b] text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-colors disabled:opacity-50 mt-2"
           >
-            <span>{loading ? 'Entering...' : 'Enter Sanctuary'}</span>
-            <ArrowRight className="w-4 h-4" />
+            {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="text-center text-xs text-[#122B22]/70 pt-2">
-          New to Mental Tactic?{' '}
-          <Link
-            to="/register"
-            className="font-semibold text-[#122B22] hover:text-[#6F8A77] underline underline-offset-4"
-          >
-            Join the Sanctuary
+        <div className="text-center pt-2 text-xs text-[#777]">
+          <span>Don't have an account? </span>
+          <Link to="/register" className="text-[#ce354b] font-bold uppercase tracking-wider hover:underline ml-1">
+            Register here
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

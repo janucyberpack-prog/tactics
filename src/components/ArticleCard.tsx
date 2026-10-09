@@ -8,12 +8,14 @@ import { useToast } from './Toast';
 
 interface ArticleCardProps {
   post: Post;
+  index?: number;
   isInitiallySaved?: boolean;
   onSavedChange?: (postId: string, saved: boolean) => void;
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({
   post,
+  index = 1,
   isInitiallySaved = false,
   onSavedChange
 }) => {
@@ -22,12 +24,14 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   const [isSaved, setIsSaved] = useState(isInitiallySaved);
   const [savingLoading, setSavingLoading] = useState(false);
 
+  const formattedIndex = String(index).padStart(2, '0');
+
   const handleToggleSave = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
     if (!user) {
-      showToast('Please sign in to bookmark stories.', 'info');
+      showToast('Please sign in to bookmark articles.', 'info');
       return;
     }
 
@@ -41,7 +45,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       } else {
         await savePost(user.uid, post);
         setIsSaved(true);
-        showToast('Saved to sanctuary.', 'success');
+        showToast('Saved to your collection.', 'success');
         onSavedChange?.(post.id, true);
       }
     } catch (err) {
@@ -53,106 +57,64 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   };
 
   return (
-    <article className="card group relative flex flex-col justify-between" style={{ color: 'var(--ink)' }}>
-      <div>
-        {/* Cover image container */}
-        <div style={{ position: 'relative', overflow: 'hidden', backgroundColor: 'var(--paper)' }}>
+    <article className="group min-w-0 bg-[#0a0a0a] border-b border-[#292929] hover:border-[#b51f35] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
+      <Link to={`/journal/${post.slug}`} className="block">
+        {/* Cinematic Grayscale Cover Image */}
+        <div className="relative aspect-[1.16/1] overflow-hidden bg-[#111111]">
           <img
             src={post.coverImage}
             alt={post.title}
-            style={{
-              width: '100%',
-              aspectRatio: '1 / 0.84',
-              objectFit: 'cover',
-              display: 'block',
-              filter: 'saturate(0.72)',
-              transition: 'transform 0.5s ease, filter 0.5s ease'
-            }}
-            className="group-hover:scale-105 group-hover:saturate-100"
             loading="lazy"
+            className="w-full h-full object-cover filter grayscale contrast-[1.17] brightness-[0.66] group-hover:grayscale-[0.8] group-hover:brightness-[0.76] group-hover:scale-105 transition-all duration-700 ease-out"
           />
+          {/* Subtle bottom shadow vignette */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+
+          {/* Editorial Index Number */}
+          <span className="absolute right-4 bottom-3 z-10 font-serif italic text-[11px] text-white/50">
+            {formattedIndex}
+          </span>
 
           {/* Bookmark Button */}
           <button
             onClick={handleToggleSave}
             disabled={savingLoading}
             aria-label={isSaved ? 'Remove from saved' : 'Save article'}
-            style={{
-              position: 'absolute',
-              top: '12px',
-              right: '12px',
-              width: '34px',
-              height: '34px',
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: isSaved ? 'var(--ink)' : 'rgba(255, 253, 248, 0.9)',
-              color: isSaved ? 'var(--white)' : 'var(--ink)',
-              border: 0,
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-              transition: 'all 0.2s ease'
-            }}
+            className={`absolute top-3 right-3 z-20 w-8 h-8 rounded-none border border-white/20 flex items-center justify-center transition-colors ${
+              isSaved
+                ? 'bg-[#b51f35] border-[#b51f35] text-white'
+                : 'bg-black/60 text-white/70 hover:text-white hover:border-[#b51f35]'
+            }`}
           >
-            <Bookmark style={{ width: '15px', height: '15px', fill: isSaved ? 'currentColor' : 'none' }} />
+            <Bookmark className="w-3.5 h-3.5" fill={isSaved ? 'currentColor' : 'none'} />
           </button>
         </div>
 
-        {/* Metadata */}
-        <div
-          className="meta"
-          style={{
-            color: 'var(--dark)',
-            fontSize: '11px',
-            fontWeight: 'bold',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            margin: '20px 0 12px'
-          }}
-        >
-          {post.category} · {post.readingTime} min read
+        {/* Content Box */}
+        <div className="p-6 pb-5 flex flex-col flex-1 justify-between min-h-[190px]">
+          <div>
+            <span className="text-[8px] font-bold tracking-[0.23em] text-[#c92b42] uppercase block">
+              {post.category || 'Mindset'}
+            </span>
+            <h3 className="font-serif text-[clamp(19px,1.55vw,25px)] text-[#f1f0ed] group-hover:text-white font-normal leading-[1.18] mt-3.5 mb-5 line-clamp-2 transition-colors">
+              {post.title}
+            </h3>
+          </div>
+
+          {/* Meta footer row */}
+          <div className="pt-3.5 border-t border-[#212121] flex items-center justify-between text-[8px] font-semibold tracking-[0.15em] text-[#6f6f6c] uppercase">
+            <span>{post.readingTime || 7} min read</span>
+            <svg
+              className="w-3.5 h-3.5 text-[#6f6f6c] group-hover:text-[#ce354b] transition-colors"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.2" />
+            </svg>
+          </div>
         </div>
-
-        {/* Title */}
-        <Link to={`/journal/${post.slug}`} className="block">
-          <h3
-            className="serif"
-            style={{
-              fontSize: 'clamp(26px, 2.3vw, 36px)',
-              lineHeight: 1.08,
-              margin: '0 0 12px',
-              color: 'var(--ink)'
-            }}
-          >
-            {post.title}
-          </h3>
-        </Link>
-
-        {/* Excerpt */}
-        <p style={{ color: 'rgba(24, 34, 29, 0.7)', lineHeight: 1.6, fontSize: '14px', margin: '0 0 16px' }}>
-          {post.excerpt}
-        </p>
-      </div>
-
-      {/* Action link */}
-      <div>
-        <Link
-          to={`/journal/${post.slug}`}
-          className="read"
-          style={{
-            fontSize: '12px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            borderBottom: '1px solid currentColor',
-            paddingBottom: '4px',
-            display: 'inline-block',
-            color: 'var(--ink)'
-          }}
-        >
-          Read story →
-        </Link>
-      </div>
+      </Link>
     </article>
   );
 };

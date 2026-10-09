@@ -38,23 +38,23 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-2xl shadow-lg border backdrop-blur-md transition-all duration-300 transform translate-y-0 opacity-100 ${
+            className={`pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 border backdrop-blur-md transition-all duration-300 transform translate-y-0 opacity-100 ${
               toast.type === 'success'
-                ? 'bg-[#122B22] text-[#FAF7F2] border-[#8EA595]/30'
+                ? 'bg-[#0f1411] text-[#f1f0ed] border-[#b51f35]/50'
                 : toast.type === 'error'
-                ? 'bg-[#4A1E1E] text-[#FFF0F0] border-[#E27D60]/40'
-                : 'bg-[#FAF7F2] text-[#122B22] border-[#122B22]/15 shadow-md'
+                ? 'bg-[#1c0b0e] text-[#f1f0ed] border-[#ce354b]'
+                : 'bg-[#0e0e0e] text-[#f1f0ed] border-[#282828] shadow-2xl'
             }`}
           >
-            <div className="flex items-center gap-2.5 text-sm font-medium">
-              {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-[#B8E0D2] shrink-0" />}
-              {toast.type === 'error' && <AlertCircle className="w-4 h-4 text-[#F59F87] shrink-0" />}
-              {toast.type === 'info' && <Info className="w-4 h-4 text-[#6F8A77] shrink-0" />}
+            <div className="flex items-center gap-2.5 text-xs font-medium">
+              {toast.type === 'success' && <CheckCircle2 className="w-4 h-4 text-[#ce354b] shrink-0" />}
+              {toast.type === 'error' && <AlertCircle className="w-4 h-4 text-[#ce354b] shrink-0" />}
+              {toast.type === 'info' && <Info className="w-4 h-4 text-[#ce354b] shrink-0" />}
               <span>{toast.message}</span>
             </div>
             <button
               onClick={() => removeToast(toast.id)}
-              className="p-1 rounded-full opacity-60 hover:opacity-100 transition-opacity"
+              className="p-1 opacity-60 hover:opacity-100 hover:text-white transition-opacity"
               aria-label="Dismiss"
             >
               <X className="w-3.5 h-3.5" />

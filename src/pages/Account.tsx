@@ -49,7 +49,7 @@ export const Account: React.FC = () => {
         bio: bio.trim()
       });
       await refreshProfile();
-      showToast('Profile updated smoothly.', 'success');
+      showToast('Profile updated.', 'success');
     } catch (err) {
       showToast('Unable to update profile.', 'error');
     } finally {
@@ -65,66 +65,66 @@ export const Account: React.FC = () => {
   if (!user || !profile) return null;
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-16 md:py-24 text-[#122B22]">
-      <SEO title="Account Profile" description="Your quiet account sanctuary." />
+    <div className="min-h-screen bg-[#050505] py-16 md:py-24 text-[#f1f0ed]">
+      <SEO title="Account Profile — Mental Tactic" description="Your account settings and saved collections." />
 
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="site-container max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-12 space-y-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#6F8A77]">
-            Sanctuary Profile
+          <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#ce354b]">
+            User Settings
           </span>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#122B22] font-normal">
-            Your Account
+          <h1 className="font-serif text-4xl md:text-5xl text-white font-normal uppercase tracking-tight m-0">
+            Account Profile
           </h1>
-          <p className="text-sm text-[#122B22]/70 leading-relaxed font-sans">
-            Manage your personal reflection space and preferences.
+          <p className="text-xs sm:text-sm text-[#888] leading-relaxed font-light">
+            Manage your credentials and access saved collections.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Left Column: Quick Stats & Role */}
           <div className="space-y-6">
-            <div className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm text-center space-y-4">
-              <div className="w-20 h-20 rounded-full bg-[#E5ECE7] text-[#122B22] text-2xl font-serif font-bold flex items-center justify-center mx-auto shadow-inner">
+            <div className="bg-[#090909] p-6 border border-[#222] text-center space-y-4">
+              <div className="w-20 h-20 bg-[#141414] border border-[#282828] text-white text-2xl font-serif font-bold flex items-center justify-center mx-auto">
                 {profile.photoURL ? (
-                  <img src={profile.photoURL} alt="" className="w-full h-full object-cover rounded-full" />
+                  <img src={profile.photoURL} alt="" className="w-full h-full object-cover" />
                 ) : (
                   profile.displayName?.charAt(0) || 'U'
                 )}
               </div>
 
               <div>
-                <h3 className="font-serif text-xl text-[#122B22]">{profile.displayName}</h3>
-                <p className="text-xs text-[#6F8A77] truncate">{profile.email}</p>
+                <h3 className="font-serif text-xl text-white font-normal m-0">{profile.displayName}</h3>
+                <p className="text-xs text-[#777] truncate mt-1">{profile.email}</p>
               </div>
 
               <div className="pt-2 flex justify-center">
-                <span className={`px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider ${
+                <span className={`px-3 py-1 text-[10px] font-bold uppercase tracking-widest border ${
                   isAdmin
-                    ? 'bg-[#122B22] text-[#B8E0D2]'
-                    : 'bg-[#B8E0D2]/40 text-[#122B22]'
+                    ? 'border-[#b51f35] bg-[#b51f35]/20 text-[#ce354b]'
+                    : 'border-[#333] bg-[#121212] text-[#aaa]'
                 }`}>
-                  {isAdmin ? 'Administrator' : 'Mindful Reader'}
+                  {isAdmin ? 'Administrator' : 'Member'}
                 </span>
               </div>
             </div>
 
             {/* Quick Links Card */}
-            <div className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm space-y-3">
-              <h4 className="text-xs uppercase tracking-wider font-semibold text-[#8EA595] mb-2">
-                Sanctuary Links
+            <div className="bg-[#090909] p-6 border border-[#222] space-y-3">
+              <h4 className="text-[10px] uppercase tracking-widest font-bold text-[#888] mb-2">
+                Quick Navigation
               </h4>
 
               <Link
                 to="/saved"
-                className="flex items-center justify-between p-3 rounded-2xl bg-[#FAF7F2] hover:bg-[#F2ECE4] text-xs font-semibold text-[#122B22] transition-colors"
+                className="flex items-center justify-between p-3 bg-[#111] hover:bg-[#161616] border border-[#222] hover:border-[#b51f35] text-xs font-semibold text-white transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <Bookmark className="w-4 h-4 text-[#6F8A77]" />
-                  <span>Saved Reflections</span>
+                  <Bookmark className="w-4 h-4 text-[#ce354b]" />
+                  <span>Saved Articles</span>
                 </div>
-                <span className="px-2 py-0.5 rounded-full bg-white text-[11px] font-bold text-[#122B22]">
+                <span className="px-2 py-0.5 bg-[#222] text-[10px] font-bold text-white">
                   {savedCount}
                 </span>
               </Link>
@@ -132,19 +132,19 @@ export const Account: React.FC = () => {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className="flex items-center justify-between p-3 rounded-2xl bg-[#122B22] hover:bg-[#1A3B2F] text-xs font-semibold text-[#FAF7F2] transition-colors"
+                  className="flex items-center justify-between p-3 bg-[#111] hover:bg-[#161616] border border-[#b51f35]/50 hover:border-[#b51f35] text-xs font-semibold text-white transition-colors"
                 >
                   <div className="flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-[#B8E0D2]" />
+                    <Shield className="w-4 h-4 text-[#ce354b]" />
                     <span>Admin Studio</span>
                   </div>
-                  <span className="text-[11px] text-[#B8E0D2]">Open</span>
+                  <span className="text-[9px] uppercase tracking-wider text-[#ce354b] font-bold">Open →</span>
                 </Link>
               )}
 
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-2 p-3 rounded-2xl text-xs font-semibold text-[#A33] hover:bg-[#FFF5F5] transition-colors mt-2"
+                className="w-full flex items-center gap-2 p-3 text-left text-xs text-[#ce354b] hover:bg-[#161616] border border-transparent hover:border-[#333] transition-colors"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Sign Out</span>
@@ -152,52 +152,47 @@ export const Account: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Edit Profile Details */}
+          {/* Right Column: Edit Profile Form */}
           <div className="md:col-span-2">
-            <div className="bg-white rounded-3xl p-8 border border-[#EBE6DC] shadow-sm space-y-6">
-              <h3 className="font-serif text-2xl text-[#122B22] font-normal">
-                Personal Details
-              </h3>
+            <div className="bg-[#090909] p-8 border border-[#222]">
+              <h3 className="font-serif text-2xl font-normal text-white mb-6">Edit Information</h3>
 
-              <form onSubmit={handleSaveProfile} className="space-y-5">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+              <form onSubmit={handleSaveProfile} className="space-y-6">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#888] mb-2">
                     Display Name
                   </label>
                   <input
                     type="text"
                     required
                     value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl px-4 py-3 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors"
+                    onChange={e => setDisplayName(e.target.value)}
+                    className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs px-4 py-3 outline-none transition-colors"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#888] mb-2">
                     Email Address
                   </label>
                   <input
                     type="email"
                     disabled
-                    value={user.email || ''}
-                    className="w-full bg-[#F5F2EC] border border-[#EBE6DC] rounded-2xl px-4 py-3 text-sm text-[#122B22]/60 cursor-not-allowed"
+                    value={profile.email}
+                    className="w-full bg-[#101010] border border-[#1e1e1e] text-[#666] text-xs px-4 py-3 outline-none cursor-not-allowed"
                   />
-                  <p className="text-[11px] text-[#8EA595]">
-                    Email address is tied to your Firebase authentication credentials.
-                  </p>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
-                    Contemplative Bio / Notes
+                <div>
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#888] mb-2">
+                    Personal Bio / Focus Note
                   </label>
                   <textarea
                     rows={4}
                     value={bio}
-                    onChange={(e) => setBio(e.target.value)}
-                    placeholder="A quiet note on your focus or current practices..."
-                    className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl p-4 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors resize-none"
+                    onChange={e => setBio(e.target.value)}
+                    placeholder="What areas of psychology and thought are you exploring right now?"
+                    className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs p-4 outline-none resize-none leading-relaxed transition-colors"
                   />
                 </div>
 
@@ -205,10 +200,9 @@ export const Account: React.FC = () => {
                   <button
                     type="submit"
                     disabled={saving}
-                    className="px-8 py-3 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center gap-2 shadow-sm disabled:opacity-50"
+                    className="px-7 py-3 bg-[#b51f35] hover:bg-[#ce354b] text-white text-[10px] font-bold uppercase tracking-widest transition-colors disabled:opacity-50"
                   >
-                    <Check className="w-4 h-4" />
-                    <span>{saving ? 'Updating...' : 'Save Changes'}</span>
+                    {saving ? 'Saving...' : 'Save Changes'}
                   </button>
                 </div>
               </form>

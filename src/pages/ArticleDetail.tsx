@@ -59,7 +59,7 @@ export const ArticleDetail: React.FC = () => {
 
   const handleToggleSave = async () => {
     if (!user || !post) {
-      showToast('Please sign in to bookmark stories.', 'info');
+      showToast('Please sign in to bookmark articles.', 'info');
       return;
     }
 
@@ -71,7 +71,7 @@ export const ArticleDetail: React.FC = () => {
       } else {
         await savePost(user.uid, post);
         setSaved(true);
-        showToast('Saved to sanctuary.', 'success');
+        showToast('Saved to your collection.', 'success');
       }
     } catch (err) {
       showToast('Failed to update bookmark.', 'error');
@@ -81,21 +81,13 @@ export const ArticleDetail: React.FC = () => {
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     setShareCopied(true);
-    showToast('Link copied.', 'success');
-    setTimeout(() => setShareCopied(false), 3000);
+    showToast('Link copied to clipboard.', 'info');
+    setTimeout(() => setShareCopied(false), 2000);
   };
 
   const handleAddComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !profile || !post) {
-      showToast('Please sign in to leave a reflection.', 'info');
-      return;
-    }
-
-    if (newComment.trim().length < 3) {
-      showToast('Please write a message.', 'error');
-      return;
-    }
+    if (!user || !profile || !post || !newComment.trim()) return;
 
     setCommentSubmitting(true);
     try {
@@ -113,7 +105,7 @@ export const ArticleDetail: React.FC = () => {
       setNewComment('');
       showToast('Reflection shared.', 'success');
     } catch (err: any) {
-      showToast(err.message || 'Unable to post comment.', 'error');
+      showToast(err.message || 'Unable to post reflection.', 'error');
     } finally {
       setCommentSubmitting(false);
     }
@@ -123,15 +115,15 @@ export const ArticleDetail: React.FC = () => {
     try {
       await deleteComment(commentId);
       setComments(comments.filter(c => c.id !== commentId));
-      showToast('Comment removed.', 'info');
+      showToast('Reflection removed.', 'info');
     } catch (err) {
-      showToast('Unable to remove comment.', 'error');
+      showToast('Unable to remove reflection.', 'error');
     }
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen py-16" style={{ backgroundColor: 'var(--paper)' }}>
+      <div className="min-h-screen py-16 bg-[#050505]">
         <ArticleSkeleton />
       </div>
     );
@@ -139,27 +131,17 @@ export const ArticleDetail: React.FC = () => {
 
   if (!post) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center p-6 text-center" style={{ backgroundColor: 'var(--paper)', color: 'var(--ink)' }}>
+      <div className="min-h-[70vh] flex items-center justify-center p-6 text-center bg-[#050505] text-[#f1f0ed]">
         <div className="max-w-md space-y-4">
-          <h2 className="serif text-3xl">Story not found</h2>
-          <p className="text-sm opacity-70">
-            This note may have moved or does not exist.
+          <h2 className="font-serif text-3xl font-normal">Article Not Found</h2>
+          <p className="text-sm text-[#888]">
+            This note may have moved or does not exist in the collection.
           </p>
           <Link
             to="/journal"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '10px 22px',
-              borderRadius: '999px',
-              backgroundColor: 'var(--ink)',
-              color: 'var(--white)',
-              fontSize: '13px',
-              fontWeight: 600
-            }}
+            className="inline-flex items-center gap-2 px-6 py-3 border border-[#b51f35] text-white text-xs uppercase font-bold tracking-widest hover:bg-[#b51f35] transition-colors"
           >
-            <ArrowLeft style={{ width: '15px', height: '15px' }} /> Return to stories
+            <ArrowLeft className="w-3.5 h-3.5" /> Return to articles
           </Link>
         </div>
       </div>
@@ -171,7 +153,7 @@ export const ArticleDetail: React.FC = () => {
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
   return (
-    <article className="min-h-screen py-12 md:py-20" style={{ backgroundColor: 'var(--paper)', color: 'var(--ink)' }}>
+    <article className="min-h-screen py-12 md:py-20 bg-[#050505] text-[#f1f0ed]">
       <SEO
         title={post.title}
         description={post.excerpt}
@@ -179,72 +161,39 @@ export const ArticleDetail: React.FC = () => {
         type="article"
       />
 
-      <div className="wrap" style={{ maxWidth: '840px' }}>
+      <div className="site-container max-w-4xl mx-auto">
         {/* Back Link */}
-        <div className="mb-8">
+        <div className="mb-10">
           <Link
             to="/journal"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              fontSize: '12px',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              color: 'var(--dark)'
-            }}
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#888] hover:text-[#ce354b] transition-colors"
           >
-            <ArrowLeft style={{ width: '14px', height: '14px' }} />
-            <span>Stories</span>
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Articles</span>
           </Link>
         </div>
 
         {/* Article Header */}
-        <header className="space-y-6 text-center mb-12">
-          <div
-            style={{
-              display: 'inline-block',
-              padding: '5px 16px',
-              borderRadius: '999px',
-              fontSize: '11px',
-              fontWeight: 700,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              backgroundColor: 'var(--sage)',
-              color: 'var(--ink)'
-            }}
-          >
-            {post.category}
-          </div>
+        <header className="space-y-6 text-center mb-14">
+          <span className="inline-block text-[9px] font-bold tracking-[0.26em] uppercase text-[#ce354b]">
+            {post.category || 'Behavior'}
+          </span>
 
-          <h1
-            className="serif"
-            style={{
-              fontSize: 'clamp(36px, 5.5vw, 68px)',
-              lineHeight: 1.05,
-              fontWeight: 400,
-              margin: '0 auto',
-              maxWidth: '780px'
-            }}
-          >
+          <h1 className="font-serif text-[clamp(36px,5vw,66px)] font-normal text-white uppercase tracking-tight m-0 max-w-3xl mx-auto leading-[0.98]">
             {post.title}
           </h1>
 
-          <p style={{ fontSize: '17px', lineHeight: 1.65, color: 'rgba(24, 34, 29, 0.75)', maxWidth: '620px', margin: '0 auto' }}>
+          <p className="text-base sm:text-lg text-[#999] leading-relaxed max-w-2xl mx-auto font-light">
             {post.excerpt}
           </p>
 
-          {/* Metadata */}
-          <div
-            className="flex items-center justify-between pt-6 text-xs"
-            style={{ borderTop: '1px solid var(--line)', color: 'var(--dark)', fontWeight: 600 }}
-          >
+          {/* Metadata Row */}
+          <div className="flex items-center justify-between pt-6 border-t border-[#222] text-[10px] font-semibold tracking-wider text-[#777] uppercase">
             <div className="flex items-center gap-3">
-              <span>{post.authorName}</span>
+              <span className="text-[#bbb]">{post.authorName || 'Mental Tactic'}</span>
               <span>·</span>
-              <span className="flex items-center gap-1">
-                <Clock style={{ width: '13px', height: '13px' }} />
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3 h-3 text-[#ce354b]" />
                 {post.readingTime} min read
               </span>
             </div>
@@ -252,57 +201,37 @@ export const ArticleDetail: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={handleToggleSave}
-                aria-label="Save reflection"
-                style={{
-                  padding: '8px',
-                  borderRadius: '50%',
-                  border: '1px solid var(--line)',
-                  backgroundColor: saved ? 'var(--ink)' : 'var(--white)',
-                  color: saved ? 'var(--white)' : 'var(--ink)',
-                  cursor: 'pointer'
-                }}
+                aria-label="Save note"
+                className={`p-2 border border-[#262626] transition-colors ${
+                  saved ? 'bg-[#b51f35] border-[#b51f35] text-white' : 'text-[#888] hover:text-white hover:border-[#b51f35]'
+                }`}
               >
-                <Bookmark style={{ width: '15px', height: '15px', fill: saved ? 'currentColor' : 'none' }} />
+                <Bookmark className="w-3.5 h-3.5" fill={saved ? 'currentColor' : 'none'} />
               </button>
 
               <button
                 onClick={() => setShowShareModal(true)}
-                aria-label="Share story"
-                style={{
-                  padding: '8px',
-                  borderRadius: '50%',
-                  border: '1px solid var(--line)',
-                  backgroundColor: 'var(--white)',
-                  color: 'var(--ink)',
-                  cursor: 'pointer'
-                }}
+                aria-label="Share article"
+                className="p-2 border border-[#262626] text-[#888] hover:text-white hover:border-[#b51f35] transition-colors"
               >
-                <Share2 style={{ width: '15px', height: '15px' }} />
+                <Share2 className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
         </header>
 
         {/* Cover Artwork */}
-        <div
-          style={{
-            borderRadius: '24px',
-            overflow: 'hidden',
-            marginBottom: '48px',
-            border: '1px solid var(--line)',
-            maxHeight: '480px'
-          }}
-        >
+        <div className="relative overflow-hidden mb-14 border border-[#222] bg-[#0c0c0c] max-h-[520px]">
           <img
             src={post.coverImage}
             alt={post.title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            className="w-full h-full object-cover filter grayscale contrast-110 brightness-75"
           />
         </div>
 
         {/* Article Body */}
-        <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-          <div style={{ fontSize: '17px', lineHeight: 1.85, color: 'rgba(24, 34, 29, 0.88)' }} className="space-y-6">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-[16px] sm:text-[17px] leading-[1.85] text-[#ccc] space-y-7 font-light">
             {post.content.split('\n\n').map((paragraph, idx) => {
               // Markdown image: ![caption](url)
               const imgMatch = paragraph.match(/^!\[(.*?)\]\((.*?)\)$/);
@@ -310,33 +239,15 @@ export const ArticleDetail: React.FC = () => {
                 const caption = imgMatch[1];
                 const src = imgMatch[2];
                 return (
-                  <figure
-                    key={idx}
-                    style={{
-                      margin: '36px 0',
-                      borderRadius: '20px',
-                      overflow: 'hidden',
-                      border: '1px solid var(--line)',
-                      backgroundColor: 'var(--white)'
-                    }}
-                  >
+                  <figure key={idx} className="my-10 border border-[#262626] bg-[#090909] overflow-hidden">
                     <img
                       src={src}
                       alt={caption || post.title}
-                      style={{ width: '100%', maxHeight: '520px', objectFit: 'cover', display: 'block' }}
+                      className="w-full max-h-[500px] object-cover filter grayscale contrast-110"
                       loading="lazy"
                     />
                     {caption && (
-                      <figcaption
-                        style={{
-                          textAlign: 'center',
-                          fontSize: '12px',
-                          color: 'var(--dark)',
-                          padding: '10px 16px',
-                          fontStyle: 'italic',
-                          borderTop: '1px solid var(--line)'
-                        }}
-                      >
+                      <figcaption className="text-center text-xs text-[#777] py-3 px-4 font-serif italic border-t border-[#1f1f1f]">
                         {caption}
                       </figcaption>
                     )}
@@ -346,39 +257,36 @@ export const ArticleDetail: React.FC = () => {
 
               if (paragraph.startsWith('### ')) {
                 return (
-                  <h3 key={idx} className="serif" style={{ fontSize: '28px', color: 'var(--ink)', paddingTop: '20px', margin: '0 0 10px' }}>
+                  <h3 key={idx} className="font-serif text-2xl sm:text-3xl font-normal text-white pt-6 m-0">
                     {paragraph.replace('### ', '')}
                   </h3>
                 );
               }
+
               if (paragraph.startsWith('* ') || paragraph.startsWith('1. ')) {
                 const lines = paragraph.split('\n');
                 return (
-                  <ul key={idx} style={{ paddingLeft: '20px', borderLeft: '2px solid var(--sage)', margin: '20px 0' }} className="space-y-2">
+                  <ul key={idx} className="pl-6 border-l border-[#b51f35] my-6 space-y-2.5">
                     {lines.map((line, lIdx) => (
-                      <li key={lIdx}>{line.replace(/^(\* |\d+\. )/, '')}</li>
+                      <li key={lIdx} className="text-[#bbb]">
+                        {line.replace(/^(\* |\d+\. )/, '')}
+                      </li>
                     ))}
                   </ul>
                 );
               }
-              return <p key={idx} style={{ margin: 0 }}>{paragraph}</p>;
+
+              return <p key={idx} className="m-0">{paragraph}</p>;
             })}
           </div>
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-8 mt-12" style={{ borderTop: '1px solid var(--line)' }}>
+            <div className="flex flex-wrap gap-2 pt-8 mt-12 border-t border-[#222]">
               {post.tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  style={{
-                    padding: '4px 12px',
-                    borderRadius: '999px',
-                    fontSize: '12px',
-                    backgroundColor: 'var(--white)',
-                    border: '1px solid var(--line)',
-                    color: 'var(--dark)'
-                  }}
+                  className="px-3 py-1 border border-[#262626] text-[9px] uppercase tracking-widest font-bold text-[#888] bg-[#0c0c0c]"
                 >
                   #{tag}
                 </span>
@@ -389,177 +297,122 @@ export const ArticleDetail: React.FC = () => {
 
         {/* Share Modal */}
         {showShareModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-            <div
-              style={{
-                backgroundColor: 'var(--white)',
-                borderRadius: '24px',
-                padding: '24px',
-                maxWidth: '340px',
-                width: '100%',
-                border: '1px solid var(--line)',
-                boxShadow: '0 16px 36px rgba(0,0,0,0.15)'
-              }}
-            >
-              <div className="flex items-center justify-between pb-3 mb-3" style={{ borderBottom: '1px solid var(--line)' }}>
-                <h4 className="serif" style={{ fontSize: '18px', margin: 0 }}>Share note</h4>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+            <div className="bg-[#0a0a0a] border border-[#282828] p-6 max-w-sm w-full shadow-2xl">
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#222]">
+                <h4 className="font-serif text-lg font-normal text-white m-0">Share Article</h4>
                 <button
                   onClick={() => setShowShareModal(false)}
-                  style={{ fontSize: '12px', background: 'none', border: 0, cursor: 'pointer', color: 'var(--dark)' }}
+                  className="text-xs text-[#888] hover:text-white uppercase tracking-wider"
                 >
                   Close
                 </button>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <button
                   onClick={handleCopyLink}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '12px 16px',
-                    borderRadius: '16px',
-                    backgroundColor: 'var(--paper)',
-                    border: 0,
-                    fontSize: '13px',
-                    fontWeight: 600,
-                    cursor: 'pointer'
-                  }}
+                  className="w-full flex items-center justify-between p-3.5 bg-[#121212] border border-[#262626] hover:border-[#b51f35] text-xs font-semibold text-white uppercase tracking-wider transition-colors"
                 >
                   <span className="flex items-center gap-2">
-                    <Copy style={{ width: '15px', height: '15px' }} /> Copy link
+                    <Copy className="w-3.5 h-3.5 text-[#ce354b]" /> Copy link
                   </span>
-                  {shareCopied && <Check style={{ width: '15px', height: '15px', color: 'var(--dark)' }} />}
+                  {shareCopied && <Check className="w-3.5 h-3.5 text-[#ce354b]" />}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* Prev & Next */}
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-6 my-12 py-8"
-          style={{ borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}
-        >
+        {/* Prev & Next Article Navigation */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 my-14 py-8 border-y border-[#222] max-w-2xl mx-auto">
           {prevPost ? (
             <Link
               to={`/journal/${prevPost.slug}`}
-              style={{ padding: '16px', borderRadius: '16px', backgroundColor: 'var(--white)', border: '1px solid var(--line)' }}
+              className="p-5 border border-[#222] bg-[#090909] hover:border-[#b51f35] transition-colors block group"
             >
-              <div className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--dark)' }}>
+              <div className="text-[9px] font-bold uppercase tracking-widest text-[#ce354b] mb-1">
                 ← Previous
               </div>
-              <div className="serif text-base line-clamp-1">{prevPost.title}</div>
+              <div className="font-serif text-base text-[#f1f0ed] group-hover:text-white line-clamp-1">
+                {prevPost.title}
+              </div>
             </Link>
-          ) : <div />}
+          ) : (
+            <div />
+          )}
 
           {nextPost && (
             <Link
               to={`/journal/${nextPost.slug}`}
-              style={{ padding: '16px', borderRadius: '16px', backgroundColor: 'var(--white)', border: '1px solid var(--line)', textAlign: 'right' }}
+              className="p-5 border border-[#222] bg-[#090909] hover:border-[#b51f35] transition-colors text-right block group"
             >
-              <div className="text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--dark)' }}>
+              <div className="text-[9px] font-bold uppercase tracking-widest text-[#ce354b] mb-1">
                 Next →
               </div>
-              <div className="serif text-base line-clamp-1">{nextPost.title}</div>
+              <div className="font-serif text-base text-[#f1f0ed] group-hover:text-white line-clamp-1">
+                {nextPost.title}
+              </div>
             </Link>
           )}
         </div>
 
-        {/* Comments */}
-        <section className="pt-4 space-y-6" style={{ maxWidth: '680px', margin: '0 auto' }}>
-          <h3 className="serif text-2xl flex items-center gap-2">
-            <MessageSquare style={{ width: '18px', height: '18px', color: 'var(--dark)' }} />
+        {/* Reflections / Comments Section */}
+        <section className="pt-4 space-y-6 max-w-2xl mx-auto">
+          <h3 className="font-serif text-2xl font-normal text-white flex items-center gap-2.5">
+            <MessageSquare className="w-4 h-4 text-[#ce354b]" />
             <span>Reflections ({comments.length})</span>
           </h3>
 
           {user ? (
-            <form onSubmit={handleAddComment} className="p-6 rounded-2xl space-y-4" style={{ backgroundColor: 'var(--white)', border: '1px solid var(--line)' }}>
+            <form onSubmit={handleAddComment} className="p-6 bg-[#090909] border border-[#222] space-y-4">
               <textarea
                 rows={3}
                 required
                 value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Leave a quiet thought..."
-                style={{
-                  width: '100%',
-                  backgroundColor: 'var(--paper)',
-                  border: '1px solid var(--line)',
-                  borderRadius: '16px',
-                  padding: '12px 16px',
-                  fontSize: '14px',
-                  outline: 0,
-                  resize: 'none'
-                }}
+                onChange={e => setNewComment(e.target.value)}
+                placeholder="Share your perspective or reflection..."
+                className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs p-3.5 outline-none resize-none leading-relaxed"
               />
               <div className="flex justify-end">
                 <button
                   type="submit"
                   disabled={commentSubmitting || !newComment.trim()}
-                  style={{
-                    padding: '8px 20px',
-                    borderRadius: '999px',
-                    backgroundColor: 'var(--ink)',
-                    color: 'var(--white)',
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    border: 0,
-                    cursor: 'pointer'
-                  }}
+                  className="px-6 py-2.5 bg-[#b51f35] hover:bg-[#ce354b] text-white text-[10px] font-bold uppercase tracking-widest transition-colors disabled:opacity-40"
                 >
-                  Post
+                  Post Reflection
                 </button>
               </div>
             </form>
           ) : (
-            <div className="p-6 rounded-2xl text-center" style={{ backgroundColor: 'var(--white)', border: '1px solid var(--line)' }}>
-              <p className="text-sm opacity-75 mb-3">Sign in to leave a reflection.</p>
+            <div className="p-6 bg-[#090909] border border-[#222] text-center">
+              <p className="text-xs text-[#888] mb-3">Sign in to leave a reflection on this article.</p>
               <Link
                 to="/login"
-                style={{
-                  padding: '8px 20px',
-                  borderRadius: '999px',
-                  backgroundColor: 'var(--ink)',
-                  color: 'var(--white)',
-                  fontSize: '12px',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  display: 'inline-block'
-                }}
+                className="px-5 py-2 border border-[#b51f35] text-white text-[10px] font-bold uppercase tracking-widest hover:bg-[#b51f35] transition-colors inline-block"
               >
-                Sign in
+                Sign In
               </Link>
             </div>
           )}
 
           {/* Comments List */}
           <div className="space-y-3">
-            {comments.map((comment) => (
-              <div
-                key={comment.id}
-                style={{
-                  backgroundColor: 'var(--white)',
-                  borderRadius: '16px',
-                  padding: '16px',
-                  border: '1px solid var(--line)'
-                }}
-              >
-                <div className="flex items-center justify-between mb-2 text-xs font-semibold">
-                  <span>{comment.authorName}</span>
+            {comments.map(comment => (
+              <div key={comment.id} className="p-4 bg-[#090909] border border-[#1f1f1f]">
+                <div className="flex items-center justify-between mb-2 text-xs">
+                  <span className="font-semibold text-[#f1f0ed]">{comment.authorName}</span>
                   {(user?.uid === comment.authorId || isAdmin) && (
                     <button
                       onClick={() => handleDeleteComment(comment.id)}
-                      style={{ background: 'none', border: 0, color: '#b3261e', cursor: 'pointer' }}
+                      className="text-[#888] hover:text-[#ce354b] transition-colors"
+                      aria-label="Delete comment"
                     >
-                      <Trash2 style={{ width: '13px', height: '13px' }} />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
-                <p style={{ margin: 0, fontSize: '14px', lineHeight: 1.6, opacity: 0.85 }}>
+                <p className="m-0 text-xs text-[#aaa] leading-relaxed">
                   {comment.content}
                 </p>
               </div>

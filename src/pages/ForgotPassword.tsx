@@ -30,61 +30,59 @@ export const ForgotPassword: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-16 px-6 bg-[#FAF7F2]">
-      <SEO title="Reset Password" description="Recover your Mental Tactic access." />
+    <div className="min-h-[85vh] flex items-center justify-center py-16 px-6 bg-[#050505] text-[#f1f0ed]">
+      <SEO title="Reset Password — Mental Tactic" description="Recover your Mental Tactic access." />
 
-      <div className="max-w-md w-full bg-white/90 backdrop-blur-md rounded-3xl p-8 sm:p-10 border border-[#EBE6DC] shadow-lg space-y-6">
+      <div className="max-w-md w-full bg-[#090909] p-8 sm:p-10 border border-[#222] space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-10 h-10 rounded-full bg-[#122B22] text-[#FAF7F2] font-serif font-bold text-base flex items-center justify-center mx-auto mb-3">
-            M
-          </div>
-          <h1 className="font-serif text-3xl font-normal text-[#122B22]">
+          <span className="text-[10px] font-bold uppercase tracking-[0.26em] text-[#ce354b]">
+            Account Recovery
+          </span>
+          <h1 className="font-serif text-3xl font-normal text-white uppercase tracking-tight m-0">
             Reset Password
           </h1>
-          <p className="text-xs text-[#6F8A77] font-medium">
+          <p className="text-xs text-[#888] font-light leading-relaxed">
             Enter your email to receive a secure link to reset your credentials.
           </p>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-2xl bg-[#FFF0F0] border border-[#E27D60]/30 text-xs text-[#992222] font-medium leading-relaxed">
+          <div className="p-3.5 bg-[#1a080a] border border-[#b51f35]/40 text-xs text-[#ce354b] font-medium leading-relaxed">
             {error}
           </div>
         )}
 
         {sent ? (
           <div className="py-6 text-center space-y-4">
-            <div className="w-12 h-12 rounded-full bg-[#B8E0D2]/40 text-[#122B22] flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-6 h-6 text-[#6F8A77]" />
-            </div>
-            <h3 className="font-serif text-2xl text-[#122B22]">
-              Check Your Inbox
-            </h3>
-            <p className="text-xs text-[#122B22]/70 leading-relaxed max-w-xs mx-auto">
-              If an account is associated with <span className="font-semibold text-[#122B22]">{email}</span>, you will receive password reset instructions shortly.
+            <CheckCircle2 className="w-10 h-10 text-[#ce354b] mx-auto" />
+            <h3 className="font-serif text-2xl text-white font-normal m-0">Reset Link Dispatched</h3>
+            <p className="text-xs text-[#888] leading-relaxed max-w-xs mx-auto">
+              Check your inbox at <span className="text-white font-medium">{email}</span> and follow the instructions to choose a new password.
             </p>
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all"
-            >
-              <ArrowLeft className="w-4 h-4" /> Return to Sign In
-            </Link>
+            <div className="pt-2">
+              <Link
+                to="/login"
+                className="inline-flex items-center gap-2 text-xs uppercase tracking-wider font-bold text-[#ce354b] hover:underline"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" /> Return to Sign In
+              </Link>
+            </div>
           </div>
         ) : (
           <form onSubmit={handleReset} className="space-y-4">
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#122B22]/80 uppercase tracking-wider">
-                Email Address
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold text-[#888] uppercase tracking-wider">
+                Account Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8EA595]" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#666]" />
                 <input
                   type="email"
                   required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   placeholder="name@example.com"
-                  className="w-full bg-[#FAF7F2] border border-[#EBE6DC] rounded-2xl pl-11 pr-4 py-3 text-sm text-[#122B22] focus:outline-none focus:border-[#8EA595] transition-colors"
+                  className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs pl-10 pr-4 py-3 outline-none transition-colors"
                 />
               </div>
             </div>
@@ -92,18 +90,17 @@ export const ForgotPassword: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-full bg-[#122B22] text-[#FAF7F2] text-xs font-semibold uppercase tracking-wider hover:bg-[#1A3B2F] transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-md mt-2"
+              className="w-full py-3.5 bg-[#b51f35] hover:bg-[#ce354b] text-white text-[10px] font-bold uppercase tracking-[0.2em] transition-colors disabled:opacity-50 mt-2"
             >
-              <span>{loading ? 'Sending link...' : 'Send Reset Link'}</span>
-              <Send className="w-3.5 h-3.5" />
+              {loading ? 'Sending...' : 'Send Reset Link'}
             </button>
 
             <div className="text-center pt-2">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1.5 text-xs text-[#6F8A77] hover:text-[#122B22] font-semibold"
+                className="inline-flex items-center gap-2 text-xs text-[#888] hover:text-white uppercase tracking-wider transition-colors"
               >
-                <ArrowLeft className="w-3.5 h-3.5" /> Back to Sign In
+                <ArrowLeft className="w-3.5 h-3.5" /> Return to Sign In
               </Link>
             </div>
           </form>

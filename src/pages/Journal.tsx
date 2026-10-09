@@ -9,25 +9,32 @@ import { Post } from '../types';
 
 const CATEGORIES = [
   'All notes',
-  'Anxiety',
-  'Rest',
-  'Growth',
-  'Mindfulness',
+  'Behavior',
+  'Social Psychology',
+  'Mental Strength',
+  'Clarity',
   'Neuroscience'
 ];
 
 export const Journal: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') || 'All notes';
+  const queryParam = searchParams.get('search') || '';
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(queryParam);
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
 
   useEffect(() => {
     setSelectedCategory(categoryParam);
   }, [categoryParam]);
+
+  useEffect(() => {
+    if (queryParam) {
+      setSearchQuery(queryParam);
+    }
+  }, [queryParam]);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -57,162 +64,112 @@ export const Journal: React.FC = () => {
   const filteredPosts = useMemo(() => {
     return posts.filter(post => {
       const isAll = selectedCategory === 'All notes' || selectedCategory === 'All';
-      const matchesCategory = isAll || (
+      const matchesCategory =
+        isAll ||
         post.category.toLowerCase().includes(selectedCategory.toLowerCase()) ||
-        post.tags?.some(t => t.toLowerCase().includes(selectedCategory.toLowerCase()))
-      );
-      
+        post.tags?.some(t => t.toLowerCase().includes(selectedCategory.toLowerCase()));
+
       const query = searchQuery.trim().toLowerCase();
-      const matchesSearch = !query || (
+      const matchesSearch =
+        !query ||
         post.title.toLowerCase().includes(query) ||
         post.excerpt.toLowerCase().includes(query) ||
         post.category.toLowerCase().includes(query) ||
-        (post.tags && post.tags.some(t => t.toLowerCase().includes(query)))
-      );
+        (post.tags && post.tags.some(t => t.toLowerCase().includes(query)));
 
       return matchesCategory && matchesSearch;
     });
   }, [posts, selectedCategory, searchQuery]);
 
   return (
-    <div className="min-h-screen py-16 md:py-24" style={{ backgroundColor: 'var(--paper)', color: 'var(--ink)' }}>
+    <div className="min-h-screen py-16 md:py-24 bg-[#050505] text-[#f1f0ed]">
       <SEO
-        title="Stories & Reflections"
-        description="Browse essays and meditations on anxiety, rest, growth, and living intentionally."
+        title="Journal Archive — Mental Tactic"
+        description="Browse essays and mental tactics on human behavior, social psychology, and cognitive resilience."
       />
 
-      <div className="wrap">
+      <div className="site-container">
         {/* Header */}
-        <div className="max-w-2xl mb-12 space-y-3">
-          <p
-            style={{
-              fontSize: '11px',
-              fontWeight: 700,
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              color: 'var(--dark)',
-              margin: 0
-            }}
-          >
-            Stories & Notes
+        <div className="max-w-2xl mb-12">
+          <p className="flex items-center gap-3 text-[#ce354b] text-[10px] font-bold tracking-[0.26em] uppercase mb-4">
+            <span className="w-8 h-[1px] bg-[#b51f35] inline-block" />
+            <span>Selected Writing</span>
           </p>
-          <h1
-            className="serif"
-            style={{
-              fontSize: 'clamp(45px, 6vw, 84px)',
-              lineHeight: 0.92,
-              margin: 0,
-              letterSpacing: '-0.04em'
-            }}
-          >
-            Latest <em style={{ color: 'var(--dark)', fontStyle: 'italic' }}>thinking.</em>
+          <h1 className="font-serif text-[clamp(44px,5.5vw,78px)] font-normal text-white uppercase tracking-tight m-0 leading-[0.94]">
+            The Journal <em className="text-[#999895] italic font-normal">Archive.</em>
           </h1>
+          <p className="mt-5 text-[#888] text-sm font-light leading-relaxed max-w-lg">
+            Evidence-informed inquiries into the human condition. Frameworks, observations, and principles for navigating modern complexity.
+          </p>
         </div>
 
-        {/* Filter & Search */}
-        <div
-          className="mb-12 p-6 rounded-3xl"
-          style={{
-            backgroundColor: 'var(--white)',
-            border: '1px solid var(--line)'
-          }}
-        >
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between mb-5">
-            <div className="relative w-full md:max-w-md">
-              <Search style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', width: '16px', height: '16px', color: 'var(--dark)' }} />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search stories..."
-                style={{
-                  width: '100%',
-                  backgroundColor: 'var(--paper)',
-                  border: '1px solid var(--line)',
-                  borderRadius: '999px',
-                  padding: '10px 16px 10px 42px',
-                  fontSize: '14px',
-                  color: 'var(--ink)',
-                  outline: 0
-                }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 0, cursor: 'pointer' }}
-                >
-                  <X style={{ width: '14px', height: '14px' }} />
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Category Filters */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1">
-            {CATEGORIES.map((cat) => (
+        {/* Filter & Search Bar */}
+        <div className="mb-14 p-6 bg-[#090909] border border-[#222] flex flex-col md:flex-row gap-6 items-stretch md:items-center justify-between">
+          {/* Search Field */}
+          <div className="relative w-full md:max-w-md">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#777]" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search concepts, behaviors, keywords..."
+              className="w-full bg-[#121212] border border-[#262626] focus:border-[#b51f35] text-white text-xs pl-11 pr-10 py-3 outline-none transition-colors"
+            />
+            {searchQuery && (
               <button
-                key={cat}
-                onClick={() => handleCategorySelect(cat)}
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '999px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                  border: '1px solid var(--line)',
-                  backgroundColor: selectedCategory.toLowerCase() === cat.toLowerCase() ? 'var(--ink)' : 'transparent',
-                  color: selectedCategory.toLowerCase() === cat.toLowerCase() ? 'var(--white)' : 'var(--ink)',
-                  transition: 'all 0.2s ease'
-                }}
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#777] hover:text-white"
               >
-                {cat}
+                <X className="w-4 h-4" />
               </button>
-            ))}
+            )}
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+            {CATEGORIES.map(cat => {
+              const active = selectedCategory.toLowerCase() === cat.toLowerCase();
+              return (
+                <button
+                  key={cat}
+                  onClick={() => handleCategorySelect(cat)}
+                  className={`px-3.5 py-2 text-[10px] font-bold tracking-widest uppercase transition-colors shrink-0 border ${
+                    active
+                      ? 'bg-[#b51f35] border-[#b51f35] text-white'
+                      : 'border-[#262626] text-[#888] hover:text-white hover:border-[#444] bg-[#0c0c0c]'
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        {/* Grid */}
+        {/* Articles Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
           </div>
         ) : filteredPosts.length === 0 ? (
-          <div
-            className="text-center py-20 rounded-3xl p-8 max-w-lg mx-auto"
-            style={{ backgroundColor: 'var(--white)', border: '1px solid var(--line)' }}
-          >
-            <h3 className="serif" style={{ fontSize: '28px', margin: '0 0 10px' }}>No stories found</h3>
-            <p style={{ fontSize: '14px', color: 'rgba(24, 34, 29, 0.7)', margin: '0 0 20px' }}>
-              No notes match your filter or search keywords.
-            </p>
+          <div className="text-center py-24 border border-dashed border-[#222] bg-[#080808]">
+            <p className="text-sm text-[#777] mb-4">No matching articles found in this category.</p>
             <button
               onClick={() => {
-                setSearchQuery('');
                 setSelectedCategory('All notes');
-                searchParams.delete('category');
-                setSearchParams(searchParams);
+                setSearchQuery('');
               }}
-              style={{
-                padding: '10px 22px',
-                borderRadius: '999px',
-                backgroundColor: 'var(--ink)',
-                color: 'var(--white)',
-                border: 0,
-                fontSize: '13px',
-                fontWeight: 600,
-                cursor: 'pointer'
-              }}
+              className="px-5 py-2.5 border border-[#b51f35] text-[#ce354b] text-[10px] uppercase font-bold tracking-widest hover:bg-[#b51f35] hover:text-white transition-colors"
             >
-              Reset filters
+              Reset Filters
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" style={{ rowGap: '54px', columnGap: '28px' }}>
-            {filteredPosts.map((post) => (
-              <ArticleCard key={post.id} post={post} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredPosts.map((post, idx) => (
+              <ArticleCard key={post.id} post={post} index={idx + 1} />
             ))}
           </div>
         )}

@@ -41,105 +41,98 @@ export const SavedArticles: React.FC = () => {
     if (!user) return;
     try {
       await removeSavedPost(user.uid, postId);
-      setSavedPosts(savedPosts.filter((p) => p.postId !== postId));
-      showToast(`Removed "${title}" from your saved reflections.`, 'info');
+      setSavedPosts(savedPosts.filter(p => p.postId !== postId));
+      showToast(`Removed "${title}" from saved.`, 'info');
     } catch (err) {
       showToast('Unable to remove article.', 'error');
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] py-16 md:py-24 text-[#122B22]">
-      <SEO title="Saved Sanctuary" description="Your saved articles and quiet meditations." />
+    <div className="min-h-screen bg-[#050505] py-16 md:py-24 text-[#f1f0ed]">
+      <SEO title="Saved Articles — Mental Tactic" description="Your saved articles and mental tactics." />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="site-container">
         {/* Header */}
-        <div className="max-w-3xl mb-12 space-y-3">
-          <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#6F8A77]">
+        <div className="max-w-2xl mb-12">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[#ce354b] mb-3">
             <Bookmark className="w-3.5 h-3.5" />
             <span>Personal Collection</span>
           </div>
-          <h1 className="font-serif text-4xl md:text-5xl text-[#122B22] font-normal">
-            Saved Sanctuary
+          <h1 className="font-serif text-4xl sm:text-5xl text-white font-normal uppercase tracking-tight m-0">
+            Saved Articles
           </h1>
-          <p className="text-sm text-[#122B22]/70 leading-relaxed font-sans">
-            Reflections you have bookmarked to return to in moments of contemplation.
+          <p className="mt-4 text-[#888] text-sm font-light leading-relaxed">
+            Your personal archive of selected reading and practical models.
           </p>
         </div>
 
+        {/* Content */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <CardSkeleton />
             <CardSkeleton />
             <CardSkeleton />
           </div>
         ) : savedPosts.length === 0 ? (
-          <div className="text-center py-24 bg-white/70 rounded-3xl border border-[#EBE6DC] max-w-xl mx-auto p-8 space-y-4 shadow-sm">
-            <div className="w-12 h-12 rounded-full bg-[#FAF7F2] flex items-center justify-center mx-auto text-[#6F8A77]">
-              <Bookmark className="w-6 h-6" />
-            </div>
-            <h3 className="font-serif text-2xl text-[#122B22]">
-              No saved articles yet.
-            </h3>
-            <p className="text-xs text-[#122B22]/70 leading-relaxed max-w-sm mx-auto">
-              Take your time exploring our journal. When an essay or somatic protocol speaks to you, tap the bookmark icon to keep it here.
+          <div className="text-center py-24 bg-[#090909] border border-[#222]">
+            <Bookmark className="w-8 h-8 text-[#555] mx-auto mb-4" />
+            <h3 className="font-serif text-2xl text-white font-normal mb-2">No Saved Articles Yet</h3>
+            <p className="text-xs text-[#888] max-w-sm mx-auto mb-6">
+              When an essay or tactic catches your eye, tap the bookmark icon to keep it here for quiet review.
             </p>
             <Link
               to="/journal"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#122B22] text-[#FAF7F2] hover:bg-[#1A3B2F] transition-colors mt-2"
+              className="inline-flex items-center gap-2 px-6 py-3 border border-[#b51f35] text-white text-[10px] uppercase font-bold tracking-widest hover:bg-[#b51f35] transition-colors"
             >
-              <span>Explore Journal</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              Browse Articles <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {savedPosts.map((item) => (
-              <div
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {savedPosts.map((item, idx) => (
+              <article
                 key={item.id}
-                className="bg-white rounded-3xl p-6 border border-[#EBE6DC] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow group"
+                className="bg-[#0a0a0a] border border-[#222] hover:border-[#b51f35] transition-colors flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative w-full h-48 rounded-2xl overflow-hidden mb-5 bg-[#FAF7F2]">
+                  <div className="relative aspect-[1.16/1] overflow-hidden bg-[#121212]">
                     <img
                       src={item.postCoverImage}
                       alt={item.postTitle}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover filter grayscale contrast-110 brightness-75"
                     />
-                    <span className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold bg-[#FAF7F2]/90 backdrop-blur-md text-[#122B22]">
-                      {item.postCategory}
-                    </span>
                     <button
                       onClick={() => handleRemove(item.postId, item.postTitle)}
-                      className="absolute top-3 right-3 p-2 rounded-full bg-[#FAF7F2]/90 hover:bg-white text-red-600 shadow-sm transition-colors"
+                      className="absolute top-3 right-3 p-2 bg-black/70 hover:bg-[#b51f35] text-white border border-white/20 transition-colors"
                       title="Remove from saved"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
 
-                  <Link to={`/journal/${item.postSlug}`}>
-                    <h3 className="font-serif text-2xl text-[#122B22] mb-3 group-hover:text-[#6F8A77] transition-colors leading-snug">
-                      {item.postTitle}
-                    </h3>
-                  </Link>
-
-                  <p className="text-xs text-[#122B22]/70 leading-relaxed line-clamp-3 mb-6">
-                    {item.postExcerpt}
-                  </p>
+                  <div className="p-6">
+                    <span className="text-[8px] font-bold tracking-widest uppercase text-[#ce354b]">
+                      {item.postCategory}
+                    </span>
+                    <Link to={`/journal/${item.postSlug}`} className="block mt-2">
+                      <h3 className="font-serif text-xl text-white font-normal hover:text-[#ce354b] transition-colors line-clamp-2">
+                        {item.postTitle}
+                      </h3>
+                    </Link>
+                  </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#F2ECE4] flex items-center justify-between">
-                  <span className="text-[11px] text-[#8EA595]">Saved Reflection</span>
+                <div className="p-6 pt-0 border-t border-[#1a1a1a] flex justify-between items-center text-[9px] uppercase tracking-wider text-[#777]">
+                  <span>Saved</span>
                   <Link
                     to={`/journal/${item.postSlug}`}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#122B22] group-hover:text-[#6F8A77]"
+                    className="inline-flex items-center gap-1.5 text-white hover:text-[#ce354b] font-bold"
                   >
-                    <span>Read Reflection</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    Read <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         )}
