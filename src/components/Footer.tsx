@@ -55,9 +55,9 @@ export const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link to="/sitemap" className="hover:text-[#f1f0ed] transition-colors">
+              <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-[#f1f0ed] transition-colors">
                 Sitemap
-              </Link>
+              </a>
             </li>
           </ul>
 

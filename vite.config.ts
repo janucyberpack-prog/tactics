@@ -9,16 +9,18 @@ function sitemapXmlPlugin(): Plugin {
     name: 'sitemap-xml-handler',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        const url = req.url || '';
-        const accept = req.headers.accept || '';
+        const pathname = (req.url || '').split('?')[0];
         if (
-          url === '/sitemap?format=xml' ||
-          url === '/sitemap.xml' ||
-          (url === '/sitemap' && (accept.includes('application/xml') || accept.includes('text/xml')))
+          pathname === '/sitemap' ||
+          pathname === '/sitemap/' ||
+          pathname === '/sitemap.xml' ||
+          pathname === '/sitemap-news.xml'
         ) {
-          const filePath = path.resolve('public/sitemap.xml');
+          const fileName = pathname === '/sitemap-news.xml' ? 'sitemap-news.xml' : 'sitemap.xml';
+          const filePath = path.resolve('public', fileName);
           if (fs.existsSync(filePath)) {
             res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+            res.setHeader('Cache-Control', 'public, max-age=3600');
             return res.end(fs.readFileSync(filePath, 'utf-8'));
           }
         }

@@ -54,7 +54,6 @@ Disallow: /account/
 
 # Sitemaps (updated daily for fresh post indexing)
 Sitemap: https://mental-tactic-65c43.web.app/sitemap.xml
-Sitemap: https://mental-tactic-65c43.web.app/sitemap
 Sitemap: https://mental-tactic-65c43.web.app/sitemap-news.xml
 
 Host: https://mental-tactic-65c43.web.app
