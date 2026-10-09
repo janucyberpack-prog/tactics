@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import fs from 'fs';
 import {defineConfig, Plugin} from 'vite';
+// @ts-ignore
+import { generateSitemap } from './scripts/generate-sitemap.mjs';
 
 function sitemapXmlPlugin(): Plugin {
   return {
@@ -10,33 +12,62 @@ function sitemapXmlPlugin(): Plugin {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const pathname = (req.url || '').split('?')[0];
-        if (
-          pathname === '/sitemap' ||
-          pathname === '/sitemap/' ||
-          pathname === '/sitemap.xml' ||
-          pathname === '/sitemap-news.xml' ||
-          pathname === '/robots.txt'
-        ) {
-          const fileName = pathname === '/sitemap-news.xml'
-            ? 'sitemap-news.xml'
-            : pathname === '/robots.txt'
-              ? 'robots.txt'
-              : 'sitemap.xml';
-          const filePath = path.resolve('public', fileName);
+
+        // Clean 301 redirect /sitemap -> /sitemap.xml (prevents any browser auto-downloads)
+        if (pathname === '/sitemap' || pathname === '/sitemap/') {
+          res.writeHead(301, {
+            Location: '/sitemap.xml',
+            'Cache-Control': 'public, max-age=3600'
+          });
+          return res.end();
+        }
+
+        if (pathname === '/sitemap.xml') {
+          const xHost = (req.headers['x-forwarded-host'] || '').toString().trim();
+          const rawHost = xHost || (req.headers.host || '').toString().trim();
+          const urlObj = new URL(req.url || '/', 'http://localhost');
+          const overrideDomain = urlObj.searchParams.get('domain');
+
+          let currentOrigin = 'https://mental-tactic-65c43.web.app';
+          if (overrideDomain) {
+            currentOrigin = overrideDomain.replace(/\/+$/, '');
+          } else if (xHost) {
+            const proto = (req.headers['x-forwarded-proto'] || 'https').toString().split(',')[0].trim();
+            currentOrigin = `${proto}://${xHost}`;
+          } else if (rawHost && !rawHost.includes('localhost') && !rawHost.includes('127.0.0.1') && !rawHost.includes('0.0.0.0')) {
+            const proto = (req.headers['x-forwarded-proto'] || 'https').toString().split(',')[0].trim();
+            currentOrigin = `${proto}://${rawHost}`;
+          }
+
+          // Dynamically query published posts and generate real-time XML
+          generateSitemap(currentOrigin)
+            .then((xml: string) => {
+              res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+              res.setHeader('Cache-Control', 'no-cache');
+              res.end(xml);
+            })
+            .catch(() => {
+              const filePath = path.resolve('public', 'sitemap.xml');
+              if (fs.existsSync(filePath)) {
+                let content = fs.readFileSync(filePath, 'utf-8');
+                content = content.replace(/https:\/\/mental-tactic-65c43\.web\.app/g, currentOrigin);
+                res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+                return res.end(content);
+              }
+              res.statusCode = 404;
+              res.end();
+            });
+          return;
+        }
+
+        if (pathname === '/robots.txt') {
+          const filePath = path.resolve('public', 'robots.txt');
           if (fs.existsSync(filePath)) {
             let content = fs.readFileSync(filePath, 'utf-8');
-
-            // Detect current host from Cloud Run / reverse proxy headers so Google Search Console
-            // never flags 'URL not allowed' cross-domain mismatch
             const xHost = (req.headers['x-forwarded-host'] || '').toString().trim();
             const rawHost = xHost || (req.headers.host || '').toString().trim();
-            const urlObj = new URL(req.url || '/', 'http://localhost');
-            const overrideDomain = urlObj.searchParams.get('domain');
-
             let currentOrigin = 'https://mental-tactic-65c43.web.app';
-            if (overrideDomain) {
-              currentOrigin = overrideDomain.replace(/\/+$/, '');
-            } else if (xHost) {
+            if (xHost) {
               const proto = (req.headers['x-forwarded-proto'] || 'https').toString().split(',')[0].trim();
               currentOrigin = `${proto}://${xHost}`;
             } else if (rawHost && !rawHost.includes('localhost') && !rawHost.includes('127.0.0.1') && !rawHost.includes('0.0.0.0')) {
@@ -45,15 +76,12 @@ function sitemapXmlPlugin(): Plugin {
             }
 
             content = content.replace(/https:\/\/mental-tactic-65c43\.web\.app/g, currentOrigin);
-
-            const contentType = fileName === 'robots.txt'
-              ? 'text/plain; charset=utf-8'
-              : 'application/xml; charset=utf-8';
-            res.setHeader('Content-Type', contentType);
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8');
             res.setHeader('Cache-Control', 'no-cache');
             return res.end(content);
           }
         }
+
         next();
       });
     }

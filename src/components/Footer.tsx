@@ -54,11 +54,6 @@ export const Footer: React.FC = () => {
                 Saved
               </Link>
             </li>
-            <li>
-              <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" className="hover:text-[#f1f0ed] transition-colors">
-                Sitemap
-              </a>
-            </li>
           </ul>
 
           {/* Right Socials */}

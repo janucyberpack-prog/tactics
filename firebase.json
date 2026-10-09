@@ -15,38 +15,27 @@
     ],
     "headers": [
       {
-        "source": "/sitemap",
-        "headers": [
-          {
-            "key": "Content-Type",
-            "value": "application/xml; charset=utf-8"
-          }
-        ]
-      },
-      {
         "source": "/sitemap.xml",
         "headers": [
           {
             "key": "Content-Type",
             "value": "application/xml; charset=utf-8"
-          }
-        ]
-      },
-      {
-        "source": "/sitemap-news.xml",
-        "headers": [
+          },
           {
-            "key": "Content-Type",
-            "value": "application/xml; charset=utf-8"
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
           }
         ]
       }
     ],
-    "rewrites": [
+    "redirects": [
       {
         "source": "/sitemap",
-        "destination": "/sitemap.xml"
-      },
+        "destination": "/sitemap.xml",
+        "type": 301
+      }
+    ],
+    "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"

@@ -7,8 +7,6 @@ Allow: /journal
 Allow: /journal/*
 Allow: /about
 Allow: /contact
-Allow: /sitemap
-Allow: /sitemap.xml
 
 # Static and media asset crawling
 Allow: /assets/
@@ -52,8 +50,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /account/
 
-# Sitemaps (updated daily for fresh post indexing)
+# Sitemaps
 Sitemap: https://mental-tactic-65c43.web.app/sitemap.xml
-Sitemap: https://mental-tactic-65c43.web.app/sitemap-news.xml
 
 Host: https://mental-tactic-65c43.web.app

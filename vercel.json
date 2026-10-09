@@ -2,22 +2,29 @@
   "version": 2,
   "headers": [
     {
-      "source": "/(sitemap|sitemap.xml|sitemap-news.xml)",
+      "source": "/sitemap.xml",
       "headers": [
         {
           "key": "Content-Type",
           "value": "application/xml; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, s-maxage=3600"
         }
       ]
     }
   ],
-  "rewrites": [
+  "redirects": [
     {
       "source": "/sitemap",
-      "destination": "/sitemap.xml"
-    },
+      "destination": "/sitemap.xml",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
     {
-      "source": "/((?!assets/|robots.txt|sitemap|sitemap.xml|sitemap-news.xml|favicon.ico|api/).*)",
+      "source": "/((?!assets/|robots.txt|sitemap.xml|favicon.ico|api/).*)",
       "destination": "/index.html"
     }
   ]

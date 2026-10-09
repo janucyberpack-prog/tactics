@@ -14,7 +14,6 @@ import { Journal } from './pages/Journal';
 import { ArticleDetail } from './pages/ArticleDetail';
 import { About } from './pages/About';
 import { Contact } from './pages/Contact';
-import { Sitemap } from './pages/Sitemap';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { ForgotPassword } from './pages/ForgotPassword';
@@ -149,8 +148,6 @@ function AppContent() {
           <Route path="/journal/:slug" element={<ArticleDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/sitemap" element={<Sitemap />} />
-          <Route path="/sitemaps" element={<Sitemap />} />
 
           {/* Authentication Routes */}
           <Route path="/login" element={<Login />} />
