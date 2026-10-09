@@ -304,6 +304,14 @@ export const AdminSettings: React.FC = () => {
                 </p>
                 <div className="flex flex-wrap gap-2 pt-1">
                   <a
+                    href="/sitemap"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] text-zinc-300 hover:text-white px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" /> View /sitemap
+                  </a>
+                  <a
                     href="/sitemap.xml"
                     target="_blank"
                     rel="noopener noreferrer"

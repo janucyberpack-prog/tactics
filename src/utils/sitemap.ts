@@ -11,7 +11,8 @@ export const STATIC_SITEMAP_ROUTES = [
   { path: 'journal?category=Neuroscience', priority: '0.8', changefreq: 'daily' },
   { path: 'journal?category=Daily%20Rituals', priority: '0.8', changefreq: 'daily' },
   { path: 'about', priority: '0.6', changefreq: 'monthly' },
-  { path: 'contact', priority: '0.5', changefreq: 'monthly' }
+  { path: 'contact', priority: '0.5', changefreq: 'monthly' },
+  { path: 'sitemap', priority: '0.7', changefreq: 'daily' }
 ];
 
 function escapeXml(unsafe: string): string {

@@ -54,6 +54,11 @@ export const Footer: React.FC = () => {
                 Saved
               </Link>
             </li>
+            <li>
+              <Link to="/sitemap" className="hover:text-[#f1f0ed] transition-colors">
+                Sitemap
+              </Link>
+            </li>
           </ul>
 
           {/* Right Socials */}
