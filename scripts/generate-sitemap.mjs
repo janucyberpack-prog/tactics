@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config({ override: true });
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +21,7 @@ export function resolveDomain() {
   if (process.env.VERCEL_URL && process.env.VERCEL_URL.trim()) {
     return `https://${process.env.VERCEL_URL.trim()}`.replace(/\/+$/, '');
   }
-  return 'https://mentaltactic.site';
+  return 'https://www.mentaltactic.site';
 }
 
 const DEFAULT_DOMAIN = resolveDomain();

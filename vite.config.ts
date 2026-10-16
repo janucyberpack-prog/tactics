@@ -19,7 +19,7 @@ function sitemapXmlPlugin(): Plugin {
           const urlObj = new URL(req.url || '/', 'http://localhost');
           const overrideDomain = urlObj.searchParams.get('domain');
 
-          let currentOrigin = process.env.VITE_SITE_DOMAIN || process.env.SITE_URL || 'https://mentaltactic.site';
+          let currentOrigin = process.env.VITE_SITE_DOMAIN || process.env.SITE_URL || 'https://www.mentaltactic.site';
           if (overrideDomain) {
             currentOrigin = overrideDomain.replace(/\/+$/, '');
           } else if (xHost) {

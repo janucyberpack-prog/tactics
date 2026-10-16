@@ -43,7 +43,7 @@ export const AdminSettings: React.FC = () => {
         return window.location.origin;
       }
     }
-    return 'https://mentaltactic.site';
+    return 'https://www.mentaltactic.site';
   });
 
   const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
