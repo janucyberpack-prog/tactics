@@ -19,7 +19,7 @@ export function resolveDomain() {
   if (process.env.VERCEL_URL && process.env.VERCEL_URL.trim()) {
     return `https://${process.env.VERCEL_URL.trim()}`.replace(/\/+$/, '');
   }
-  return 'https://mental-tactic-65c43.web.app';
+  return 'https://mentaltactic.site';
 }
 
 const DEFAULT_DOMAIN = resolveDomain();
@@ -216,6 +216,7 @@ Disallow: /saved-articles
 
 # Sitemaps
 Sitemap: ${cleanDomain}/sitemap.xml
+Sitemap: ${cleanDomain}/sitemap
 
 Host: ${cleanDomain}
 `;

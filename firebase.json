@@ -15,7 +15,7 @@
     ],
     "headers": [
       {
-        "source": "/sitemap.xml",
+        "source": "/(sitemap|sitemap.xml)",
         "headers": [
           {
             "key": "Content-Type",
@@ -41,14 +41,11 @@
         ]
       }
     ],
-    "redirects": [
+    "rewrites": [
       {
         "source": "/sitemap",
-        "destination": "/sitemap.xml",
-        "type": 301
-      }
-    ],
-    "rewrites": [
+        "destination": "/sitemap.xml"
+      },
       {
         "source": "**",
         "destination": "/index.html"

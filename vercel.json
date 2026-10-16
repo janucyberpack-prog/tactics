@@ -3,7 +3,7 @@
   "cleanUrls": false,
   "headers": [
     {
-      "source": "/sitemap.xml",
+      "source": "/(sitemap|sitemap.xml)",
       "headers": [
         {
           "key": "Content-Type",
@@ -29,14 +29,11 @@
       ]
     }
   ],
-  "redirects": [
+  "rewrites": [
     {
       "source": "/sitemap",
-      "destination": "/sitemap.xml",
-      "permanent": true
-    }
-  ],
-  "rewrites": [
+      "destination": "/sitemap.xml"
+    },
     {
       "source": "/sitemap.xml",
       "destination": "/sitemap.xml"
@@ -46,7 +43,7 @@
       "destination": "/robots.txt"
     },
     {
-      "source": "/((?!assets/|robots\\.txt|sitemap\\.xml|favicon\\.ico).*)",
+      "source": "/((?!assets/|robots\\.txt|sitemap|sitemap\\.xml|favicon\\.ico).*)",
       "destination": "/index.html"
     }
   ]

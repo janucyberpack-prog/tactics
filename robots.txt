@@ -37,6 +37,7 @@ Disallow: /account/
 Disallow: /saved-articles
 
 # Sitemaps
-Sitemap: https://mycustomdomain.com/sitemap.xml
+Sitemap: https://mentaltactic.site/sitemap.xml
+Sitemap: https://mentaltactic.site/sitemap
 
-Host: https://mycustomdomain.com
+Host: https://mentaltactic.site

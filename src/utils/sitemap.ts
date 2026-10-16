@@ -1,7 +1,7 @@
 import { Post } from '../types';
 import { INITIAL_SEED_POSTS } from '../services/posts';
 
-export const DEFAULT_SITE_DOMAIN = 'https://mental-tactic-65c43.web.app';
+export const DEFAULT_SITE_DOMAIN = 'https://mentaltactic.site';
 
 export function getSiteDomain(): string {
   if (typeof window !== 'undefined' && window.location?.origin) {

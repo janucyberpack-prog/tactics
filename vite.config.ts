@@ -13,22 +13,13 @@ function sitemapXmlPlugin(): Plugin {
       server.middlewares.use((req, res, next) => {
         const pathname = (req.url || '').split('?')[0];
 
-        // Clean 301 redirect /sitemap -> /sitemap.xml (prevents any browser auto-downloads)
-        if (pathname === '/sitemap' || pathname === '/sitemap/') {
-          res.writeHead(301, {
-            Location: '/sitemap.xml',
-            'Cache-Control': 'public, max-age=3600'
-          });
-          return res.end();
-        }
-
-        if (pathname === '/sitemap.xml') {
+        if (pathname === '/sitemap' || pathname === '/sitemap/' || pathname === '/sitemap.xml') {
           const xHost = (req.headers['x-forwarded-host'] || '').toString().trim();
           const rawHost = xHost || (req.headers.host || '').toString().trim();
           const urlObj = new URL(req.url || '/', 'http://localhost');
           const overrideDomain = urlObj.searchParams.get('domain');
 
-          let currentOrigin = process.env.VITE_SITE_DOMAIN || process.env.SITE_URL || 'https://mental-tactic-65c43.web.app';
+          let currentOrigin = process.env.VITE_SITE_DOMAIN || process.env.SITE_URL || 'https://mentaltactic.site';
           if (overrideDomain) {
             currentOrigin = overrideDomain.replace(/\/+$/, '');
           } else if (xHost) {
@@ -66,7 +57,7 @@ function sitemapXmlPlugin(): Plugin {
             let content = fs.readFileSync(filePath, 'utf-8');
             const xHost = (req.headers['x-forwarded-host'] || '').toString().trim();
             const rawHost = xHost || (req.headers.host || '').toString().trim();
-            let currentOrigin = 'https://mental-tactic-65c43.web.app';
+            let currentOrigin = process.env.VITE_SITE_DOMAIN || process.env.SITE_URL || 'https://mentaltactic.site';
             if (xHost) {
               const proto = (req.headers['x-forwarded-proto'] || 'https').toString().split(',')[0].trim();
               currentOrigin = `${proto}://${xHost}`;
@@ -75,7 +66,9 @@ function sitemapXmlPlugin(): Plugin {
               currentOrigin = `${proto}://${rawHost}`;
             }
 
-            content = content.replace(/https:\/\/mental-tactic-65c43\.web\.app/g, currentOrigin);
+            content = content
+              .replace(/https:\/\/mental-tactic-65c43\.web\.app/g, currentOrigin)
+              .replace(/https:\/\/mentaltactic\.site/g, currentOrigin);
             res.setHeader('Content-Type', 'text/plain; charset=utf-8');
             res.setHeader('Cache-Control', 'no-cache');
             return res.end(content);

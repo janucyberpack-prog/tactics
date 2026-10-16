@@ -37,9 +37,13 @@ export const AdminSettings: React.FC = () => {
   const [copiedXml, setCopiedXml] = useState(false);
   const [siteDomainInput, setSiteDomainInput] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('mental_tactic_site_domain') || window.location.origin;
+      const stored = localStorage.getItem('mental_tactic_site_domain');
+      if (stored) return stored;
+      if (window.location.origin && window.location.origin.includes('mentaltactic.site')) {
+        return window.location.origin;
+      }
     }
-    return SITE_DOMAIN;
+    return 'https://mentaltactic.site';
   });
 
   const handleDomainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
