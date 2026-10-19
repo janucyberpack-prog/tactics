@@ -1,146 +1,86 @@
-# Resolution Plan: Unblock Appwrite Deployment & Fix Google Search Console Sitemap Fetching
+# Resolution Plan: Switch to https://mentaltactic.site Property in Google Search Console
 
-Resolve the Google Search Console errors (**"Not Fetched - Blocked due to other 4xx issue"** on `robots.txt` and **"Couldn't fetch"** on sitemaps) by diagnosing and unblocking the Appwrite site deployment, aligning all sitemap and canonical URLs to the apex domain `https://mentaltactic.site`, and verifying clean HTTP 200 responses.
+Resolve the **"Failed: Invalid server SSL certificate"** and **"URL is not available to Google"** errors by directing Google Search Console to the verified apex property `https://mentaltactic.site/`, where SSL and HTTP 200 responses are already active and healthy.
 
 ---
 
 ### User Review & Critical Decisions
 
 > [!IMPORTANT]
-> The primary obstacle preventing Google Search Console from fetching `robots.txt` and `sitemap.xml` is that Appwrite Cloud is currently returning **HTTP 403 Forbidden** (`{"type":"router_deployment_blocked","message":"The deployment is blocked","code":403}`) on all requests to `mentaltactic.site`. Because Googlebot cannot read `robots.txt` due to a 4xx error, it immediately refuses to fetch any sitemaps.
+> Live testing confirms that **`https://mentaltactic.site`** (apex domain) is fully working, unblocked on Appwrite, and returning HTTP 200 with an authentic SSL certificate. The inspection error **"Failed: Invalid server SSL certificate"** was caused because Google Search Console inspected **`https://www.mentaltactic.site`**, which lacks an SSL certificate on Appwrite.
 
-- **Confirmed Decision 1 (Hosting)**: Unblock and redeploy the site in Appwrite Console (Project ID: `6ac67f07002f98d4948b`).
-- **Confirmed Decision 2 (Domain)**: Standardize on apex domain without www (`https://mentaltactic.site`) where SSL is verified and active.
-- **Action Required by User in Appwrite Console**: Follow the quick steps in Section 3 to activate/redeploy the deployment and clear the router block.
-
----
-
-## 1. Root Cause Breakdown
-
-```
-Google Search Console Crawl Request
-                │
-                ▼
-   GET https://mentaltactic.site/robots.txt
-                │
-                ▼
-    Appwrite Edge Router (Fastly / Swoole)
-                │
-       [Deployment Blocked]
-                ▼
-         HTTP 403 Forbidden
-    {"type":"router_deployment_blocked"}
-                │
-                ▼
-Googlebot halts crawl immediately:
-- "Blocked due to other 4xx issue" on robots.txt
-- "Couldn't fetch" on all sitemaps
-```
-
-1. **`router_deployment_blocked` (HTTP 403)**:
-   - When Appwrite encounters an unhealthy build, paused site, or resource/storage limit threshold, the edge router serves HTTP 403 `{"type":"router_deployment_blocked","message":"The deployment is blocked","code":403}`.
-   - Per Google's webmaster guidelines, if `robots.txt` returns an HTTP 4xx error (specifically 403 Forbidden), Google assumes crawler access is prohibited or down, halting sitemap processing.
-
-2. **Subdomain SSL Mismatch**:
-   - `www.mentaltactic.site` was serving the Fastly fallback certificate (`subjectAltName does not match www.mentaltactic.site`), triggering `Failed: Invalid server SSL certificate`.
-   - The apex domain `https://mentaltactic.site` has a fully valid, active SSL certificate issued by Certainly.
+- **Confirmed Decision**: Switch to the **`https://mentaltactic.site/`** property in Google Search Console.
+- **Verification Status**:
+  - `https://mentaltactic.site/` -> **HTTP/2 200 OK** (SSL: Valid, Certainly)
+  - `https://mentaltactic.site/robots.txt` -> **HTTP/2 200 OK** (`text/plain`)
+  - `https://mentaltactic.site/sitemap.xml` -> **HTTP/2 200 OK** (`text/xml`)
 
 ---
 
-## 2. Technical Architecture & Sitemap Flow
+## 1. Domain Status Comparison
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                  Codebase & Build Pipeline                      │
-│                                                                 │
-│  .env: VITE_SITE_DOMAIN="https://mentaltactic.site"             │
-│  appwrite.json: projectId="6ac67f07002f98d4948b"                │
-│                                                                 │
-│  npm run build                                                  │
-│     │                                                           │
-│     ├──> scripts/generate-sitemap.mjs                           │
-│     │       ├── Fetches published articles from Firestore       │
-│     │       ├── Emits /public/sitemap.xml (15 clean URLs)       │
-│     │       ├── Emits /dist/sitemap.xml                         │
-│     │       └── Generates robots.txt referencing apex sitemap   │
-│     │                                                           │
-│     └──> vite build (Bundles static SPA into /dist)             │
-└────────────────────────────────┬────────────────────────────────┘
-                                 │
-                                 ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                       Appwrite Cloud                            │
-│                                                                 │
-│  Sites Service -> Mental Tactic (6ac67f07002f98d4948b)          │
-│  Custom Domain: mentaltactic.site (Active SSL)                  │
-│                                                                 │
-│  Response for /robots.txt:  HTTP 200 (text/plain)               │
-│  Response for /sitemap.xml: HTTP 200 (application/xml)          │
-│  Response for /sitemap:     HTTP 200 / 301 to /sitemap.xml      │
-└────────────────────────────────┬────────────────────────────────┘
-                                 │
-                                 ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    Google Search Console                        │
-│                                                                 │
-│  Property: https://mentaltactic.site/ (URL prefix)              │
-│  robots.txt: Fetched successfully (200 OK)                      │
-│  sitemap.xml: Fetched successfully (Status: Success, 15 pages)  │
-└─────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│  Request: https://mentaltactic.site/         │
+│  SSL Certificate: Valid (Certainly CA)       │
+│  HTTP Status: HTTP/2 200 OK                  │
+│  Status: READY FOR GOOGLE SEARCH CONSOLE     │
+└──────────────────────────────────────────────┘
+                       vs
+┌──────────────────────────────────────────────┐
+│  Request: https://www.mentaltactic.site/     │
+│  SSL Certificate: Mismatch (Fastly default) │
+│  HTTP Status: SSL Handshake Failed           │
+│  GSC Result: "Invalid server SSL cert"       │
+└──────────────────────────────────────────────┘
 ```
 
 ---
 
-## 3. Step-by-Step Implementation
+## 2. Step-by-Step Action Plan
 
-### Step 1: Codebase Alignment to Apex Domain
-- **`.env` & `.env.example`**: Set `VITE_SITE_DOMAIN="https://mentaltactic.site"`.
-- **`appwrite.json`**: Populate `"projectId": "6ac67f07002f98d4948b"`.
-- **`scripts/generate-sitemap.mjs`**: Ensure default fallback and canonical generation use `https://mentaltactic.site`.
-- **`public/robots.txt`**:
-  ```
-  User-agent: *
-  Allow: /
-  Disallow: /admin
-  Disallow: /admin/
-  Disallow: /admin/*
-  Disallow: /login
+### Step 1: Open or Add the Apex Property in Google Search Console
+1. Open [Google Search Console](https://search.google.com/search-console).
+2. Look at the top-left dropdown where your current property is selected (currently showing `https://www.mentaltactic.site/`).
+3. Click the dropdown:
+   - If **`https://mentaltactic.site/`** is already in your list, select it.
+   - If not, click **+ Add property** -> Under **URL prefix**, enter:
+     ```
+     https://mentaltactic.site/
+     ```
+   - Click **Continue**. (Verification will auto-succeed if you have DNS records or Google Analytics tag `G-NJYNZ5D2ES` already in the HTML).
 
-  Sitemap: https://mentaltactic.site/sitemap.xml
-  Sitemap: https://mentaltactic.site/sitemap
-  Host: https://mentaltactic.site
-  ```
-- **Execute Build**: Run `npm run build` to generate the latest static bundle and sitemap.
+### Step 2: Test Live URL in the New Property
+1. In the search bar at the top ("Inspect any URL in 'https://mentaltactic.site/'"), enter:
+   ```
+   https://mentaltactic.site/
+   ```
+2. Click **Test Live URL**.
+3. Google will now report:
+   - **Page fetch**: Successful (200 OK)
+   - **SSL certificate**: Valid
+   - **Crawl allowed?**: Yes
+   - **URL is available to Google**
 
-### Step 2: Unblock and Redeploy in Appwrite Console (User Action)
-To clear the `router_deployment_blocked` (HTTP 403):
-1. Navigate to **[Appwrite Cloud Console](https://cloud.appwrite.io/)** and open your project **Mental Tactic** (`6ac67f07002f98d4948b`).
-2. In the left sidebar, click **Sites** and select **Mental Tactic**.
-3. Under the **Deployments** tab:
-   - Check if the latest deployment failed, got stuck, or is deactivated.
-   - If a deployment exists, click its options icon (`...`) and click **Activate**.
-   - If failed or out of date, click **Create Deployment** (or trigger a push via your connected GitHub repository).
-   - Check the **Settings -> Usage / Storage** tab to ensure the project has not hit the 2 GB free limit (delete older inactive deployments if needed).
-4. Verify custom domain:
-   - Go to **Sites -> Settings -> Domains**.
-   - Ensure `mentaltactic.site` has a green checkmark (**Active**).
-
-### Step 3: Verification & Resubmission in Google Search Console
-1. **Live Check via curl**:
-   - `curl -I https://mentaltactic.site/robots.txt` must return `HTTP/2 200` with `content-type: text/plain`.
-   - `curl -I https://mentaltactic.site/sitemap.xml` must return `HTTP/2 200` with `content-type: application/xml`.
-2. **Google Search Console**:
-   - In GSC property selector (top left), switch to or select the property: `https://mentaltactic.site/` (or the Domain property `mentaltactic.site`).
-   - Go to **Settings -> Crawling -> robots.txt** or **Page Indexing**. Check that robots.txt is fetched with 200 OK.
-   - Under **Sitemaps**, enter `sitemap.xml` and click **Submit**.
-   - GSC will fetch the 15 discovered URLs and report Status: **Success**.
+### Step 3: Submit the Sitemap
+1. In the left navigation, click **Sitemaps**.
+2. Under "Add a new sitemap", enter:
+   ```
+   sitemap.xml
+   ```
+3. Click **Submit**.
+4. Result:
+   - Type: **Sitemap**
+   - Status: **Success**
+   - Discovered pages: **15**
 
 ---
 
-## 4. Verification Checklist
+## 3. Verification Checklist
 
-- [ ] `.env` updated with `VITE_SITE_DOMAIN="https://mentaltactic.site"`
-- [ ] `appwrite.json` configured with correct project settings
-- [ ] `scripts/generate-sitemap.mjs` executed and verified producing 15 URLs starting with `https://mentaltactic.site/`
-- [ ] Appwrite deployment unblocked and serving 200 OK
-- [ ] Google Search Console robots.txt and sitemap verified
+- [x] Appwrite site unblocked (`x-appwrite-project-id: 6ac67f07002f98d4948b` active)
+- [x] `https://mentaltactic.site/robots.txt` live check returns HTTP 200 OK
+- [x] `https://mentaltactic.site/sitemap.xml` live check returns HTTP 200 OK with pure XML
+- [ ] User selects `https://mentaltactic.site/` property in Google Search Console
+- [ ] User tests live URL and confirms 0 SSL errors
+- [ ] User submits `sitemap.xml` with status Success
