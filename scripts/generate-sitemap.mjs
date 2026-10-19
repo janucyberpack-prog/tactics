@@ -21,7 +21,7 @@ export function resolveDomain() {
   if (process.env.VERCEL_URL && process.env.VERCEL_URL.trim()) {
     return `https://${process.env.VERCEL_URL.trim()}`.replace(/\/+$/, '');
   }
-  return 'https://www.mentaltactic.site';
+  return 'https://mentaltactic.site';
 }
 
 const DEFAULT_DOMAIN = resolveDomain();

@@ -84,7 +84,7 @@ export const SEO: React.FC<SEOProps> = ({
       document.head.appendChild(jsonLdScript);
     }
 
-    const baseOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://mental-tactic-65c43.web.app';
+    const baseOrigin = typeof window !== 'undefined' ? window.location.origin : 'https://mentaltactic.site';
 
     if (type === 'article' && article) {
       const articleSchema = {

@@ -1,6 +1,6 @@
 {
-  "summary": "Implementation plan to resolve Google Search Console 'Failed: Invalid server SSL certificate' error for https://www.mentaltactic.site/, aligning code, sitemap generation, and Appwrite Sites domain configuration.",
-  "updatedAt": "2026-10-16T03:43:57.154122096Z",
+  "summary": "Implementation plan to resolve Appwrite router_deployment_blocked HTTP 403 error, fix Google Search Console 'Blocked due to other 4xx issue' and 'Couldn't fetch' sitemap errors, align canonical URLs to apex domain https://mentaltactic.site, and restore healthy robots.txt and sitemap fetching.",
+  "updatedAt": "2026-10-19T11:51:57.911807097Z",
   "requestFeedback": true,
   "userFacing": true
 }
